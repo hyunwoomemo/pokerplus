@@ -1,0 +1,11 @@
+{
+  "expo": {
+    "name": "t08_ticket_rn",
+    "slug": "t08_ticket_rn",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  },
+  "name": "t08_ticket_rn"
+}
