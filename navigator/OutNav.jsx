@@ -5,6 +5,7 @@ import Join from '../screens/Join';
 import { MyDrawer } from './Drawer';
 import Terms from '../screens/auth/Terms';
 import TermsNav from './TermsNav';
+import InNav from './InNav';
 
 const Nav = createNativeStackNavigator();
 
@@ -20,7 +21,7 @@ const OutNav = ({route}) => {
     >
     <Nav.Screen name='Login' component={Login} />
     <Nav.Screen name='Terms' component={Terms} />
-    <Nav.Screen name='Drawer' component={MyDrawer} />
+    <Nav.Screen name='InNav' component={InNav} />
     <Nav.Screen name='TermsNav' component={TermsNav} options={{ presentation: 'modal' }} initialParams={{type: route.params?.type, text: route.params?.text}} />
   </Nav.Navigator>
 )

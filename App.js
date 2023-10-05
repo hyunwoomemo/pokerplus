@@ -1,50 +1,62 @@
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { StatusBar } from 'expo-status-bar';
+// import { StatusBar } from 'expo-status-bar';
 import React, { useEffect, useState } from 'react';
+import { StyleSheet, Text, View, SafeAreaView, Platform, StatusBar } from 'react-native';
+import styled from 'styled-components/native'
+import Root from './navigator/Root';
+import { NavigationContainer } from '@react-navigation/native';
+import 'react-native-gesture-handler';
+import { MyDrawer } from './navigator/Drawer';
+import Layout from './components/Layout';
 import OutNav from './navigator/OutNav';
-import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
-import { getUserInfo } from './source';
-import { RecoilRoot } from 'recoil'
+import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { RecoilRoot } from 'recoil';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Text, View } from 'react-native';
 import InNav from './navigator/InNav';
-import { authApi } from './api';
-// import 'react-native-gesture-handler';
+// import * as SplashScreen from 'expo-splash-screen'
+
+// SplashScreen.preventAutoHideAsync();
 
 const queryClient = new QueryClient()
 
-const Stack = createNativeStackNavigator()
+const Nav = createNativeStackNavigator()
 
 export default function App() {
-  const [loading, setLoading] = useState(true)
-  console.log(getUserInfo())
-  const data = getUserInfo()
-  const [userData, setUserData] = useState()
-  const user = async () => {
-    const data = await AsyncStorage.getItem('user_info')
-    console.log('data', data)
-    setUserData(data)
-    setLoading(false)
+
+  const [ready, setReady] = useState(true);
+  const [isLogin, setIsLogin] = useState();
+  const [user, setUser] = useState();
+
+  const getUser = async () => {
+    const data = await AsyncStorage.getItem('token')
+    const userData = await AsyncStorage.getItem('user')
+    setReady(false)
+    setIsLogin(data)
+    setUser(userData)
   }
-  // useEffect(() => {
+
   useEffect(() => {
-    user()
+    getUser()
   }, [])
-  // }, [])
-  console.log('init', userData)
 
+  console.log('user', user)
 
-  if (loading) return <View><Text>Loading...</Text></View>
+  if (ready) return <View><Text>Loading...</Text></View>
 
   return (
     <RecoilRoot>
       <QueryClientProvider client={queryClient}>
-        <NavigationContainer>
-          <Stack.Navigator>
-            {userData ? <Stack.Screen name="InNav" component={InNav} options={{ headerShown: false }} /> : <Stack.Screen name="OutNav" component={OutNav} options={{ headerShown: false }} />}
-          </Stack.Navigator>
-        </NavigationContainer>
+        <StatusBar barStyle='dark-content' backgroundColor='#ebf2f0' />
+        <SafeAreaView style={Platform.OS === 'android' ? { flex: 1, backgroundColor: '#ebf2f0' } : { flex: 1, paddingTop: 0, backgroundColor: '#ebf2f0' }}>
+          
+          <NavigationContainer>
+            <Nav.Navigator>
+              {isLogin ? <Nav.Screen name='InNav' component={InNav} options={{ headerShown: false }} /> : <Nav.Screen name='OutNav' component={OutNav} options={{ headerShown: false }} />}
+            {/* <Nav.Screen name='OutNav' component={OutNav} options={{ headerShown: false }} /> */}
+              {/* <OutNav /> */}
+            </Nav.Navigator>
+          </NavigationContainer>
+        </SafeAreaView>
       </QueryClientProvider>
     </RecoilRoot>
   );

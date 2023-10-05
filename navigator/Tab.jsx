@@ -7,22 +7,27 @@ import Menu4 from "../screens/Menu4";
 import Home from "../screens/Home";
 import Ticket from "../screens/Ticket";
 import { useColorScheme } from "react-native";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { MaterialIcons } from '@expo/vector-icons';
-import { AntDesign } from '@expo/vector-icons';
-import Profile from '../screens/auth/Profile';
+import Profile from '../screens/Profile';
+import { MyDrawer } from './Drawer';
+import Notice from '../screens/Notice';
+import CustomTabBar from '../components/CustomTabBar';
 
 const Tab = createBottomTabNavigator();
 
 const Tabs = () => {
   const isDark = useColorScheme() === "dark";
   return (
-    <Tab.Navigator
-      sceneContainerStyle={{}}
+    <Tab.Navigator sceneContainerStyle={{
+      
+    }}
       screenOptions={{
         headerShown: false,
-        tabBarActiveBackgroundColor: "pink",
+        tabBarActiveBackgroundColor: 'pink',
         tabBarShowLabel: false,
+      }} tabBar={(props) => {
+        console.log(props)
+          
+          return <CustomTabBar {...props} />
       }}
     >
       <Tab.Screen
@@ -30,21 +35,17 @@ const Tabs = () => {
         component={Home}
         options={{
           tabBarIcon: () => {
-            return <Ionicons name="home-outline" size={24} color="black" />;
+            return <Ionicons name="home-outline" size={24} color="black" />; 
           },
+          
         }}
       />
-      <Tab.Screen
-        name="ticket"
-        component={Ticket}
-        options={{
-          tabBarIcon: () => <MaterialCommunityIcons name="ticket-confirmation-outline" size={24} color="black" />,
-        }}
-      />
-      <Tab.Screen name="2" component={Menu2} options={{ tabBarIcon: () => <Ionicons name="ios-trophy-outline" size={24} color="black" /> }} />
-      <Tab.Screen name="3" component={Menu3} options={{ tabBarIcon: () => <MaterialIcons name="storefront" size={24} color="black" /> }} />
-      <Tab.Screen name="4" component={Menu4} options={{ tabBarIcon: () => <AntDesign name="notification" size={24} color="black" /> }} />
-      <Tab.Screen name="Profile" component={Profile} />
+      <Tab.Screen name="ticket" component={Ticket} />
+      <Tab.Screen name="2" component={Menu2} />
+      <Tab.Screen name="3" component={Menu3} />
+      <Tab.Screen name="4" component={Menu4} />
+      <Tab.Screen name='Profile' component={Profile} options={{presentation: 'modal' }}/>
+      <Tab.Screen name='Notice' component={Notice} options={{presentation: 'modal' }}/>
     </Tab.Navigator>
   );
 };

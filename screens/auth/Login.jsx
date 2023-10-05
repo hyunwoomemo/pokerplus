@@ -1,15 +1,16 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { Text, Image, LayoutAnimation, Alert } from "react-native";
 import styled from "styled-components/native";
-// import { LinearGradient } from "expo-linear-gradient";
+import { LinearGradient } from "expo-linear-gradient";
 import { Icon } from "../../source";
+import GradientBtn from "../../components/GradientBtn";
 import InputField from "../../components/InputField";
 import { authApi } from "../../api";
-import GradientBtn from "../../components/GradientBtn";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 import { useRecoilState } from 'recoil';
-import { authState } from '../../recoil/account/atom';
+import { authState } from '../../recoil/auth/atom';
+import { useMutation } from '@tanstack/react-query';
 
 const Container = styled.View`
   flex: 1;
@@ -79,11 +80,6 @@ const ButtonItemText = styled.Text`
 
 const Login = ({ navigation: { navigate } }) => {
   const passwordRef = useRef(null);
-  // const emailRef = useRef(null);
-
-  // useEffect(() => {
-  //   emailRef.current?.focus()
-  // }, [])
 
   const onJoin = () => {
     navigate("Terms");
@@ -184,38 +180,36 @@ const Login = ({ navigation: { navigate } }) => {
   };
 
   const { data, mutate, isLoading, isError, error: mutateError, isSuccess } = useMutation(authApi.login);
+  const [auth, setAuth] = useRecoilState(authState)
 
   const onLogin = () => {
-    const { email, password } = values;
-    // const [auth, setAuth] = useRecoilState(authState)
-    // console.log(auth)
-    mutate(
-      { id: email, password: password },
+    mutate({ id: values.email, password: values.password },
       {
         onSuccess: async (data) => {
-          console.log("login", data);
-          if (data.CODE === "AL000") {
+          console.log(data)
+          if (data.CODE === 'AL000') {
+            Alert.alert('로그인 성공')
+            const accountInfo = await axios.get('https://www.pokerplus.co.kr/account/info', {
+              headers: {
+                Authorization: `Bearer ${data.DATA.TOKEN}`,
+                Cookie: `auth._token.pokerzone=${data.DATA.TOKEN}`
+              }
+            }).then(res => res.data)
+            console.log('accpunt',accountInfo)
             await AsyncStorage.setItem('token', data.DATA.TOKEN)
-            navigate("Drawer");
+            await AsyncStorage.setItem('user', JSON.stringify(accountInfo.DATA))
+            // setAuth(accountInfo.DATA)
+            // console.log(accountInfo)
+            navigate('InNav')
           } else {
-            Alert.alert("로그인 실패");
+            Alert.alert('로그인 실패')
           }
-        },
+        }
       }
-      // {
-      //   onSuccess: async (data) => {
-      //     if (data.CODE === "AL000") {
-      //       Alert.alert("로그인 성공");
-      //       console.log('login', data )
-      //       navigate('Drawer')
-      //     } else {
-      //       Alert.alert("로그인 실패");
-      //     }
-      //   },
-      // }
     );
-    // console.log("login", data);
   };
+  console.log(data, mutate, isLoading, isError, mutateError, isSuccess);
+
 
   return (
     <Container>
