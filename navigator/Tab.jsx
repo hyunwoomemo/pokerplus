@@ -7,27 +7,30 @@ import Menu4 from "../screens/Menu4";
 import Home from "../screens/Home";
 import Ticket from "../screens/Ticket";
 import { useColorScheme } from "react-native";
-import Profile from '../screens/Profile';
-import { MyDrawer } from './Drawer';
-import Notice from '../screens/Notice';
-import CustomTabBar from '../components/CustomTabBar';
+import Profile from "../screens/Profile";
+import { MyDrawer } from "./Drawer";
+import Notice from "../screens/Notice";
+import Test from "../screens/Test";
+import QrCreate from "../screens/qr/QrCreate";
+import QrScan from "../screens/qr/QrScan";
+import CustomTabBar from "../components/CustomTabBar";
 
 const Tab = createBottomTabNavigator();
 
 const Tabs = () => {
   const isDark = useColorScheme() === "dark";
   return (
-    <Tab.Navigator sceneContainerStyle={{
-      
-    }}
+    <Tab.Navigator
+      sceneContainerStyle={{}}
       screenOptions={{
         headerShown: false,
-        tabBarActiveBackgroundColor: 'pink',
+        tabBarActiveBackgroundColor: "pink",
         tabBarShowLabel: false,
-      }} tabBar={(props) => {
-        console.log(props)
-          
-          return <CustomTabBar {...props} />
+      }}
+      tabBar={(props) => {
+        console.log(props);
+
+        return <CustomTabBar {...props} />;
       }}
     >
       <Tab.Screen
@@ -35,7 +38,7 @@ const Tabs = () => {
         component={Home}
         options={{
           tabBarIcon: () => {
-            return <Ionicons name="home-outline" size={24} color="black" />; 
+            return <Ionicons name="home-outline" size={24} color="black" />;
           },
         }}
       />
@@ -43,11 +46,9 @@ const Tabs = () => {
       <Tab.Screen name="Championship" component={Menu2} />
       <Tab.Screen name="Pub" component={Menu3} />
       <Tab.Screen name="Notice" component={Notice} />
-      <Tab.Screen name='Profile' component={Profile} />
-      {/* <Tab.Screen name='AuthCheck' component={AuthCheck} /> */}
-      {/* <Tab.Screen name='Notice' component={Notice} options={{presentation: 'modal' }}/> */}
+      <Tab.Screen name="Profile" component={Profile} />
     </Tab.Navigator>
   );
-}; 
+};
 
 export default Tabs;
