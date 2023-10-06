@@ -11,8 +11,8 @@ import Profile from "../screens/Profile";
 import { MyDrawer } from "./Drawer";
 import Notice from "../screens/Notice";
 import Test from "../screens/Test";
-import QrCreate from "../screens/qr/Create";
-import QrScan from "../screens/qr/Scan";
+import QrCreate from "../screens/qr/QrCreate";
+import QrScan from "../screens/qr/QrScan";
 import CustomTabBar from "../components/CustomTabBar";
 
 const Tab = createBottomTabNavigator();
