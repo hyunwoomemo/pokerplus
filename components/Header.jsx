@@ -39,15 +39,21 @@ const Header = () => {
         <Octicons name="three-bars" size={24} color="black" />
       </Hambuger>
       <Main onPress={() => navigation.navigate("home")}>
-        <Image source={{uri: 'https://newgenerationdatadev.blob.core.windows.net/data/template/t08/common/logo.png'}}
-        width={40} height={40} resizeMode='cover'/>
+        <Image
+          source={{
+            uri: "https://newgenerationdatadev.blob.core.windows.net/data/template/t08/common/logo.png",
+          }}
+          width={40}
+          height={40}
+          resizeMode="cover"
+        />
         {/* <MaterialCommunityIcons name="cards-spade-outline" size={30} color="black" /> */}
       </Main>
       <QRWrapper>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate("QrCreate")}>
           <MaterialCommunityIcons name="qrcode-edit" size={24} color="black" />
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate("QrScan")}>
           <MaterialCommunityIcons name="qrcode-scan" size={24} color="black" />
         </TouchableOpacity>
       </QRWrapper>
