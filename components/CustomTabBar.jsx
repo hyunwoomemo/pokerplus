@@ -1,16 +1,19 @@
 import React from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, Image } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Octicons } from '@expo/vector-icons';
+import { AntDesign } from '@expo/vector-icons';
+import { footerIcon } from '../source';
 
 const CustomTabBar = ({ state, descriptors, navigation, options }) => {
-  const icons = {
-    home: <Octicons name="home" size={24} color="black" />,
-    ticket: <MaterialCommunityIcons name="ticket-confirmation-outline" size={24} color="black" />
+  const icons = (src) => {
+    return (
+      <Image source={{uri: src}} width={24} height={24} resizeMode='contain'/>
+    )
   }
   return (
-    <View style={{ flexDirection: 'row', backgroundColor: 'white', paddingVertical: 10}}>
+    <View style={{ flexDirection: 'row', backgroundColor: '#ebf2f0', paddingVertical: 10}}>
       {state.routes.map((route, index) => {
         if (index < 5) { // Display only the first 4 items
           const { options } = descriptors[route.key];
@@ -38,10 +41,10 @@ const CustomTabBar = ({ state, descriptors, navigation, options }) => {
             <TouchableOpacity
               key={route.key}
               onPress={onPress}
-              style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
+              style={{ flex: 1, justifyContent: 'center', alignItems: 'center', paddingVertical: 10 }}
             >
-              {icons[route.name]}
-              <Text style={{ color: isFocused ? 'tomato' : 'black', paddingTop: 5}}>{label}</Text>
+              {isFocused ? icons(footerIcon.active[route.name]) : icons(footerIcon.basic[route.name])}
+              {/* <Text style={{ color: isFocused ? 'tomato' : 'black', paddingTop: 5}}>{label}</Text> */}
             </TouchableOpacity>
           );
         } else {

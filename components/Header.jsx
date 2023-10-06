@@ -38,7 +38,7 @@ const Header = () => {
       <Hambuger onPress={() => navigation.toggleDrawer()}>
         <Octicons name="three-bars" size={24} color="black" />
       </Hambuger>
-      <Main onPress={() => navigation.navigate("home")}>
+      <Main onPress={() => navigation.navigate("Home")}>
         <Image source={{uri: 'https://newgenerationdatadev.blob.core.windows.net/data/template/t08/common/logo.png'}}
         width={40} height={40} resizeMode='cover'/>
         {/* <MaterialCommunityIcons name="cards-spade-outline" size={30} color="black" /> */}

@@ -1,20 +1,21 @@
-import React from 'react'
-import styled from 'styled-components/native'
-import BackBtn from './BackBtn'
+import React from "react";
+import styled from "styled-components/native";
+import BackBtn from "./BackBtn";
+import { ScrollView, View } from "react-native";
 
-const ScreenLayout = ({back,children}) => {
+const ScreenLayout = ({ back, children, scroll }) => {
   const Container = styled.View`
     padding: 20px;
-    flex: 1
-  `
-
+    background-color: #fff;
+    flex: 1;
+  `;
 
   return (
     <Container>
       {back && <BackBtn />}
       {children}
     </Container>
-  )
-}
+  );
+};
 
-export default ScreenLayout
+export default ScreenLayout;

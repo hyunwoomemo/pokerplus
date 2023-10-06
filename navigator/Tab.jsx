@@ -31,23 +31,23 @@ const Tabs = () => {
       }}
     >
       <Tab.Screen
-        name="home"
+        name="Home"
         component={Home}
         options={{
           tabBarIcon: () => {
             return <Ionicons name="home-outline" size={24} color="black" />; 
           },
-          
         }}
       />
-      <Tab.Screen name="ticket" component={Ticket} />
-      <Tab.Screen name="2" component={Menu2} />
-      <Tab.Screen name="3" component={Menu3} />
-      <Tab.Screen name="4" component={Menu4} />
-      <Tab.Screen name='Profile' component={Profile} options={{presentation: 'modal' }}/>
-      <Tab.Screen name='Notice' component={Notice} options={{presentation: 'modal' }}/>
+      <Tab.Screen name="Ticket" component={Ticket} />
+      <Tab.Screen name="Championship" component={Menu2} />
+      <Tab.Screen name="Pub" component={Menu3} />
+      <Tab.Screen name="Notice" component={Notice} />
+      <Tab.Screen name='Profile' component={Profile} />
+      {/* <Tab.Screen name='AuthCheck' component={AuthCheck} /> */}
+      {/* <Tab.Screen name='Notice' component={Notice} options={{presentation: 'modal' }}/> */}
     </Tab.Navigator>
   );
-};
+}; 
 
 export default Tabs;

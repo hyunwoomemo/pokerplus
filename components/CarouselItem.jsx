@@ -9,10 +9,9 @@ const PageItem = styled.View`
   justify-content: center;
   align-items: center;
   border-radius: 20px;
-  margin-top: 30px;
+  margin-top: 20px;
 `;
 
-const PageNum = styled.Text``;
 const PosterImg = styled.Image`
 flex: 1;
 width: 80%;
@@ -32,7 +31,7 @@ export default function Page({ item, style }) {
   return (
     <PageItem color={item.color} style={style}>
       <PosterWrapper style={{width: width, height: height, }}>
-        <PosterImg source={{ uri: item.poster_url }} resizeMode={"contain"} style={{ borderRadius: width / 15 }} />
+        <PosterImg source={{ uri: item.poster_url }} resizeMode={"contain"} style={{ borderRadius: 15 }} />
       </PosterWrapper>
       {/* <PageNum>{item.poster_url}</PageNum> */}
     </PageItem>

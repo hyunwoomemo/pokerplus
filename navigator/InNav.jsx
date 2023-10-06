@@ -2,6 +2,7 @@ import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { MyDrawer } from './Drawer';
 import Root from './Root';
+import OutNav from './OutNav';
 
 const Nav = createNativeStackNavigator();
 
@@ -10,7 +11,7 @@ screenOptions={{
   headerTintColor: "white",
 }}
 >
-  <Nav.Screen name='Root' component={Root} options={{headerShown: false}}/>
+  <Nav.Screen name='Drawer' component={MyDrawer} options={{headerShown: false}}/>
 </Nav.Navigator>
 
 export default InNav

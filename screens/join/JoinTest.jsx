@@ -79,7 +79,7 @@ const ButtonItemText = styled.Text`
   color: #fff;
 `;
 
-const Login = ({ navigation: { navigate } }) => {
+const JoinTest = ({ navigation: { navigate } }) => {
   const passwordRef = useRef(null);
 
   const onJoin = () => {
@@ -94,6 +94,7 @@ const Login = ({ navigation: { navigate } }) => {
   const [error, setError] = useState({});
 
   const handleChangeText = (name, text) => {
+    console.log(text);
     setValues({
       ...values,
       [name]: text,
@@ -199,4 +200,4 @@ const Login = ({ navigation: { navigate } }) => {
   );
 };
 
-export default Login;
+export default JoinTest;

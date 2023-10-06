@@ -1,113 +1,137 @@
-import React from "react";
-import { Text, TouchableNativeFeedback, TouchableOpacity } from "react-native";
+import React, { useRef, useState } from "react";
+import { Alert, Image, ScrollView, Text, TextInput, TouchableNativeFeedback, TouchableOpacity, View } from "react-native";
 import styled from "styled-components/native";
+import { FontAwesome5 } from "@expo/vector-icons";
+import InputField from "../components/InputField";
+import JoinInputField from "../components/JoinInputField";
+import { validateJoin } from "../utils/validate";
 
-const Container = styled.View`
-  flex: 1;
+const Container = styled.ScrollView`
+  /* flex: 1; */
+  padding: 20px 0;
+  gap: 40px;
+`;
+
+const Profile = styled.TouchableOpacity`
+  margin-top: 20px;
   align-items: center;
-  justify-content: center;
-  /* max-height: 80%;
-  margin: auto 0; */
-  /* padding: 50px 0; */
 `;
 
-const LogoWrapper = styled.View`
-  width: 100px;
-  height: 100px;
-  justify-content: center;
-  align-items: center;
-  background-color: rgba(255, 255, 255, 0.5);
-  margin-bottom: 20px;
-`;
-const FormWrapper = styled.View`
-width: 80%;
-gap: 15px;
-margin-top: 30px;
-/* flex: 1 1 auto; */
-`;
-const FormItemWrapper = styled.View`
-  flex-direction: row;
-  gap: 10px;
-  align-items: center;
-  background-color: rgba(255, 255, 255, 0.5);
-  padding: 15px 20px;
-  border-radius: 30px;
-`;
-const EmailInput = styled.TextInput``;
-const PwInput = styled.TextInput``;
-
-const FindWrapper = styled.View`
-  margin-top: 30px;
-  flex-direction: row;
-  gap: 15px;
-  justify-content: center;
+const Noti = styled.Text`
+  color: #ff3183;
+  font-size: 14px;
+  margin-top: 20px;
+  padding: 10px;
 `;
 
-const FindItem = styled.TouchableOpacity`
-`
+// const FormWrapper = styled.ScrollView`
+// padding: 10px;
+// `
 
-const FindItemText = styled.Text`
-font-size: 12px;
-`
+const Join = ({ route, navigation }) => {
+  // const { authkey, check } = route.params;
+  // console.log(authkey, check);
 
-const ButtonWrapper = styled.View`
-  margin-top: 50px;
-  width: 80%;
-  gap: 15px;
-`;
+  // Alert.alert(authkey)
 
-const ButtonItem = styled.TouchableOpacity`
-  background-color: ${props => props.login ? 'hotpink' : 'black'};
-  padding: 15px 20px;
-  border-radius: 30px;
-  align-items: center;
-  justify-content: center;
+  const passwordRef = useRef();
 
-`
+  const [values, setValues] = useState({
+    email: "",
+    password: "",
+    password2: "",
+    eng_name: "",
+    nick: "",
+    location_code: null,
+    file1: null,
+    provision_yn: "Y",
+    privacy_yn: "Y",
+    position_yn: "Y",
+  });
 
-const ButtonItemText = styled.Text`
-  font-weight: bold;
-  color: #fff;
-`
+  // const [touched, setTouched] = useState({});
 
+  const [error, setError] = useState({});
 
-const Join = ({navigation}) => {
-  const onLogin = () => {
-    navigation.goBack()
-  }
-
-  const onJoin = () => {
-    navigation.goBack()
-  }
+  const handleChangeText = (name, text) => {
+    setValues({
+      ...values,
+      [name]: text,
+    });
+    validateJoin(name, text, values, error, setError);
+  };
 
   return (
     <Container>
-      <LogoWrapper>
-        <Text>로고</Text>
-      </LogoWrapper>
-      <FormWrapper>
-        <FormItemWrapper>
-          <Text>아이콘</Text>
-          <EmailInput placeholder="이메일 입력" placeholderTextColor="gray"></EmailInput>
-        </FormItemWrapper>
-        <FormItemWrapper>
-          <Text>아이콘</Text>
-          <PwInput placeholder="비밀번호 입력" placeholderTextColor="gray"></PwInput>
-        </FormItemWrapper>
-      </FormWrapper>
-      <FindWrapper>
-        <FindItem>
-          <FindItemText>이메일 찾기</FindItemText>
-        </FindItem>
-        <Text>|</Text>
-        <FindItem>
-          <FindItemText>비밀번호 찾기</FindItemText>
-        </FindItem>
-      </FindWrapper>
-      <ButtonWrapper>
-        <ButtonItem onPress={onLogin} login={true}><ButtonItemText>로그인</ButtonItemText></ButtonItem>
-        <ButtonItem onPress={onJoin}><ButtonItemText>회원가입</ButtonItemText></ButtonItem>
-      </ButtonWrapper>
+      <Profile>
+        <Image
+          source={{
+            uri: "https://www.pokerplus.co.kr/_next/image?url=%09https%3A%2F%2Fnewgenerationdatadev.blob.core.windows.net%2Fdata%2Ftemplate%2Ft08%2Faccount%2Fprofile_default_img.jpg&w=256&q=75",
+          }}
+          width={100}
+          height={100}
+          style={{ borderRadius: 50 }}
+          resizeMode="contain"
+        />
+      </Profile>
+      <Noti>* 원활한 회원가입을 위해 필수 입력 칸(*)을 입력해주세요.</Noti>
+      <JoinInputField
+        check={true}
+        label="이메일"
+        value={values.email}
+        onChangeText={(text) => handleChangeText("email", text)}
+        error={error.email}
+        inputMode="email"
+        returnKeyType="next"
+        onSubmitEditing={() => passwordRef.current?.focus()}
+      />
+      {/* <Text>이메일</Text>
+        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+        <TextInput style={{backgroundColor: 'tomato'}} maxLength={4}/>
+        <TouchableOpacity style={{backgroundColor: 'gray'}}><Text>중복 확인</Text></TouchableOpacity>
+        </View> */}
+      <Text>비밀번호</Text>
+      <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+        <TextInput ref={passwordRef} style={{ backgroundColor: "tomato" }} />
+      </View>
+
+      <Text>비밀번호 확인</Text>
+      <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+        <TextInput style={{ backgroundColor: "tomato" }} />
+      </View>
+
+      <Text>이름</Text>
+      <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+        <Text>이현우</Text>
+      </View>
+
+      <Text>영문 이름(GPI 등재할 영문 이름)</Text>
+      <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+        <TextInput style={{ backgroundColor: "tomato" }} />
+      </View>
+
+      <Text>닉네임</Text>
+      <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+        <TextInput style={{ backgroundColor: "tomato" }} />
+        <TouchableOpacity style={{ backgroundColor: "gray" }}>
+          <Text>중복 확인</Text>
+        </TouchableOpacity>
+      </View>
+
+      <Text>휴대폰번호</Text>
+      <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+        <Text>010-7736-1324</Text>
+      </View>
+
+      <Text>생년월일</Text>
+      <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+        <Text>1994-07-15</Text>
+      </View>
+
+      <Text>지역(시/도)</Text>
+      <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+        <TextInput style={{ backgroundColor: "tomato" }} />
+      </View>
     </Container>
   );
 };

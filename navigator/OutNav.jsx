@@ -1,30 +1,30 @@
-import React from 'react';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import Login from '../screens/auth/Login';
-import Join from '../screens/Join';
-import { MyDrawer } from './Drawer';
-import Terms from '../screens/auth/Terms';
-import TermsNav from './TermsNav';
-import InNav from './InNav';
+import React from "react";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { MyDrawer } from "./Drawer";
+import Terms from "../screens/auth/Terms";
+import InNav from "./InNav";
+import JoinView from "../screens/join/JoinView";
+import JoinTest from "../screens/join/JoinTest";
+import Join from "../screens/Join";
+import Login from "../screens/auth/Login";
 
 const Nav = createNativeStackNavigator();
 
-const OutNav = ({route}) => {
-  console.log(route.params?.type)
+const OutNav = ({ route }) => {
+  console.log(route.params?.type);
   return (
     <Nav.Navigator
-    screenOptions={{
-      // presentation: "modal",
-      headerTintColor: "white",
-      headerShown: false
-    }}
+      screenOptions={{
+        // presentation: "modal",
+        // headerTintColor: "white",
+        headerShown: false,
+      }}
     >
-    <Nav.Screen name='Login' component={Login} />
-    <Nav.Screen name='Terms' component={Terms} />
-    <Nav.Screen name='InNav' component={InNav} />
-    <Nav.Screen name='TermsNav' component={TermsNav} options={{ presentation: 'modal' }} initialParams={{type: route.params?.type, text: route.params?.text}} />
-  </Nav.Navigator>
-)
-}
+      <Nav.Screen name="Login" component={Login} />
+      <Nav.Screen name="Join" component={JoinView} />
+      <Nav.Screen name="Terms" component={Terms} />
+    </Nav.Navigator>
+  );
+};
 
-export default OutNav
+export default OutNav;

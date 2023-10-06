@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Image, Text, TouchableOpacity, View } from "react-native";
+import { Alert, Image, Linking, Text, TouchableOpacity, View } from "react-native";
 import BackBtn from "../../components/BackBtn";
 import styled from "styled-components/native";
 import { Icon } from "../../source";
@@ -9,6 +9,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import ScreenLayout from "../../components/ScreenLayout";
 import GradientBtn from "../../components/GradientBtn";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
+import { authApi } from "../../api";
 
 const TextWrapper = styled.View``;
 
@@ -116,8 +117,6 @@ const Terms = () => {
     },
   ];
 
-  const [allCheck, setAllCheck] = useState(false);
-
   const [check, setCheck] = useState([]);
 
   console.log(check);
@@ -127,7 +126,6 @@ const Terms = () => {
       check.length !== 4 ? setCheck([1, 2, 3, 4]) : setCheck([]);
     } else {
       if (check.includes(i)) {
-        // check.filter((v) => v !== i)
         setCheck((prev) => prev.filter((v) => v !== i));
       } else {
         setCheck((prev) => [...prev, i].filter((v, i, arr) => arr.indexOf(v) === i));
@@ -135,9 +133,14 @@ const Terms = () => {
     }
   };
 
-  const handleCheckAuth = () => {
-    // navigation.
-  }
+  const handleCheckAuth = async () => {
+    console.log("본인인증 페이지 이동");
+    try {
+      Linking.openURL(`https://ngapi.dev.pokerzone.io/auth/create?next=pokerplusapp://join?check=${check.sort((a, b) => a - b).join(",")}`);
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   return (
     <ScreenLayout>
@@ -155,12 +158,7 @@ const Terms = () => {
         {terms.map((term, i) => {
           return (
             <CheckRow key={term.text}>
-              <BouncyCheckbox
-                ref={term.ref}
-                fillColor="#ff3183"
-                isChecked={i === 0 ? check.length === 4 : check.includes(i)}
-                onPress={() => handleCheck(i)}
-              />
+              <BouncyCheckbox ref={term.ref} fillColor="#ff3183" isChecked={i === 0 ? check.length === 4 : check.includes(i)} onPress={() => handleCheck(i)} />
               <TouchableOpacity onPress={() => term.ref?.current.onPress()}>
                 <CheckText style={term.style && { ...term.style }}>{term.text}</CheckText>
               </TouchableOpacity>
@@ -173,9 +171,6 @@ const Terms = () => {
           );
         })}
       </CheckWrapper>
-      {/* <Nav.Navigator>
-        <Nav.Screen name='Provision' component={Provision}/>
-      </Nav.Navigator> */}
       <GradientBtn onPress={handleCheckAuth} disabled={check.filter((v) => v !== 4).length !== 3} label="휴대폰 본인 인증" style={{ marginTop: "auto" }} />
     </ScreenLayout>
   );

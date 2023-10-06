@@ -10,6 +10,10 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { authState } from "../recoil/auth/atom";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Notice from "../screens/Notice";
+import { MaterialIcons } from "@expo/vector-icons";
+import { FontAwesome } from "@expo/vector-icons";
+import { authApi } from "../api";
+import { SimpleLineIcons } from "@expo/vector-icons";
 
 const Drawer = createDrawerNavigator();
 
@@ -17,6 +21,7 @@ const DrawerContainer = styled.View`
   margin-top: 30px;
   padding: 20px;
   gap: 15px;
+  flex: 1;
 `;
 
 const WrapperTitle = styled.Text`
@@ -67,10 +72,23 @@ const AccordionWrapper = ({ title, children }) => {
     setIsOpen(!isOpen);
   };
 
+  // console.log(animationController)
+  const rotate = animationController.interpolate({
+    inputRange: [0, 1],
+    outputRange: ["0deg", "180deg"],
+  });
+
+  console.log(rotate);
+
   return (
     <Animated.View style={{ overflow: "hidden" }}>
       <TouchableOpacity onPress={toggleListItem}>
-        <WrapperTitle>{title}</WrapperTitle>
+        <View style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
+          <WrapperTitle>{title}</WrapperTitle>
+          <Animated.View style={{ transform: [{ rotate }] }}>
+            <MaterialIcons name="keyboard-arrow-down" size={24} color="black" />
+          </Animated.View>
+        </View>
       </TouchableOpacity>
       {isOpen &&
         menuData.map((_, i) => (
@@ -86,7 +104,9 @@ const AccordionItem = ({ content, name }) => {
   const navigation = useNavigation();
   return (
     <ItemWrapper>
-      <Text onPress={() => navigation.navigate(name)}>{content}</Text>
+      <TouchableOpacity onPress={() => navigation.navigate(name)}>
+        <Text>{content}</Text>
+      </TouchableOpacity>
     </ItemWrapper>
   );
 };
@@ -97,6 +117,21 @@ const menuData = [
   { content: "3", name: "3" },
   { content: "4", name: "4" },
 ];
+
+const DrawerFooter = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: auto;
+`;
+
+const SignOut = styled.TouchableOpacity`
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+`;
+
+const SignOutText = styled.Text``;
 
 const DrawerContent = ({ navigation: { navigate } }) => {
   const [user, setUser] = useState();
@@ -109,13 +144,25 @@ const DrawerContent = ({ navigation: { navigate } }) => {
     getUser();
   }, []);
 
-  console.log("drawer", user);
+  const navigation = useNavigation();
+  const [auth, setAuth] = useRecoilState(authState);
+
+  const handleSignout = async () => {
+    try {
+      await authApi.logout();
+      await AsyncStorage.clear();
+      setAuth({})
+      // navigation.navigate("OutNav");
+    } catch (err) {
+      console.error(err);
+    }
+  };
 
   return (
     <DrawerContainer>
       <InfoSection>
         <ProfileWrapper onPress={() => navigate("Profile")} style={{ width: 70, height: 70, borderRadius: 70 / 2 }}>
-          <Image source={{ uri: user?.user_profile_url }} width={70} height={70} borderRadius={70 / 2} resizeMode="cover" />
+          {user?.user_profile_url && <Image source={{ uri: user?.user_profile_url }} width={70} height={70} borderRadius={70 / 2} resizeMode="cover" />}
         </ProfileWrapper>
         <InfoTextWrapper>
           <NickText>{user?.nick}</NickText>
@@ -125,6 +172,14 @@ const DrawerContent = ({ navigation: { navigate } }) => {
       <AccordionWrapper title="고객센터" data={menuData}></AccordionWrapper>
       <AccordionWrapper title="운영 정책" data={menuData}></AccordionWrapper>
       {/* 추가 아이템 */}
+      <DrawerFooter>
+        <SignOut onPress={handleSignout}>
+          {/* <FontAwesome name="sign-out" size={24} color="black" /> */}
+          <SimpleLineIcons name="logout" size={20} color="black" />
+          <SignOutText>로그아웃</SignOutText>
+        </SignOut>
+        <Text style={{ color: "gray" }}>APP VER 1.0.1</Text>
+      </DrawerFooter>
     </DrawerContainer>
   );
 };
@@ -137,8 +192,6 @@ export function MyDrawer() {
       }}
     >
       <Drawer.Screen name="Tabs" component={Tabs} />
-      {/* <Drawer.Screen name="Profile" component={Profile} options={{}} />
-      <Drawer.Screen name="Notice" component={Notice} options={{}} /> */}
     </Drawer.Navigator>
   );
 }

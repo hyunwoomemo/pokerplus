@@ -18,7 +18,7 @@ const ButtonText = styled.Text`
 
 const GradientBtn = ({ onPress, label, style, disabled }) => {
   return (
-    <TouchableOpacity onPress={onPress} style={style && {...style}}>
+    <TouchableOpacity disabled={disabled} onPress={onPress} style={style && {...style}}>
       <LinearGradient colors={disabled ? ["gray", "gray"] :["#fe806a", "#ff3183"]} start={{ x: 0.3, y: 0.1 }} style={{ borderRadius: 30 }} end={{ x: 0.9, y: 0.1 }}>
         <Wrapper>
           <ButtonText>{label}</ButtonText>

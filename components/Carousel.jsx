@@ -1,11 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Animated, FlatList, Text, View } from "react-native";
 import styled from "styled-components/native";
-import Page from "./Page";
-
+import CarouselItem from "./CarouselItem";
+import { LinearGradient } from "expo-linear-gradient";
 
 const Container = styled.View`
-  height: 90%;
+  height: 100%;
   justify-content: center;
   align-items: center;
 `;
@@ -25,7 +25,7 @@ const IndicatorWrapper = styled.View`
 `;
 
 const ItemTitleWrapper = styled(Animated.createAnimatedComponent(View))`
-  padding-bottom: 10px;
+  /* padding-bottom: 10px; */
   align-items: center;
 `;
 const ItemTitle = styled.Text`
@@ -41,10 +41,8 @@ const Carousel = ({ data, pageWidth, gap, offset }) => {
   };
   const scrollX = useRef(new Animated.Value(0)).current;
 
-
   function renderItem(item, index, scrollX) {
     const inputRange = [(index - 1) * pageWidth, index * pageWidth, (index + 1) * pageWidth];
-
 
     const opacity = scrollX.interpolate({
       inputRange,
@@ -61,16 +59,17 @@ const Carousel = ({ data, pageWidth, gap, offset }) => {
       outputRange: [0.9, 1, 0.9],
     });
 
+
     return (
       <Animated.View style={[{ opacity, transform: [{ scale }] }]}>
-        <ItemTitleWrapper
-          style={{opacity:titleOpacity}}
-        >
-          <View style={{ borderWidth: 2, width: "80%", borderRadius: 20 }}>
-            <ItemTitle>{item.title}</ItemTitle>
-          </View>
+        <ItemTitleWrapper style={{ opacity: titleOpacity }}>
+          <LinearGradient colors={["#bc20a7", "#4c56fa"]} start={{ x: 0.3, y: 0.1 }} style={{ borderRadius: 30, width: "80%" }} end={{ x: 0.9, y: 0.1 }}>
+            <View style={{ borderRadius: 30, backgroundColor: "#ebf2f0", marginVertical: 2, marginHorizontal: 2, paddingVertical: 5 }}>
+              <ItemTitle>{item.title}</ItemTitle>
+            </View>
+          </LinearGradient>
         </ItemTitleWrapper>
-        <Page item={item} style={{ width: pageWidth, marginHorizontal: gap / 2, flex: 1 }} />
+        <CarouselItem item={item} style={{ width: pageWidth, marginHorizontal: gap / 2, flex: 1 }} />
       </Animated.View>
     );
   }
