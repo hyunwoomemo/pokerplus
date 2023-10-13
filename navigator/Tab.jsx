@@ -3,9 +3,13 @@ import React from "react";
 import { Ionicons } from "@expo/vector-icons";
 import Home from "../screens/Home";
 import Ticket from "../screens/Ticket";
+import TicketTab from "../navigator/TicketTab";
 import { useColorScheme } from "react-native";
 import Profile from "../screens/Profile";
 import Notice from "../screens/Notice";
+// import Test from "../screens/Test";
+import QrCreate from "../screens/qr/QrCreate";
+import QrScan from "../screens/qr/QrScan";
 import CustomTabBar from "../components/CustomTabBar";
 
 const Tab = createBottomTabNavigator();
@@ -35,11 +39,13 @@ const Tabs = () => {
           },
         }}
       />
-      <Tab.Screen name="Ticket" component={Ticket} />
+      <Tab.Screen name="Ticket" component={TicketTab} />
       <Tab.Screen name="Championship" component={Menu2} />
       <Tab.Screen name="Pub" component={Menu3} />
       <Tab.Screen name="Notice" component={Notice} />
       <Tab.Screen name="Profile" component={Profile} />
+      <Tab.Screen name="QrCreate" component={QrCreate} />
+      <Tab.Screen name="QrScan" component={QrScan} />
     </Tab.Navigator>
   );
 };
