@@ -14,7 +14,6 @@ const Container = styled.ScrollView`
 `;
 
 const Alliance = ({ navigation: { navigate }, route }) => {
-  console.log("address", filename);
   const [imageUrl, setImageUrl] = useState("");
   const [filename, setFilename] = useState("");
 

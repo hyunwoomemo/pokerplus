@@ -7,11 +7,35 @@ import { AntDesign } from "@expo/vector-icons";
 import { footerIcon } from "../source";
 
 const CustomTabBar = ({ state, descriptors, navigation, options }) => {
-  const icons = (src) => {
-    return <Image source={{ uri: src }} width={24} height={24} resizeMode="contain" />;
+  const icons = (src, options) => {
+    return (
+      <View
+        style={
+          options?.active
+            ? {
+                backgroundColor: "#fff",
+                padding: 12,
+                borderRadius: 20,
+                shadowOffset: {
+                  width: 3,
+                  height: 2,
+                },
+                shadowOpacity: 0.25,
+                shadowRadius: 3,
+                elevation: 5,
+                shadowColor: "#000",
+              }
+            : {
+                padding: 12,
+              }
+        }
+      >
+        <Image source={{ uri: src }} width={24} height={24} resizeMode="contain" />
+      </View>
+    );
   };
   return (
-    <View style={{ flexDirection: "row", backgroundColor: "#ebf2f0", paddingVertical: 10 }}>
+    <View style={{ flexDirection: "row", backgroundColor: "#ebf2f0", paddingVertical: 5, paddingBottom: 20, borderTopWidth: 1, borderTopColor: "rgba(59,59,59,0.1)" }}>
       {state.routes.map((route, index) => {
         if (index < 5) {
           // Display only the first 4 items
@@ -33,7 +57,7 @@ const CustomTabBar = ({ state, descriptors, navigation, options }) => {
 
           return (
             <TouchableOpacity key={route.key} onPress={onPress} style={{ flex: 1, justifyContent: "center", alignItems: "center", paddingVertical: 10 }}>
-              {isFocused ? icons(footerIcon.active[route.name]) : icons(footerIcon.basic[route.name])}
+              {isFocused ? icons(footerIcon.active[route.name], { active: true }) : icons(footerIcon.basic[route.name])}
               {/* <Text style={{ color: isFocused ? 'tomato' : 'black', paddingTop: 5}}>{label}</Text> */}
             </TouchableOpacity>
           );

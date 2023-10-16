@@ -16,9 +16,9 @@ import { useRecoilState } from "recoil";
 import { authState } from "../../recoil/auth/atom";
 
 const InfoEdit = ({ route, navigation }) => {
-  const [auth, setAuth] = useRecoilState(authState);
+  const [user, setUser] = useRecoilState(authState);
 
-  const { name, eng_name, user_profile_url, email, nick, hp, location_code } = auth;
+  const { name, eng_name, user_profile_url, email, nick, hp, location_code } = user;
 
   const [selected, setSelected] = useState("");
   const [area, setArea] = useState([]);
@@ -43,12 +43,12 @@ const InfoEdit = ({ route, navigation }) => {
       ...changneValues,
       [type]: text,
     });
-    if (type === "id" && text !== defaultValue.id) {
+    if (type === "id") {
       setSuccess({
         ...success,
         [type]: false,
       });
-    } else if (type === "nick" && text !== defaultValue.nick) {
+    } else if (type === "nick") {
       setSuccess({
         ...success,
         [type]: false,
@@ -61,7 +61,6 @@ const InfoEdit = ({ route, navigation }) => {
     setLoading({ ...loading, [type]: true });
     try {
       const res = await authApi.validate(type, { value: changneValues[type] });
-      console.log(res);
       if (res.CODE === "AC000") {
         setSuccess({ ...success, [type]: true });
       }
@@ -145,10 +144,9 @@ const InfoEdit = ({ route, navigation }) => {
       if (res.CODE === "AUI000") {
         const accountInfo = await authApi.info();
         await setStorage("user", JSON.stringify(accountInfo?.DATA));
-        setAuth(accountInfo?.DATA);
+        setUser(accountInfo?.DATA);
         navigation.navigate("Profile");
       }
-      console.log(res);
     } catch (err) {
       console.error(err);
     } finally {
@@ -161,75 +159,82 @@ const InfoEdit = ({ route, navigation }) => {
 
   return (
     <Layout>
-      <BackBtn title="정보 수정" />
+      <BackBtn title="정보 수정" onPress={() => navigation.popToTop()} />
       <ScrollView style={{ paddingHorizontal: 32 }}>
         <TouchableOpacity onPress={() => useImageUpload(status, requestPermission, setImageUrl)} style={{ alignItems: "center", paddingVertical: 30 }}>
           <Image source={{ uri: imageUrl ? imageUrl : user_profile_url }} width={120} height={120} borderRadius={60} resizeMode="cover" />
         </TouchableOpacity>
         <Button onPress={() => navigation.navigate("Alliance")} dark label=" 제휴 등록 " style={{ alignItems: "center" }} />
-        <WithLabelDisableInput backgroundColor={"#fff"} value={name}>
-          <Text>이름</Text>
-        </WithLabelDisableInput>
-        <WithLabelErrorInput backgroundColor={"#fff"} defaultValue={eng_name}>
-          <Text>영문 이름 (GPI등재용)</Text>
-        </WithLabelErrorInput>
-        <WithLabelCheckErrorInput
-          backgroundColor={"#fff"}
-          defaultValue={email}
-          onChangeText={(text) => handleChange("id", text)}
-          disabled={email === changneValues.id}
-          dark={true}
-          error={error.id}
-          onCheck={() => handleCheck("id")}
-          success={success.id}
-          loading={loading.id}
-        >
-          <Text>이메일</Text>
-        </WithLabelCheckErrorInput>
-        <WithLabelCheckErrorInput
-          backgroundColor={"#fff"}
-          defaultValue={nick}
-          onChangeText={(text) => handleChange("nick", text)}
-          disabled={nick === changneValues.nick}
-          dark={nick !== changneValues.nick}
-          error={error.nick}
-          onCheck={() => handleCheck("nick")}
-          success={success.nick}
-          loading={loading.nick}
-        >
-          <Text>닉네임</Text>
-        </WithLabelCheckErrorInput>
-        <WithLabelDisableInput backgroundColor={"#fff"} value={hp}>
-          <Text>연락처</Text>
-        </WithLabelDisableInput>
-        <Text style={{ marginTop: 30 }}>지역(시/도) {area.filter((v) => v.key === location_code)[0]?.value}</Text>
-        {area.length > 0 && (
-          <SelectList
-            boxStyles={{ marginTop: 10, backgroundColor: "#fff", borderRadius: 30, paddingVertical: 18, paddingHorizontal: 20, borderColor: "transparent" }}
-            setSelected={(val) => setSelected(val)}
-            data={area}
-            save="key"
-            // defaultOption={{ key: String(location_code), value: area.filter((v) => v.key === location_code)[0]?.value }}
+        <View gap={10}>
+          <WithLabelDisableInput value={name}>
+            <Text>이름</Text>
+          </WithLabelDisableInput>
+          <WithLabelErrorInput backgroundColor={"#fff"} defaultValue={eng_name}>
+            <Text>영문 이름 (GPI등재용)</Text>
+          </WithLabelErrorInput>
+          <WithLabelCheckErrorInput
+            backgroundColor={"#fff"}
+            defaultValue={email}
+            onChangeText={(text) => handleChange("id", text)}
+            disabled={email === changneValues.id}
+            dark={true}
+            error={error.id}
+            onCheck={() => handleCheck("id")}
+            success={success.id}
+            loading={loading.id}
+          >
+            <Text>이메일</Text>
+          </WithLabelCheckErrorInput>
+          <WithLabelCheckErrorInput
+            backgroundColor={"#fff"}
+            defaultValue={nick}
+            onChangeText={(text) => handleChange("nick", text)}
+            disabled={nick === changneValues.nick}
+            dark={nick !== changneValues.nick}
+            error={error.nick}
+            onCheck={() => handleCheck("nick")}
+            success={success.nick}
+            loading={loading.nick}
+          >
+            <Text>닉네임</Text>
+          </WithLabelCheckErrorInput>
+          <WithLabelDisableInput value={hp}>
+            <Text>연락처</Text>
+          </WithLabelDisableInput>
+          <View style={{ paddingHorizontal: 10, flexDirection: "row", alignItems: "center", marginTop: 30, justifyContent: "space-between" }}>
+            <Text>지역(시/도)</Text>
+            <Text>현재 지역: {area.filter((v) => v.key === location_code)[0]?.value}</Text>
+          </View>
+          {area.length > 0 && (
+            <SelectList
+              boxStyles={{ marginTop: 10, backgroundColor: "#fff", borderRadius: 15, paddingVertical: 18, paddingHorizontal: 20, borderColor: "transparent" }}
+              dropdownStyles={{ backgroundColor: "#fff", borderWidth: 0 }}
+              dropdownItemStyles={{ paddingVertical: 10 }}
+              setSelected={(val) => setSelected(val)}
+              data={area}
+              save="key"
+              // defaultOption={{ key: String(location_code), value: area.filter((v) => v.key === location_code)[0]?.value }}
+            />
+          )}
+          <WithLabelErrorInput
+            backgroundColor={"#fff"}
+            placeholder="새 비밀번호를 입력하세요."
+            placeholderTextColor="gray"
+            onChangeText={(text) => handleChange("password", text)}
+            error={error.password}
+            secureTextEntry
+          >
+            <Text>비밀번호</Text>
+          </WithLabelErrorInput>
+          <WithLabelErrorInput
+            backgroundColor={"#fff"}
+            placeholder="비밀번호를 한번 더 입력해주세요."
+            placeholderTextColor="gray"
+            onChangeText={(text) => handleChange("password2", text)}
+            error={error.password2}
+            secureTextEntry
           />
-        )}
-        <WithLabelErrorInput
-          backgroundColor={"#fff"}
-          placeholder="새 비밀번호를 입력하세요."
-          placeholderTextColor="gray"
-          onChangeText={(text) => handleChange("password", text)}
-          error={error.password}
-          secureTextEntry
-        >
-          <Text>비밀번호</Text>
-        </WithLabelErrorInput>
-        <WithLabelErrorInput
-          backgroundColor={"#fff"}
-          placeholder="비밀번호를 한번 더 입력해주세요."
-          placeholderTextColor="gray"
-          onChangeText={(text) => handleChange("password2", text)}
-          error={error.password2}
-          secureTextEntry
-        />
+        </View>
         <Button
           primary
           label="저장"

@@ -1,6 +1,6 @@
 // import { StatusBar } from 'expo-status-bar';
-import React, { useEffect, useState } from "react";
-import { SafeAreaView, Platform, StatusBar, Alert } from "react-native";
+import React, { useCallback, useEffect, useState } from "react";
+import { SafeAreaView, Platform, StatusBar, Alert, View, Image, Text, StyleSheet } from "react-native";
 import Root from "./navigator/Root";
 import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import "react-native-gesture-handler";
@@ -9,29 +9,13 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { RecoilRoot } from "recoil";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Linking } from "react-native";
-import { getSearchParamFromURL } from "./utils/getSearchParamFromUrl";
 import { deepLinkConfig } from "./source";
+import { ToastProvider } from "react-native-toast-notifications";
 
 const queryClient = new QueryClient();
 
 const Nav = createNativeStackNavigator();
 export default function App() {
-  const [ready, setReady] = useState(true);
-  const [isLogin, setIsLogin] = useState();
-  const [user, setUser] = useState();
-
-  const getUser = async () => {
-    const data = await AsyncStorage.getItem("token");
-    const userData = await AsyncStorage.getItem("user");
-    setReady(false);
-    setIsLogin(data);
-    setUser(userData);
-  };
-
-  useEffect(() => {
-    getUser();
-  }, []);
-
   const linking = {
     prefixes: ["https://...", "http://localhost:3000", "pokerplusapp://"],
 
@@ -67,20 +51,24 @@ export default function App() {
     config: deepLinkConfig,
   };
 
+  const [login, setLogin] = useState(false);
+
   return (
     <RecoilRoot>
-      <QueryClientProvider client={queryClient}>
-        <StatusBar barStyle="dark-content" backgroundColor="#ebf2f0" />
-        <SafeAreaView style={Platform.OS === "android" ? { flex: 1, backgroundColor: "#ebf2f0" } : { flex: 1, paddingTop: 0, backgroundColor: "#ebf2f0" }}>
-          {!ready && (
-            <NavigationContainer linking={linking}>
-              <Nav.Navigator>
-                <Nav.Screen name="Root" component={Root} options={{ headerShown: false }} />
-              </Nav.Navigator>
-            </NavigationContainer>
-          )}
-        </SafeAreaView>
-      </QueryClientProvider>
+      <ToastProvider duration={1000} offset={30} swipeEnabled={true}>
+        <QueryClientProvider client={queryClient}>
+          <StatusBar barStyle="dark-content" backgroundColor="#fff" />
+          <NavigationContainer linking={linking}>
+            <Nav.Navigator>
+              <Nav.Screen name="Root" component={Root} options={{ headerShown: false }} />
+            </Nav.Navigator>
+          </NavigationContainer>
+        </QueryClientProvider>
+      </ToastProvider>
     </RecoilRoot>
   );
 }
+
+const styles = StyleSheet.create({
+  login: {},
+});

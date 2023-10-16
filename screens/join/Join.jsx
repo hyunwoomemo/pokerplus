@@ -142,8 +142,6 @@ const Join = ({ navigation: { navigate }, route }) => {
   };
 
   const handleJoin = async () => {
-    console.log("join");
-
     try {
       const file = imageUrl.split("/").pop();
       const match = /\.(\w+)$/.exec(file ?? "");
@@ -167,8 +165,6 @@ const Join = ({ navigation: { navigate }, route }) => {
 
       const res = await authApi.join(bodyData);
       console.log(bodyData);
-      console.log(res);
-      console.log("sdf");
 
       if (res.CODE === "AR000") {
         Alert.alert("회원가입이 완료되었습니다.");
@@ -269,7 +265,9 @@ const Join = ({ navigation: { navigate }, route }) => {
         <Text style={{ marginTop: 30 }}>지역(시/도)</Text>
         {area.length > 0 && (
           <SelectList
-            boxStyles={{ marginTop: 10, backgroundColor: "#edf0f7", borderRadius: 30, paddingVertical: 18, paddingHorizontal: 20, borderColor: "transparent" }}
+            boxStyles={{ marginTop: 10, backgroundColor: "#fff", borderRadius: 15, paddingVertical: 18, paddingHorizontal: 20, borderColor: "transparent" }}
+            dropdownStyles={{ backgroundColor: "#fff", borderWidth: 0 }}
+            dropdownItemStyles={{ paddingVertical: 10 }}
             setSelected={(val) => setSelected(val)}
             data={area}
             save="key"

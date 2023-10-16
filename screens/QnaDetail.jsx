@@ -13,7 +13,6 @@ const QnaDetail = ({ route }) => {
   const [answer, setAnswer] = useState([]);
   const [prevItem, setPrevItem] = useState([]);
 
-  console.log(answer);
 
   useEffect(() => {
     customerApi

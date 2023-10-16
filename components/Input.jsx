@@ -1,5 +1,5 @@
 import React, { forwardRef } from "react";
-import { ActivityIndicator, Text, TextInput, View } from "react-native";
+import { ActivityIndicator, StyleSheet, Text, TextInput, View } from "react-native";
 import styled from "styled-components/native";
 import Button from "./Button";
 import { Feather } from "@expo/vector-icons";
@@ -8,6 +8,7 @@ import { SelectList } from "react-native-dropdown-select-list";
 const Label = styled.View`
   flex-direction: row;
   align-items: center;
+  padding-left: 10px;
 `;
 
 const Container = styled.View`
@@ -24,8 +25,8 @@ const Input = forwardRef(({ style, disableStyle, backgroundColor, ...rest }, ref
         {...rest}
         style={
           disableStyle
-            ? { backgroundColor: "#c1c4cb", borderRadius: 30, paddingVertical: 18, paddingHorizontal: 20 }
-            : { backgroundColor: `${backgroundColor || "#edf0f7"}`, borderRadius: 30, paddingVertical: 18, paddingHorizontal: 20 }
+            ? { backgroundColor: "#c1c4cb", borderRadius: 15, paddingVertical: 18, paddingHorizontal: 20 }
+            : { backgroundColor: `${backgroundColor || "#edf0f7"}`, borderRadius: 15, paddingVertical: 18, paddingHorizontal: 20 }
         }
         ref={ref}
       />
@@ -37,11 +38,11 @@ const DisabledInput = ({ style, value, backgroundColor, ...rest }) => {
   return (
     <View style={style}>
       {value ? (
-        <View autoCapitalize="none" autoCorrect={false} {...rest} style={{ backgroundColor: backgroundColor || "#dedfe3", borderRadius: 30, paddingVertical: 18, paddingHorizontal: 20 }}>
+        <View autoCapitalize="none" autoCorrect={false} {...rest} style={{ backgroundColor: backgroundColor || "#dedfe377", borderRadius: 15, paddingVertical: 18, paddingHorizontal: 20 }}>
           <Text>{value}</Text>
         </View>
       ) : (
-        <View autoCapitalize="none" autoCorrect={false} {...rest} style={{ backgroundColor: "#dedfe3", borderRadius: 30, paddingVertical: 18, paddingHorizontal: 20 }} />
+        <View autoCapitalize="none" autoCorrect={false} {...rest} style={{ backgroundColor: "#dedfe377", borderRadius: 15, paddingVertical: 18, paddingHorizontal: 20 }} />
       )}
     </View>
   );
@@ -76,7 +77,9 @@ const withCheckBtn = (Component) => {
         <Button
           onPress={!success && !error ? onCheck : null}
           disabled={disabled}
-          label={loading ? <ActivityIndicator size={17} color="#ff3183" /> : success ? "확인 완료" : "중복 확인"}
+          dark
+          primary={success}
+          label={loading ? <ActivityIndicator size={16} color="#fff" /> : success ? "확인 완료" : "중복 확인"}
           style={{ flex: 1 }}
         />
       </View>

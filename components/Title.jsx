@@ -2,7 +2,7 @@ import React from "react";
 import { Text, View } from "react-native";
 import styled from "styled-components/native";
 
-const Title = ({ text }) => {
+const Title = ({ text, ...rest }) => {
   const BoldText = styled.Text`
     font-weight: 900;
     font-size: 28px;
@@ -10,7 +10,7 @@ const Title = ({ text }) => {
   `;
 
   return (
-    <View>
+    <View {...rest}>
       <BoldText>{text}</BoldText>
     </View>
   );

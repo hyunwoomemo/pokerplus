@@ -6,7 +6,8 @@ import request from "./axios";
 const BASE_URL = "https://www.pokerplus.co.kr";
 
 export const resourceApi = {
-  posters: () => fetch(`${BASE_URL}/resource/posters`).then((res) => res.json()),
+  posters: () => request.get(`/resource/posters`),
+  policys: (type) => request.get(`/resource/policys/${type}`),
 };
 
 export const authApi = {

@@ -1,10 +1,12 @@
 import React from "react";
-import { Dimensions, Text, View } from "react-native";
+import { ActivityIndicator, Dimensions, StatusBar, StyleSheet, Text, View } from "react-native";
 import Layout from "../components/Layout";
 import styled from "styled-components/native";
 import Carousel from "../components/Carousel";
 import { resourceApi } from "../api";
 import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
+import { useEffect } from "react";
 
 const Container = styled.View`
   flex: 1;
@@ -15,17 +17,26 @@ const Container = styled.View`
 const screenWidth = Math.round(Dimensions.get("window").width);
 
 const Home = () => {
-  const { isLoading, data } = useQuery(["resource", "poster"], resourceApi.posters);
-  // console.log(data)
+  const [poster, setPoster] = useState([]);
+
+  useEffect(() => {
+    if (poster.length > 0) return;
+    resourceApi.posters().then((res) => {
+      if (res.CODE === "P000") {
+        setPoster(res.DATA);
+      }
+    });
+  }, []);
   return (
     <Layout>
       <Container>
-        {!isLoading && <Carousel gap={4} offset={36} data={data.DATA} pageWidth={screenWidth - (4 + 36) * 2} />}
-        {isLoading && (
+        {/* {!isLoading && */}
+        <Carousel gap={4} offset={36} data={poster} pageWidth={screenWidth - (4 + 36) * 2} />
+        {/* {isLoading && (
           <View>
-            <Text>Loading...</Text>
+            <ActivityIndicator style={StyleSheet.absoluteFillObject} color="#ff3183" />
           </View>
-        )}
+        )} */}
       </Container>
     </Layout>
   );

@@ -17,7 +17,6 @@ const TicketTabs = () => {
         tabBarShowLabel: false,
       }}
       tabBar={(props) => {
-        console.log(props);
 
         return <CustomTabBar {...props} />;
       }}

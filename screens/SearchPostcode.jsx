@@ -5,7 +5,6 @@ import BackBtn from "../components/BackBtn";
 
 const SearchPostcode = ({ navigation, route }) => {
   const getAddressData = (data) => {
-    console.log(data.address);
     let defaultAddress = ""; // 기본주소
     if (data.buildingName === "N") {
       defaultAddress = data.apartment;

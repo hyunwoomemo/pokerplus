@@ -3,6 +3,7 @@ import { Animated, FlatList, Text, View } from "react-native";
 import styled from "styled-components/native";
 import CarouselItem from "./CarouselItem";
 import { LinearGradient } from "expo-linear-gradient";
+// import SplashScreen from "react-native-splash-screen";
 
 const Container = styled.View`
   height: 100%;
@@ -34,11 +35,12 @@ const ItemTitle = styled.Text`
 `;
 
 const Carousel = ({ data, pageWidth, gap, offset }) => {
-  const [page, setPage] = useState(0);
-  const onScroll = (e) => {
-    const newPage = Math.abs(Math.round(e.nativeEvent.contentOffset.x / (pageWidth + gap)));
-    setPage(newPage);
-  };
+  const [load, setLoad] = useState([]);
+  useEffect(() => {
+    if (load.length === 3) {
+      // SplashScreen.hide();
+    }
+  }, [data, load]);
   const scrollX = useRef(new Animated.Value(0)).current;
 
   function renderItem(item, index, scrollX) {
@@ -59,7 +61,6 @@ const Carousel = ({ data, pageWidth, gap, offset }) => {
       outputRange: [0.9, 1, 0.9],
     });
 
-
     return (
       <Animated.View style={[{ opacity, transform: [{ scale }] }]}>
         <ItemTitleWrapper style={{ opacity: titleOpacity }}>
@@ -69,7 +70,7 @@ const Carousel = ({ data, pageWidth, gap, offset }) => {
             </View>
           </LinearGradient>
         </ItemTitleWrapper>
-        <CarouselItem item={item} style={{ width: pageWidth, marginHorizontal: gap / 2, flex: 1 }} />
+        <CarouselItem setLoad={setLoad} item={item} index={index} style={{ width: pageWidth, marginHorizontal: gap / 2, flex: 1 }} />
       </Animated.View>
     );
   }
@@ -88,7 +89,7 @@ const Carousel = ({ data, pageWidth, gap, offset }) => {
         onScroll={Animated.event([{ nativeEvent: { contentOffset: { x: scrollX } } }], { useNativeDriver: true })}
         // scrollEventThrottle={12}
         pagingEnabled
-        renderItem={({ item, index }) => renderItem(item, index, scrollX)}
+        renderItem={({ item, index }) => renderItem(item, index, scrollX, setLoad)}
         snapToInterval={pageWidth + gap}
         snapToAlignment="start"
         showsHorizontalScrollIndicator={false}

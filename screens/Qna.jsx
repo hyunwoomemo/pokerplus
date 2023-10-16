@@ -6,10 +6,14 @@ import { SelectList } from "react-native-dropdown-select-list";
 import { WithLabelInput } from "../components/Input";
 import Button from "../components/Button";
 
-const Qna = ({ navigation: { navigate } }) => {
+const Qna = ({ navigation }) => {
   const [config, setConfig] = useState([]);
   const [values, setValues] = useState({});
   const [loading, setLoading] = useState(false);
+
+  navigation.addListener("blur", () => {
+    setValues({});
+  });
 
   useEffect(() => {
     if (config.length === 0) {
@@ -26,19 +30,16 @@ const Qna = ({ navigation: { navigate } }) => {
       ...values,
       [type]: value,
     });
-    console.log(values);
   };
 
-  // console.log(values);
 
   const handleSubmit = async () => {
     setLoading(true);
     const { host_id, subject, contents } = values;
     try {
       const res = await customerApi.updateCustomerItem(0, host_id, subject, contents);
-      console.log(res);
       if (res.CODE === "DU000") {
-        navigate("QnaList", { data: res.DATA });
+        navigation.navigate("QnaNav", { data: res.DATA });
         setValues({});
       }
     } catch (err) {
@@ -53,16 +54,16 @@ const Qna = ({ navigation: { navigate } }) => {
       <Text style={styles.title}>1:1 문의하기</Text>
       <ScrollView style={{ paddingHorizontal: 32, marginTop: 20 }}>
         <SelectList
-          boxStyles={{ marginTop: 10, backgroundColor: "#fff", borderRadius: 30, paddingVertical: 18, paddingHorizontal: 20, borderColor: "transparent" }}
+          boxStyles={{ marginTop: 10, backgroundColor: "#fff", borderRadius: 15, paddingVertical: 18, paddingHorizontal: 20, borderColor: "transparent" }}
+          dropdownStyles={{ backgroundColor: "#fff", borderWidth: 0 }}
+          dropdownItemStyles={{ paddingVertical: 10 }}
           setSelected={(val) => handleChange("host_id", val)}
           data={config}
           save="key"
           placeholder="문의 대상을 선택하세요."
-          dropdownStyles={{ backgroundColor: "#fff" }}
           defaultOption={{ key: "", value: "" }}
-          // defaultOption={{ key: String(location_code), value: area.filter((v) => v.key === location_code)[0]?.value }}
         />
-        <WithLabelInput onChangeText={(text) => handleChange("subject", text)} backgroundColor="#fff" placeholder="문의 제목을 입력하세요." value={values.subject}>
+        <WithLabelInput onChangeText={(text) => handleChange("subject", text)} backgroundColor="#fff" placeholder="문의 제목을 입력하세요." placeholderTextColor="gray" value={values.subject}>
           <Text>제목</Text>
         </WithLabelInput>
         <View style={styles.textAreaWrapper}>
@@ -78,7 +79,7 @@ const Qna = ({ navigation: { navigate } }) => {
           />
         </View>
         <View style={styles.buttonWrapper}>
-          <Button label="취소" style={{ flex: 1 }} />
+          <Button label="취소" dark style={{ flex: 1 }} onPress={() => navigation.goBack()} />
           <Button label="전송" loading={loading} onPress={handleSubmit} primary style={{ flex: 1 }} />
         </View>
       </ScrollView>
@@ -99,10 +100,13 @@ const styles = StyleSheet.create({
   },
   textArea: {
     backgroundColor: "#fff",
-    borderRadius: 30,
+    borderRadius: 15,
     marginTop: 20,
     paddingHorizontal: 20,
-    fontSize: 16,
+    // fontSize: 16,
+    paddingVertical: 40,
+    paddingTop: 20,
+    height: 100,
   },
   buttonWrapper: {
     flexDirection: "row",

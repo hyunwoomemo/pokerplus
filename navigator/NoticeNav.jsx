@@ -1,24 +1,32 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import React from "react";
+import React, { createContext, useCallback, useState } from "react";
 import Notice from "../screens/Notice";
 import NoticeDetail from "../screens/NoticeDetail";
+import { useFocusEffect } from "@react-navigation/native";
+import { NoticeContext } from "../context";
 
 const Stack = createNativeStackNavigator();
 
 const NoticeNav = () => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const value = { currentPage, setCurrentPage };
+
+  useFocusEffect(
+    useCallback(() => {
+      console.log("Focus");
+      return () => {
+        setCurrentPage(1);
+      };
+    }, [])
+  );
+
   return (
-    <Stack.Navigator
-      initialRouteName="Notice"
-      screenListeners={() => ({
-        blur: () => {
-          console.log("blur");
-        },
-      })}
-      screenOptions={{ headerShown: false }}
-    >
-      <Stack.Screen name="Notice" component={Notice} />
-      <Stack.Screen name="NoticeDetail" component={NoticeDetail} />
-    </Stack.Navigator>
+    <NoticeContext.Provider value={value}>
+      <Stack.Navigator initialRouteName="Notice" screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="Notice" component={Notice} />
+        <Stack.Screen name="NoticeDetail" component={NoticeDetail} />
+      </Stack.Navigator>
+    </NoticeContext.Provider>
   );
 };
 

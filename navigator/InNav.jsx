@@ -1,8 +1,6 @@
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { MyDrawer } from "./Drawer";
-import Root from "./Root";
-import OutNav from "./OutNav";
 
 const Nav = createNativeStackNavigator();
 

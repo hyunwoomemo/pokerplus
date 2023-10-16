@@ -29,10 +29,6 @@ const Noti = styled.Text`
 // `
 
 const Join = ({ route, navigation }) => {
-  // const { authkey, check } = route.params;
-  // console.log(authkey, check);
-
-  // Alert.alert(authkey)
 
   const passwordRef = useRef();
 

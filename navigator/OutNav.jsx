@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Terms from "../screens/auth/Terms";
 import Join from "../screens/join/Join";
@@ -7,16 +7,34 @@ import FindId from "../screens/auth/FindId";
 import FindIdSuccess from "../screens/auth/FindIdSuccess";
 import FindPwSuccess from "../screens/auth/FindPwSuccess";
 import FindPw from "../screens/auth/FindPw";
+// import SplashScreen from "react-native-splash-screen";
+import { useRecoilState } from "recoil";
+import { authState } from "../recoil/auth/atom";
+import { getStorage } from "../utils/asyncStorage";
 
 const Nav = createNativeStackNavigator();
 
-const OutNav = ({ route }) => {
-  console.log(route.params?.type);
+const OutNav = () => {
+  const [user, setUser] = useRecoilState(authState);
+
+  useEffect(() => {
+    getStorage("token").then((data) => {
+      if (!data) {
+        setTimeout(() => {
+          // SplashScreen.hide();
+        }, 2000);
+      }
+    });
+    // if (Object.keys(user).length === 0) {
+
+    //   setTimeout(() => {
+    //     SplashScreen.hide();
+    //   }, 3000);
+    // }
+  }, []);
   return (
     <Nav.Navigator
       screenOptions={{
-        // presentation: "modal",
-        // headerTintColor: "white",
         headerShown: false,
       }}
     >

@@ -27,7 +27,6 @@ const BackBtn = ({ onPress }) => {
 
 const withTitle = (Component) => {
   return ({ title, subTitle, ...rest }) => {
-    console.log(title);
     return (
       <View style={styles.titleBackbtn}>
         <Component {...rest} />

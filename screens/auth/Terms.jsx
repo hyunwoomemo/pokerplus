@@ -119,7 +119,6 @@ const Terms = () => {
 
   const [check, setCheck] = useState([]);
 
-  console.log(check);
 
   const handleCheck = (i) => {
     if (i === 0) {
@@ -134,7 +133,6 @@ const Terms = () => {
   };
 
   const handleCheckAuth = async () => {
-    console.log("본인인증 페이지 이동");
     try {
       Linking.openURL(`https://ngapi.dev.pokerzone.io/auth/create?next=pokerplusapp://join?check=${check.sort((a, b) => a - b).join(",")}`);
     } catch (err) {

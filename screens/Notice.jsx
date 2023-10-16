@@ -1,20 +1,20 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useState } from "react";
 import { ActivityIndicator, FlatList, LayoutAnimation, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Layout from "../components/Layout";
 import { customerApi } from "../api";
 import moment from "moment";
 import Pagination from "../components/Pagination";
+import { NoticeContext } from "../context";
 
-const Notice = ({ navigation: { navigate } }) => {
+const Notice = ({ navigation }) => {
   const [notice, setNotice] = useState();
   const [offset, setOffset] = useState(10);
   const [total, setTotal] = useState(0);
   const [totalPage, setTotalPage] = useState(0);
-  const [currentPage, setCurrentPage] = useState(1);
+  const { currentPage, setCurrentPage } = useContext(NoticeContext);
   const [loading, setLoading] = useState(true);
-  // const [currentPage]
+
   useEffect(() => {
-    // console.log(notice);
     if (!notice) {
       customerApi
         .noticeList({
@@ -41,7 +41,8 @@ const Notice = ({ navigation: { navigate } }) => {
         page: currentPage,
       })
       .then((res) => {
-        console.log(res.DATA);
+        LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
+
         setTotal(res.DATA.total);
         setNotice(res.DATA.data);
       })
@@ -55,7 +56,7 @@ const Notice = ({ navigation: { navigate } }) => {
   return (
     <Layout>
       {loading ? (
-        <ActivityIndicator style={StyleSheet.absoluteFillObject} color="#4c56fa" size={36} />
+        <ActivityIndicator style={StyleSheet.absoluteFillObject} color="#ff3183" size="large" />
       ) : (
         <>
           <Text style={{ textAlign: "center", fontSize: 16, paddingVertical: 20 }}>공지사항</Text>
@@ -67,7 +68,7 @@ const Notice = ({ navigation: { navigate } }) => {
               <TouchableOpacity
                 style={{ padding: 20, gap: 5, borderBottomWidth: 1, borderBottomColor: "rgba(0,0,0,0.1)" }}
                 onPress={() =>
-                  navigate("NoticeDetail", {
+                  navigation.navigate("NoticeDetail", {
                     notice: notice,
                     index: index,
                   })

@@ -1,8 +1,8 @@
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import Tabs from "./Tab";
 import { useEffect, useRef, useState } from "react";
-import { Animated, Image, LayoutAnimation, Text, TouchableOpacity, View } from "react-native";
-import { useNavigation } from "@react-navigation/native";
+import { Animated, Image, LayoutAnimation, Platform, Text, TouchableOpacity, View } from "react-native";
+import { getFocusedRouteNameFromRoute, useNavigation, useRoute } from "@react-navigation/native";
 import styled from "styled-components/native";
 import { toggleAnimation } from "../animations/toggleAnimation";
 import Profile from "../screens/Profile";
@@ -14,15 +14,18 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 import { authApi } from "../api";
 import { SimpleLineIcons } from "@expo/vector-icons";
-import { removeStorage } from "../utils/asyncStorage";
+import { getStorage, removeStorage } from "../utils/asyncStorage";
+import { ActiveDrawer } from "../context";
+import { opacityAnimation } from "../animations/opacityAnimation";
 
 const Drawer = createDrawerNavigator();
 
 const DrawerContainer = styled.View`
-  margin-top: 30px;
+  margin: ${(props) => (props.ios ? "40px 0 10px 0" : "0")};
   padding: 20px;
   gap: 15px;
   flex: 1;
+  background-color: #ebf2f0;
 `;
 
 const WrapperTitle = styled.Text`
@@ -31,8 +34,7 @@ const WrapperTitle = styled.Text`
 `;
 
 const ItemWrapper = styled(Animated.createAnimatedComponent(View))`
-  margin-top: 5px;
-  margin-left: 10px;
+  margin: 5px;
 `;
 
 const InfoSection = styled.View`
@@ -40,7 +42,7 @@ const InfoSection = styled.View`
   gap: 10px;
   margin-bottom: 20px;
 `;
-const ProfileWrapper = styled.TouchableOpacity`
+const ProfileWrapper = styled(Animated.createAnimatedComponent(TouchableOpacity))`
   background-color: gray;
   justify-content: center;
   align-items: center;
@@ -58,7 +60,7 @@ const MyTicketText = styled.Text`
   color: hotpink;
 `;
 
-const AccordionWrapper = ({ title, children, data }) => {
+const AccordionWrapper = ({ title, children, data, active }) => {
   const [isOpen, setIsOpen] = useState(false);
   const animationController = useRef(new Animated.Value(0)).current;
 
@@ -88,22 +90,30 @@ const AccordionWrapper = ({ title, children, data }) => {
           </Animated.View>
         </View>
       </TouchableOpacity>
-      {isOpen &&
-        data.map((_, i) => (
-          <AccordionItem key={i} content={_.content} name={_.name}>
-            {_.content}
-          </AccordionItem>
-        ))}
+      {isOpen && (
+        <View style={{ paddingVertical: 10 }}>
+          {data.map((_, i) => (
+            <AccordionItem key={i} active={active} content={_.content} name={_.name}>
+              {_.content}
+            </AccordionItem>
+          ))}
+        </View>
+      )}
     </Animated.View>
   );
 };
 
-const AccordionItem = ({ content, name }) => {
+const AccordionItem = ({ content, name, active }) => {
   const navigation = useNavigation();
+
   return (
     <ItemWrapper>
-      <TouchableOpacity onPress={() => navigation.navigate(name)}>
-        <Text>{content}</Text>
+      <TouchableOpacity
+        onPress={() => {
+          navigation.navigate(name);
+        }}
+      >
+        <Text style={active === name ? { color: "#ff3183" } : { color: "#000" }}>{content}</Text>
       </TouchableOpacity>
     </ItemWrapper>
   );
@@ -116,7 +126,7 @@ const customer = [
   { content: "1:1 문의내역", name: "QnaNav" },
 ];
 
-const policy = [{}];
+const policy = [{ content: "약관 및 정책", name: "PolicyNav" }];
 
 const DrawerFooter = styled.View`
   flex-direction: row;
@@ -133,49 +143,54 @@ const SignOut = styled.TouchableOpacity`
 
 const SignOutText = styled.Text``;
 
-const DrawerContent = ({ navigation: { navigate } }) => {
-  const [user, setUser] = useState();
-  const getUser = async () => {
-    const data = await AsyncStorage.getItem("user");
-    setUser(JSON.parse(data));
-  };
+const DrawerContent = (active) => {
+  const [user, setUser] = useRecoilState(authState);
 
-  useEffect(() => {
-    getUser();
-  }, []);
-
-  useEffect(() => {
-    console.log("정보 수정");
-  }, [auth]);
-
-  // const navigation = useNavigation();
-  const [auth, setAuth] = useRecoilState(authState);
+  const navigation = useNavigation();
 
   const handleSignout = async () => {
     try {
       await authApi.logout();
-      removeStorage("user");
-      removeStorage("token");
-      setAuth({});
-      navigate("Root", { screen: "OutNav" });
     } catch (err) {
       console.error(err);
+    } finally {
+      removeStorage("user");
+      removeStorage("token");
+      setUser({});
     }
   };
 
+  const opacity = useRef(new Animated.Value(1)).current;
+
   return (
-    <DrawerContainer>
+    <DrawerContainer ios={Platform.OS === "ios"}>
       <InfoSection>
-        <ProfileWrapper onPress={() => navigate("ProfileNav", { screen: "Profile", auth })} style={{ width: 70, height: 70, borderRadius: 70 / 2 }}>
-          {auth?.user_profile_url && <Image source={{ uri: auth?.user_profile_url }} width={70} height={70} borderRadius={70 / 2} resizeMode="cover" />}
+        {/* <Text>{user.nick}</Text> */}
+        <ProfileWrapper
+          onPress={() => navigation.navigate("ProfileNav", { screen: "Profile" })}
+          style={{ width: 70, height: 70, borderRadius: 70 / 2, backgroundColor: "rgba(0,0,0,0.2)", opacity: opacity }}
+        >
+          {user.user_profile_url && (
+            <Image
+              source={{ uri: user.user_profile_url }}
+              onLoadStart={() => opacityAnimation(opacity, "start")}
+              onLoadEnd={() => {
+                opacityAnimation(opacity, "reset");
+              }}
+              width={70}
+              height={70}
+              borderRadius={70 / 2}
+              resizeMode="cover"
+            />
+          )}
         </ProfileWrapper>
         <InfoTextWrapper>
-          <NickText>{auth?.nick}</NickText>
-          <MyTicketText>3장</MyTicketText>
+          <NickText>{user.nick}</NickText>
+          <MyTicketText>{user.ticket_info ? `${user.ticket_info}장` : "0장"}</MyTicketText>
         </InfoTextWrapper>
       </InfoSection>
-      <AccordionWrapper title="고객센터" data={customer}></AccordionWrapper>
-      <AccordionWrapper title="운영 정책" data={policy}></AccordionWrapper>
+      <AccordionWrapper title="고객센터" data={customer} active={active}></AccordionWrapper>
+      <AccordionWrapper title="운영 정책" data={policy} active={active}></AccordionWrapper>
       {/* 추가 아이템 */}
       <DrawerFooter>
         <SignOut onPress={handleSignout}>
@@ -189,14 +204,20 @@ const DrawerContent = ({ navigation: { navigate } }) => {
   );
 };
 export function MyDrawer() {
+  const [active, setActive] = useState();
+
+  const value = { active, setActive };
+
   return (
-    <Drawer.Navigator
-      drawerContent={DrawerContent}
-      screenOptions={{
-        headerShown: false,
-      }}
-    >
-      <Drawer.Screen name="Tabs" component={Tabs} />
-    </Drawer.Navigator>
+    <ActiveDrawer.Provider value={value}>
+      <Drawer.Navigator
+        drawerContent={() => DrawerContent(active)}
+        screenOptions={{
+          headerShown: false,
+        }}
+      >
+        <Drawer.Screen name="Tabs" component={Tabs} options={{}} />
+      </Drawer.Navigator>
+    </ActiveDrawer.Provider>
   );
 }

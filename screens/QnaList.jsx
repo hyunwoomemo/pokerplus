@@ -1,21 +1,20 @@
-import React, { useEffect, useRef, useState } from "react";
-import { ActivityIndicator, LayoutAnimation, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import React, { useContext, useEffect, useRef, useState } from "react";
+import { ActivityIndicator, FlatList, LayoutAnimation, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Layout from "../components/Layout";
 import { customerApi } from "../api";
 import moment from "moment";
 import { LinearGradient } from "expo-linear-gradient";
 import Pagination from "../components/Pagination";
+import { QnaContext } from "../context";
 
-const QnaList = ({ route, navigation: { navigate } }) => {
+const QnaList = ({ route, navigation }) => {
   const [qna, setQna] = useState([]);
   const [offset, setOffset] = useState(10);
-  const [currentPage, setCurrentPage] = useState(1);
+  const { currentPage, setCurrentPage } = useContext(QnaContext);
   const [total, setTotal] = useState(1);
   const [totalPage, setTotalPage] = useState(1);
   const [status, setStatus] = useState([]);
   const [loading, setLoading] = useState(true);
-
-  const scrollViewRef = useRef();
 
   const itemStatus = (code) => {
     return status.filter((item) => item.code === code)[0]?.title;
@@ -27,7 +26,6 @@ const QnaList = ({ route, navigation: { navigate } }) => {
       .customerList(0, offset, currentPage)
       .then((res) => {
         if (res.CODE === "DCL000") {
-          console.log(res);
           setQna(res.DATA.data);
           setStatus(res.DATA.stat);
           setTotal(res.DATA.total);
@@ -37,13 +35,13 @@ const QnaList = ({ route, navigation: { navigate } }) => {
   }, [route.params?.data]);
 
   useEffect(() => {
-    console.log("sdfmksmdkfmsdkf");
     setLoading(true);
     customerApi
       .customerList(0, offset, currentPage)
       .then((res) => {
         if (res.CODE === "DCL000") {
-          scrollViewRef.current?.scrollTo({ x: 0, y: 0, animated: true });
+          LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
+
           setQna(res.DATA.data);
           setStatus(res.DATA.stat);
           setTotal(res.DATA.total);
@@ -81,27 +79,37 @@ const QnaList = ({ route, navigation: { navigate } }) => {
     <Layout>
       <Text style={styles.title}>1:1 문의 내역</Text>
       {loading ? (
-        <ActivityIndicator style={StyleSheet.absoluteFillObject} color="#4c56fa" size={36} />
+        <ActivityIndicator style={StyleSheet.absoluteFillObject} color="#ff3183" size="large" />
       ) : (
         <>
-          <ScrollView style={styles.main} ref={scrollViewRef}>
+          <FlatList
+            style={styles.main}
+            data={qna}
+            keyExtractor={(item, index) => index}
+            renderItem={({ item, index }) => (
+              <TouchableOpacity key={item.id} style={styles.itemWrapper} onPress={() => navigation.navigate("QnaDetail", { qna: item })}>
+                <LinearGradient colors={["#4c56fa", "#bb21a8"]} start={{ x: 1, y: 0 }} style={styles.gradient} end={{ x: 0, y: 0 }}>
+                  <View style={styles.innerContainer}>
+                    <Text style={styles.status}>{itemStatus(item.status_code)}</Text>
+                  </View>
+                </LinearGradient>
+                <View style={styles.contentsWrapper}>
+                  <View style={styles.itemheader}>
+                    <Text style={styles.itemheaderText}>{item.company_name}</Text>
+                    <Text style={styles.itemheaderText}>{moment(item.created_at).utc().add(9, "h").format("YY/MM/DD HH:mm:ss")}</Text>
+                  </View>
+                  <Text>{item.contents}</Text>
+                </View>
+              </TouchableOpacity>
+            )}
+          />
+          {/* <ScrollView style={styles.main} ref={scrollViewRef}>
             {qna.map((item) => {
               return (
-                <TouchableOpacity key={item.id} style={styles.itemWrapper} onPress={() => navigate("QnaDetail", { qna: item })}>
-                  <LinearGradient colors={["#4c56fa", "#bb21a8"]} start={{ x: 0.3, y: 0.1 }} style={{ borderRadius: 10 }} end={{ x: 0.9, y: 0.1 }}>
-                    <Text style={styles.status}>{itemStatus(item.status_code)}</Text>
-                  </LinearGradient>
-                  <View style={styles.contentsWrapper}>
-                    <View style={styles.itemheader}>
-                      <Text style={styles.itemheaderText}>{item.company_name}</Text>
-                      <Text style={styles.itemheaderText}>{moment(item.created_at).utc().add(9, "h").format("YY/MM/DD HH:mm:ss")}</Text>
-                    </View>
-                    <Text>{item.contents}</Text>
-                  </View>
-                </TouchableOpacity>
+                
               );
             })}
-          </ScrollView>
+          </ScrollView> */}
           <View style={{ flexDirection: "row", gap: 10, justifyContent: "center", marginVertical: 10 }}>
             {totalPage > 1 && <Pagination totalPage={totalPage} currentPage={currentPage} setCurrentPage={setCurrentPage} />}
           </View>
@@ -122,6 +130,13 @@ const styles = StyleSheet.create({
   main: {
     paddingHorizontal: 32,
   },
+  innerContainer: {
+    borderRadius: 15, // <-- Inner Border Radius
+    flex: 1,
+    margin: 2, // <-- Border Width
+    backgroundColor: "#ebf2f0",
+    justifyContent: "center",
+  },
   itemWrapper: {
     flexDirection: "row",
     alignItems: "center",
@@ -141,16 +156,19 @@ const styles = StyleSheet.create({
   itemheaderText: {
     color: "gray",
   },
-  status: {
-    width: 50,
+  gradient: {
     height: 50,
-    margin: 3,
-    backgroundColor: "#ebf2f0",
-    borderRadius: 7,
+    width: 50,
+    borderRadius: 18, // <-- Outer Border Radius
+  },
+  status: {
+    // fontSize: 16,
+    // fontFamily: "Gill Sans",
+    // fontWeight: "bold",
     textAlign: "center",
-    textAlignVertical: "center",
-    color: "#b331b2",
-    fontSize: 16,
+    margin: 5,
+    color: "#cc2b5e",
+    backgroundColor: "transparent",
   },
 });
 export default QnaList;

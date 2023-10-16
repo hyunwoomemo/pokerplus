@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { Alert, Text, View } from "react-native";
+import { Alert, SafeAreaView, Text, View } from "react-native";
 import BackBtn from "../../components/BackBtn";
 import Title from "../../components/Title";
 import ScreenLayout from "../../components/ScreenLayout";
@@ -27,20 +27,15 @@ const FindPwSuccess = ({ route, navigation: { navigate } }) => {
   const pw2Ref = useRef();
 
   const handleChangeText = (type, text) => {
-    console.log(type, error);
     setValues({ ...values, [type]: text });
     validateJoin(type, text, values, error, setError);
   };
   const toast = useToast();
-  console.log(values);
-
-  console.log(authkey, user_id);
 
   const handleChangePassword = async () => {
     setLoading(true);
     try {
       const res = await authApi.passwordChange(user_id, authkey, values.password);
-      console.log(res);
 
       if (res.CODE === "APC000") {
         toast.show("비밀번호가 변경되었습니다.", {
@@ -60,49 +55,47 @@ const FindPwSuccess = ({ route, navigation: { navigate } }) => {
     }
   };
 
-  // console.log(values.password.length);
-
   const disabled = values.password?.length > 0 && values.password2?.length > 0 && !error.password && !error.password2;
 
-  console.log(disabled);
-
   return (
-    <Container>
-      <BackBtn />
-      <Title text="새 비밀번호 입력" />
-      <Text style={{ marginTop: 30 }}>앱 내에서 사용하실 새로운 비밀번호를 입력해 주세요.</Text>
-      <View style={{ marginTop: 20 }}>
-        <WithLabelErrorInput
-          onChangeText={(text) => handleChangeText("password", text)}
-          placeholder="8자 이상 영문, 숫자, 특수문자 혼합 사용 가능"
-          placeholderTextColor="gray"
-          secureTextEntry
-          error={error.password}
-          onSubmitEditing={() => {
-            pw2Ref.current.focus();
-          }}
-        >
-          <Text>새 비밀번호</Text>
-        </WithLabelErrorInput>
-        <WithLabelErrorInput
-          onChangeText={(text) => handleChangeText("password2", text)}
-          placeholder="한번 더 입력해주세요."
-          secureTextEntry
-          error={error.password2}
-          placeholderTextColor="gray"
-          ref={pw2Ref}
-          onSubmitEditing={() => {
-            handleChangePassword();
-          }}
-        >
-          <Text>새 비밀번호 확인</Text>
-        </WithLabelErrorInput>
-      </View>
-      <View style={{ flexDirection: "row", marginTop: "auto", gap: 10 }}>
-        <Button label="취소" style={{ flex: 1, color: "#000" }} />
-        <Button onPress={handleChangePassword} primary label="변경 완료" style={{ flex: 1 }} loading={loading} disabled={!disabled} />
-      </View>
-    </Container>
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
+      <Container>
+        <BackBtn />
+        <Title text="새 비밀번호 입력" />
+        <Text style={{ marginTop: 30 }}>앱 내에서 사용하실 새로운 비밀번호를 입력해 주세요.</Text>
+        <View style={{ marginTop: 20 }}>
+          <WithLabelErrorInput
+            onChangeText={(text) => handleChangeText("password", text)}
+            placeholder="8자 이상 영문, 숫자, 특수문자 혼합 사용 가능"
+            placeholderTextColor="gray"
+            secureTextEntry
+            error={error.password}
+            onSubmitEditing={() => {
+              pw2Ref.current.focus();
+            }}
+          >
+            <Text>새 비밀번호</Text>
+          </WithLabelErrorInput>
+          <WithLabelErrorInput
+            onChangeText={(text) => handleChangeText("password2", text)}
+            placeholder="한번 더 입력해주세요."
+            secureTextEntry
+            error={error.password2}
+            placeholderTextColor="gray"
+            ref={pw2Ref}
+            onSubmitEditing={() => {
+              handleChangePassword();
+            }}
+          >
+            <Text>새 비밀번호 확인</Text>
+          </WithLabelErrorInput>
+        </View>
+        <View style={{ flexDirection: "row", marginTop: "auto", gap: 10 }}>
+          <Button label="취소" style={{ flex: 1, color: "#000" }} />
+          <Button onPress={handleChangePassword} primary label="변경 완료" style={{ flex: 1 }} loading={loading} disabled={!disabled} />
+        </View>
+      </Container>
+    </SafeAreaView>
   );
 };
 

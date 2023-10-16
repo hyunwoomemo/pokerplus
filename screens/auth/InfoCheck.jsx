@@ -6,7 +6,7 @@ import { WithLabelInput } from "../../components/Input";
 import Button from "../../components/Button";
 import { authApi } from "../../api";
 
-const InfoCheck = ({ navigation: { navigate }, route }) => {
+const InfoCheck = ({ navigation: { navigate, goBack }, route }) => {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const handleChange = (text) => {
@@ -17,7 +17,6 @@ const InfoCheck = ({ navigation: { navigate }, route }) => {
     setLoading(true);
     try {
       const res = await authApi.passwordCheck(password);
-      console.log(res);
       if (res.CODE === "APC000") {
         navigate("InfoEdit");
       }
@@ -37,7 +36,7 @@ const InfoCheck = ({ navigation: { navigate }, route }) => {
           <Text>비밀번호 확인</Text>
         </WithLabelInput>
         <View style={{ flexDirection: "row", gap: 10, marginTop: 30 }}>
-          <Button label="취소" style={{ flex: 1 }} />
+          <Button dark label="취소" style={{ flex: 1 }} onPress={() => goBack()} />
           <Button label="확인" loading={loading} onPress={handleCheck} primary style={{ flex: 1 }} />
         </View>
       </View>
