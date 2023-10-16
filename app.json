@@ -3,10 +3,16 @@
     "name": "t08_ticket_rn",
     "slug": "t08_ticket_rn",
     "version": "1.0.0",
-    "assetBundlePatterns": [
-      "**/*"
-    ],
-    "scheme": "pokerplusapp"
+    "assetBundlePatterns": ["**/*"],
+    "scheme": "pokerplusapp",
+    "plugins": [
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "The app accesses your photos to let you share them with your friends."
+        }
+      ]
+    ]
   },
   "name": "t08_ticket_rn"
 }

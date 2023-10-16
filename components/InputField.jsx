@@ -28,7 +28,6 @@ const InputField = forwardRef(({ touched, error, value, ...props }, ref) => {
   const handlePressInput = () => {
     innerRef.current?.focus();
   };
-
   return (
     <Pressable onPress={handlePressInput} style={{ width: "95%" }}>
       <View>

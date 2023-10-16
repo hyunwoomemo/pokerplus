@@ -14,6 +14,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
 import { authApi } from "../api";
 import { SimpleLineIcons } from "@expo/vector-icons";
+import { removeStorage } from "../utils/asyncStorage";
 
 const Drawer = createDrawerNavigator();
 
@@ -57,7 +58,7 @@ const MyTicketText = styled.Text`
   color: hotpink;
 `;
 
-const AccordionWrapper = ({ title, children }) => {
+const AccordionWrapper = ({ title, children, data }) => {
   const [isOpen, setIsOpen] = useState(false);
   const animationController = useRef(new Animated.Value(0)).current;
 
@@ -72,13 +73,10 @@ const AccordionWrapper = ({ title, children }) => {
     setIsOpen(!isOpen);
   };
 
-  // console.log(animationController)
   const rotate = animationController.interpolate({
     inputRange: [0, 1],
     outputRange: ["0deg", "180deg"],
   });
-
-  console.log(rotate);
 
   return (
     <Animated.View style={{ overflow: "hidden" }}>
@@ -91,7 +89,7 @@ const AccordionWrapper = ({ title, children }) => {
         </View>
       </TouchableOpacity>
       {isOpen &&
-        menuData.map((_, i) => (
+        data.map((_, i) => (
           <AccordionItem key={i} content={_.content} name={_.name}>
             {_.content}
           </AccordionItem>
@@ -111,12 +109,14 @@ const AccordionItem = ({ content, name }) => {
   );
 };
 
-const menuData = [
-  { content: "공지사항", name: "Notice" },
-  { content: "2", name: "2" },
-  { content: "3", name: "3" },
-  { content: "4", name: "4" },
+const customer = [
+  { content: "공지사항", name: "NoticeNav" },
+  { content: "FAQ", name: "FAQ" },
+  { content: "1:1 문의하기", name: "Qna" },
+  { content: "1:1 문의내역", name: "QnaNav" },
 ];
+
+const policy = [{}];
 
 const DrawerFooter = styled.View`
   flex-direction: row;
@@ -144,15 +144,20 @@ const DrawerContent = ({ navigation: { navigate } }) => {
     getUser();
   }, []);
 
-  const navigation = useNavigation();
+  useEffect(() => {
+    console.log("정보 수정");
+  }, [auth]);
+
+  // const navigation = useNavigation();
   const [auth, setAuth] = useRecoilState(authState);
 
   const handleSignout = async () => {
     try {
       await authApi.logout();
-      await AsyncStorage.clear();
-      setAuth({})
-      // navigation.navigate("OutNav");
+      removeStorage("user");
+      removeStorage("token");
+      setAuth({});
+      navigate("Root", { screen: "OutNav" });
     } catch (err) {
       console.error(err);
     }
@@ -161,16 +166,16 @@ const DrawerContent = ({ navigation: { navigate } }) => {
   return (
     <DrawerContainer>
       <InfoSection>
-        <ProfileWrapper onPress={() => navigate("Profile")} style={{ width: 70, height: 70, borderRadius: 70 / 2 }}>
-          {user?.user_profile_url && <Image source={{ uri: user?.user_profile_url }} width={70} height={70} borderRadius={70 / 2} resizeMode="cover" />}
+        <ProfileWrapper onPress={() => navigate("ProfileNav", { screen: "Profile", auth })} style={{ width: 70, height: 70, borderRadius: 70 / 2 }}>
+          {auth?.user_profile_url && <Image source={{ uri: auth?.user_profile_url }} width={70} height={70} borderRadius={70 / 2} resizeMode="cover" />}
         </ProfileWrapper>
         <InfoTextWrapper>
-          <NickText>{user?.nick}</NickText>
+          <NickText>{auth?.nick}</NickText>
           <MyTicketText>3장</MyTicketText>
         </InfoTextWrapper>
       </InfoSection>
-      <AccordionWrapper title="고객센터" data={menuData}></AccordionWrapper>
-      <AccordionWrapper title="운영 정책" data={menuData}></AccordionWrapper>
+      <AccordionWrapper title="고객센터" data={customer}></AccordionWrapper>
+      <AccordionWrapper title="운영 정책" data={policy}></AccordionWrapper>
       {/* 추가 아이템 */}
       <DrawerFooter>
         <SignOut onPress={handleSignout}>

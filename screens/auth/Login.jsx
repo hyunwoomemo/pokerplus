@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Text, Image, LayoutAnimation, Alert } from "react-native";
 import styled from "styled-components/native";
 import { LinearGradient } from "expo-linear-gradient";
@@ -12,6 +12,9 @@ import { useRecoilState } from "recoil";
 import { authState } from "../../recoil/auth/atom";
 import { useMutation } from "@tanstack/react-query";
 import { validateLogin } from "../../utils/validate";
+import { useToast } from "react-native-toast-notifications";
+import { getToast } from "../../utils/getToast";
+import Button from "../../components/Button";
 
 const Container = styled.View`
   flex: 1;
@@ -67,7 +70,7 @@ const ButtonWrapper = styled.View`
 `;
 
 const ButtonItem = styled.TouchableOpacity`
-  background-color: ${(props) => (props.login ? undefined : "black")};
+  background-color: ${(props) => (props.login ? undefined : "#383838")};
   padding: 18px 20px;
   border-radius: 30px;
   align-items: center;
@@ -81,6 +84,7 @@ const ButtonItemText = styled.Text`
 
 const Login = ({ navigation: { navigate } }) => {
   const passwordRef = useRef(null);
+  const toast = useToast();
 
   const onJoin = () => {
     navigate("Terms");
@@ -92,6 +96,7 @@ const Login = ({ navigation: { navigate } }) => {
   });
   const [touched, setTouched] = useState({});
   const [error, setError] = useState({});
+  const [loading, setLoading] = useState(false);
 
   const handleChangeText = (name, text) => {
     setValues({
@@ -108,39 +113,58 @@ const Login = ({ navigation: { navigate } }) => {
     });
   };
 
-  const { data, mutate, isLoading, isError, error: mutateError, isSuccess } = useMutation(authApi.login);
+  // const { data, mutate, isLoading, isError, error: mutateError, isSuccess } = useMutation(authApi.login);
   const [auth, setAuth] = useRecoilState(authState);
 
-  const onLogin = () => {
-    mutate(
-      { id: values.email, password: values.password },
-      {
-        onSuccess: async (data) => {
-          console.log(data);
-          if (data.CODE === "AL000") {
-            Alert.alert("로그인 성공");
-            const accountInfo = await axios
-              .get("https://www.pokerplus.co.kr/account/info", {
-                headers: {
-                  Authorization: `Bearer ${data.DATA.TOKEN}`,
-                  Cookie: `auth._token.pokerzone=${data.DATA.TOKEN}`,
-                },
-              })
-              .then((res) => res.data);
-            console.log("accpunt", accountInfo);
-            await AsyncStorage.setItem("token", data.DATA.TOKEN);
-            await AsyncStorage.setItem("user", JSON.stringify(accountInfo.DATA));
-            setAuth(accountInfo.DATA);
-            // console.log(accountInfo)
-            // navigate('InNav')
-          } else {
-            Alert.alert("로그인 실패");
-          }
-        },
+  const onLogin = async () => {
+    setLoading(true);
+    try {
+      const bodyData = {
+        id: values.email,
+        password: values.password,
+      };
+
+      const res = await authApi.login(bodyData);
+      console.log("res", res);
+      if (res.CODE === "AL000") {
+        // Alert.alert("로그인 성공");
+        await AsyncStorage.setItem("token", res.DATA.TOKEN);
+        const accountInfo = await authApi.info();
+        await AsyncStorage.setItem("user", JSON.stringify(accountInfo?.DATA));
+        console.log(accountInfo);
+        setAuth(accountInfo?.DATA);
+      } else {
+        switch (res.CODE) {
+          case "AL001":
+            toast.show("로그인에 실패했습니다.");
+            // getToast(toast, "로그인에 실패했습니다.");
+            break;
+          case "AL002":
+            toast.show("이메일 또는 비밀번호를 확인해주세요.");
+            break;
+          case "AL003":
+            toast.show("로그인이 차단된 계정입니다.");
+            break;
+          case "AL300":
+            toast.show("error", "탈퇴 계정입니다.");
+            break;
+          case "AL200":
+            toast.show("error", "휴면 계정입니다.");
+            break;
+          case "REAUTH":
+            toast.show("인증에 실패했습니다. 재인증 바랍니다.");
+            break;
+          case "REQUIRECHGPW":
+            toast.show("패스워드 변경 후 로그인 바랍니다.");
+            break;
+        }
       }
-    );
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
   };
-  console.log(data, mutate, isLoading, isError, mutateError, isSuccess);
 
   return (
     <Container>
@@ -170,7 +194,7 @@ const Login = ({ navigation: { navigate } }) => {
             placeholderTextColor="gray"
             value={values.password}
             onBlur={() => handleBlur("password")}
-            error={error.password}
+            // error={error.password}
             onChangeText={(text) => handleChangeText("password", text)}
             touched={touched.password}
             secureTextEntry
@@ -181,16 +205,16 @@ const Login = ({ navigation: { navigate } }) => {
         </FormItemWrapper>
       </FormWrapper>
       <FindWrapper>
-        <FindItem>
+        <FindItem onPress={() => navigate("FindId")}>
           <FindItemText>이메일 찾기</FindItemText>
         </FindItem>
         <Text>|</Text>
-        <FindItem>
+        <FindItem onPress={() => navigate("FindPw")}>
           <FindItemText>비밀번호 찾기</FindItemText>
         </FindItem>
       </FindWrapper>
       <ButtonWrapper>
-        <GradientBtn onPress={onLogin} label="로그인" />
+        <Button primary onPress={onLogin} loading={loading} label="로그인" />
         <ButtonItem onPress={onJoin}>
           <ButtonItemText>회원가입</ButtonItemText>
         </ButtonItem>

@@ -3,19 +3,26 @@ import React from "react";
 import { Ionicons } from "@expo/vector-icons";
 import Home from "../screens/Home";
 import Ticket from "../screens/Ticket";
-import TicketTab from "../navigator/TicketTab";
 import { useColorScheme } from "react-native";
 import Profile from "../screens/Profile";
 import Notice from "../screens/Notice";
-// import Test from "../screens/Test";
-import QrCreate from "../screens/qr/QrCreate";
-import QrScan from "../screens/qr/QrScan";
 import CustomTabBar from "../components/CustomTabBar";
+import InfoCheck from "../screens/auth/InfoCheck";
+import InfoEdit from "../screens/auth/InfoEdit";
+import ProfProfileNavile from "./ProfileNav";
+import ProfileNav from "./ProfileNav";
+import Championship from "../screens/Championship";
+import Pub from "../screens/Pub";
+import Faq from "../screens/Faq";
+import Qna from "../screens/Qna";
+import QnaList from "../screens/QnaList";
+import NoticeDetail from "../screens/NoticeDetail";
+import NoticeNav from "./NoticeNav";
+import QnaNav from "./QnaNav";
 
 const Tab = createBottomTabNavigator();
 
 const Tabs = () => {
-  const isDark = useColorScheme() === "dark";
   return (
     <Tab.Navigator
       sceneContainerStyle={{}}
@@ -25,8 +32,6 @@ const Tabs = () => {
         tabBarShowLabel: false,
       }}
       tabBar={(props) => {
-        console.log(props);
-
         return <CustomTabBar {...props} />;
       }}
     >
@@ -39,13 +44,17 @@ const Tabs = () => {
           },
         }}
       />
-      <Tab.Screen name="Ticket" component={TicketTab} />
-      <Tab.Screen name="Championship" component={Menu2} />
-      <Tab.Screen name="Pub" component={Menu3} />
-      <Tab.Screen name="Notice" component={Notice} />
-      <Tab.Screen name="Profile" component={Profile} />
-      <Tab.Screen name="QrCreate" component={QrCreate} />
-      <Tab.Screen name="QrScan" component={QrScan} />
+      <Tab.Screen name="Ticket" component={Ticket} />
+      <Tab.Screen name="Championship" component={Championship} />
+      <Tab.Screen name="Pub" component={Pub} />
+      <Tab.Screen name="NoticeNav" component={NoticeNav} />
+      <Tab.Screen name="ProfileNav" component={ProfileNav} />
+      <Tab.Screen name="InfoCheck" component={InfoCheck} />
+      <Tab.Screen name="InfoEdit" component={InfoEdit} />
+      <Tab.Screen name="FAQ" component={Faq} />
+      <Tab.Screen name="Qna" component={Qna} />
+      <Tab.Screen name="QnaNav" component={QnaNav} />
+      {/* <Tab.Screen name="NoticeDetail" component={NoticeDetail} /> */}
     </Tab.Navigator>
   );
 };

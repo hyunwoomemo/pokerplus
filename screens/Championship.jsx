@@ -2,14 +2,12 @@ import React from "react";
 import { Text, View } from "react-native";
 import Layout from "../components/Layout";
 
-const Ticket = () => {
+const Championship = () => {
   return (
     <Layout>
-      <View>
-        <Text>Ticket</Text>
-      </View>
+      <Text>Championship</Text>
     </Layout>
   );
 };
 
-export default Ticket;
+export default Championship;
