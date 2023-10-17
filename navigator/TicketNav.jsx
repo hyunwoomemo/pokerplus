@@ -12,7 +12,15 @@ const Tab = createMaterialTopTabNavigator();
 export default function TicketNav() {
   return (
     <Layout>
-      <Tab.Navigator style={{ marginTop: 20 }} sceneContainerStyle={{ backgroundColor: "#ebf2f0" }} screenOptions={{ tabBarIndicatorStyle: { backgroundColor: "#ff3183" } }}>
+      <Tab.Navigator
+        style={{ marginTop: 20 }}
+        sceneContainerStyle={{ backgroundColor: "#ebf2f0" }}
+        screenOptions={{
+          tabBarIndicatorStyle: { backgroundColor: "#ff3183" },
+          tabBarActiveTintColor: "#ff3183",
+          tabBarInactiveTintColor: "#000",
+        }}
+      >
         <Tab.Screen name="TicketList" component={TicketList} options={{ tabBarLabel: "내 참가권" }} />
         <Tab.Screen name="Send" component={Send} options={{ tabBarLabel: "전송하기" }} />
         <Tab.Screen name="ReceiveList" component={ReceiveList} options={{ tabBarLabel: "수령내역" }} />

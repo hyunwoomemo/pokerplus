@@ -32,3 +32,11 @@ export const customerApi = {
   customerList: (host, offset, page) => request.get(`/datatable/customer/list/${host}/${offset}/${page}`),
   customerItem: (dataid) => request.get(`/datatable/customer/read/${dataid}`),
 };
+
+export const ticketApi = {
+  list: () => request.get("/ticket/my"),
+  receiveList: (mode, offset, page) => request.get(`/ticket/${mode}/${offset}/${page}`),
+  sendList: (mode, offset, page) => request.get(`/ticket/${mode}/${offset}/${page}`),
+  findUser: (ph) => request.get(`/ticket/searchRecv/${ph}`),
+  send: (data) => request.postXf("/ticket/send", data),
+};

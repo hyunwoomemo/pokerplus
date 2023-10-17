@@ -32,7 +32,6 @@ const Qna = ({ navigation }) => {
     });
   };
 
-
   const handleSubmit = async () => {
     setLoading(true);
     const { host_id, subject, contents } = values;

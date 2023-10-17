@@ -145,8 +145,14 @@ const SignOutText = styled.Text``;
 
 const DrawerContent = (active) => {
   const [user, setUser] = useRecoilState(authState);
+  const [ticketCount, setTicketCount] = useState(0);
 
   const navigation = useNavigation();
+
+  useEffect(() => {
+    const count = user.ticket_info.reduce((acc, cur) => acc + cur.ticket_count, 0);
+    setTicketCount(count);
+  }, []);
 
   const handleSignout = async () => {
     try {
@@ -186,7 +192,7 @@ const DrawerContent = (active) => {
         </ProfileWrapper>
         <InfoTextWrapper>
           <NickText>{user.nick}</NickText>
-          <MyTicketText>{user.ticket_info ? `${user.ticket_info}장` : "0장"}</MyTicketText>
+          <MyTicketText>{ticketCount ? `${ticketCount}장` : "0장"}</MyTicketText>
         </InfoTextWrapper>
       </InfoSection>
       <AccordionWrapper title="고객센터" data={customer} active={active}></AccordionWrapper>
