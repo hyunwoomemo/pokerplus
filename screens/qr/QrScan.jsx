@@ -2,14 +2,14 @@ import React from "react";
 import { Text, View } from "react-native";
 import Layout from "../../components/Layout";
 
-const Scan = () => {
+const QrScan = () => {
   return (
     <Layout>
       <View>
-        <Text>QR Scan</Text>
+        <Text>QrScan</Text>
       </View>
     </Layout>
   );
 };
 
-export default Scan;
+export default QrScan;

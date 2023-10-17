@@ -40,3 +40,8 @@ export const ticketApi = {
   findUser: (ph) => request.get(`/ticket/searchRecv/${ph}`),
   send: (data) => request.postXf("/ticket/send", data),
 };
+
+export const qrApi = {
+  getUrl: () => request.get("/account/qr_url"),
+  getInfo: (hash) => request.get(`/account/info_by_qr/${hash}`),
+};

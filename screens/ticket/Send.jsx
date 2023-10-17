@@ -7,6 +7,7 @@ import { Entypo } from "@expo/vector-icons";
 import { TouchableOpacity } from "react-native";
 import { useToast } from "react-native-toast-notifications";
 import Button from "../../components/Button";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 const Send = () => {
   const [tickets, setTickets] = useState([]);
@@ -135,72 +136,74 @@ const Send = () => {
   };
 
   return (
-    <View style={{ padding: 20, flex: 1 }}>
-      <SelectList
-        boxStyles={{ marginTop: 10, backgroundColor: "#fff", borderRadius: 15, paddingVertical: 18, paddingHorizontal: 20, borderColor: "transparent" }}
-        dropdownStyles={{ backgroundColor: "#fff", borderWidth: 0 }}
-        dropdownItemStyles={{ paddingVertical: 10 }}
-        setSelected={(val) => handleChange("id", val)}
-        data={selectData}
-        save="key"
-        placeholder="전송하실 참가권을 선택해주세요."
-        defaultOption={{ key: "", value: "" }}
-      />
-      <View
-        style={{ marginTop: 10, backgroundColor: "#fff", borderRadius: 15, paddingVertical: 18, paddingHorizontal: 20, flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}
-      >
-        <TouchableOpacity onPress={() => handleCount("minus")} disabled={values.count < 1 || !values.id}>
-          <Entypo name="circle-with-minus" size={28} color={values.count < 1 || !values.id ? "gray" : "#5a50ef"} />
-        </TouchableOpacity>
-        <TextInput
-          value={values.count}
-          onChangeText={(text) => {
-            if (parseInt(text) < 0 || parseInt(text) >= tickets.find((v) => v.ticket_info_id === values.id)?.ticket_count || !values.id) return;
-            // if (text < 0 || text >= tickets.find((v) => v.ticket_info_id === values.ticket_info_id)?.ticket_count) return;
-            setValues({ ...values, count: text });
-          }}
-          inputMode="numeric"
-          keyboardType="numeric"
-        ></TextInput>
-        <TouchableOpacity onPress={() => handleCount("plus")} disabled={parseInt(values.count) >= tickets.find((v) => v.ticket_info_id === values.id)?.ticket_count || !values.id}>
-          <Entypo name="circle-with-plus" size={28} color={values.count >= tickets.find((v) => v.ticket_info_id === values.id)?.ticket_count || !values.id ? "gray" : "#ff2d84"} />
-        </TouchableOpacity>
-      </View>
-      <View style={{ flexDirection: "row", gap: 10 }}>
-        <TextInput
-          onChangeText={(text) => {
-            LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
-            setValues({ ...values, name: "", hp: text });
-          }}
-          style={{ marginTop: 10, backgroundColor: "#fff", borderRadius: 15, paddingVertical: 18, paddingHorizontal: 20, flex: 4 }}
-          onSubmitEditing={(text) => handleFindUser(text)}
-          inputMode="tel"
-          keyboardType="number-pad"
-        ></TextInput>
-        {values.name && (
-          <View style={{ marginTop: 10, backgroundColor: "#dbdbdb", borderRadius: 15, paddingVertical: 18, paddingHorizontal: 20, flex: 1, justifyContent: "center", alignItems: "center" }}>
-            <Text>{values.name}</Text>
-          </View>
-        )}
-        <TouchableOpacity
-          onPress={handleFindUser}
-          style={
-            values.hp
-              ? { marginTop: 10, backgroundColor: "#383838", borderRadius: 15, paddingVertical: 18, paddingHorizontal: 20, flex: 1, alignItems: "center", justifyContent: "center" }
-              : { marginTop: 10, backgroundColor: "#969696", borderRadius: 15, paddingVertical: 18, paddingHorizontal: 20, flex: 1, alignItems: "center", justifyContent: "center" }
-          }
+    <KeyboardAwareScrollView>
+      <View style={{ padding: 20, flex: 1 }}>
+        <SelectList
+          boxStyles={{ marginTop: 10, backgroundColor: "#fff", borderRadius: 15, paddingVertical: 18, paddingHorizontal: 20, borderColor: "transparent" }}
+          dropdownStyles={{ backgroundColor: "#fff", borderWidth: 0 }}
+          dropdownItemStyles={{ paddingVertical: 10 }}
+          setSelected={(val) => handleChange("id", val)}
+          data={selectData}
+          save="key"
+          placeholder="전송하실 참가권을 선택해주세요."
+          defaultOption={{ key: "", value: "" }}
+        />
+        <View
+          style={{ marginTop: 10, backgroundColor: "#fff", borderRadius: 15, paddingVertical: 18, paddingHorizontal: 20, flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}
         >
-          <Text style={{ color: "#fff", fontWeight: "bold" }}>{loading.find ? <ActivityIndicator color="#fff" size={15} /> : "조회"}</Text>
-        </TouchableOpacity>
+          <TouchableOpacity onPress={() => handleCount("minus")} disabled={values.count < 1 || !values.id}>
+            <Entypo name="circle-with-minus" size={28} color={values.count < 1 || !values.id ? "gray" : "#5a50ef"} />
+          </TouchableOpacity>
+          <TextInput
+            value={values.count}
+            onChangeText={(text) => {
+              if (parseInt(text) < 0 || parseInt(text) >= tickets.find((v) => v.ticket_info_id === values.id)?.ticket_count || !values.id) return;
+              // if (text < 0 || text >= tickets.find((v) => v.ticket_info_id === values.ticket_info_id)?.ticket_count) return;
+              setValues({ ...values, count: text });
+            }}
+            inputMode="numeric"
+            keyboardType="numeric"
+          ></TextInput>
+          <TouchableOpacity onPress={() => handleCount("plus")} disabled={parseInt(values.count) >= tickets.find((v) => v.ticket_info_id === values.id)?.ticket_count || !values.id}>
+            <Entypo name="circle-with-plus" size={28} color={values.count >= tickets.find((v) => v.ticket_info_id === values.id)?.ticket_count || !values.id ? "gray" : "#ff2d84"} />
+          </TouchableOpacity>
+        </View>
+        <View style={{ flexDirection: "row", gap: 10 }}>
+          <TextInput
+            onChangeText={(text) => {
+              LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
+              setValues({ ...values, name: "", hp: text });
+            }}
+            style={{ marginTop: 10, backgroundColor: "#fff", borderRadius: 15, paddingVertical: 18, paddingHorizontal: 20, flex: 4 }}
+            onSubmitEditing={(text) => handleFindUser(text)}
+            inputMode="tel"
+            keyboardType="number-pad"
+          ></TextInput>
+          {values.name && (
+            <View style={{ marginTop: 10, backgroundColor: "#dbdbdb", borderRadius: 15, paddingVertical: 18, paddingHorizontal: 20, flex: 1, justifyContent: "center", alignItems: "center" }}>
+              <Text>{values.name}</Text>
+            </View>
+          )}
+          <TouchableOpacity
+            onPress={handleFindUser}
+            style={
+              values.hp
+                ? { marginTop: 10, backgroundColor: "#383838", borderRadius: 15, paddingVertical: 18, paddingHorizontal: 20, flex: 1, alignItems: "center", justifyContent: "center" }
+                : { marginTop: 10, backgroundColor: "#969696", borderRadius: 15, paddingVertical: 18, paddingHorizontal: 20, flex: 1, alignItems: "center", justifyContent: "center" }
+            }
+          >
+            <Text style={{ color: "#fff", fontWeight: "bold" }}>{loading.find ? <ActivityIndicator color="#fff" size={15} /> : "조회"}</Text>
+          </TouchableOpacity>
+        </View>
+        <TextInput
+          placeholder="메모를 입력하세요."
+          multiline={true}
+          style={{ marginTop: 10, backgroundColor: "#fff", borderRadius: 15, paddingVertical: 18, paddingHorizontal: 20, flex: 1, marginBottom: 30 }}
+          onChangeText={(text) => setValues({ ...values, memo: text })}
+        ></TextInput>
+        <Button onPress={handleSend} primary label="전송" style={{ marginTop: "auto" }} disabled={!(values.hp?.length > 0 && values.name?.length > 0)} />
       </View>
-      <TextInput
-        placeholder="메모를 입력하세요."
-        multiline={true}
-        style={{ marginTop: 10, backgroundColor: "#fff", borderRadius: 15, paddingVertical: 18, paddingHorizontal: 20, flex: 1, marginBottom: 30 }}
-        onChangeText={(text) => setValues({ ...values, memo: text })}
-      ></TextInput>
-      <Button onPress={handleSend} primary label="전송" style={{ marginTop: "auto" }} disabled={!(values.hp?.length > 0 && values.name?.length > 0)} />
-    </View>
+    </KeyboardAwareScrollView>
   );
 };
 

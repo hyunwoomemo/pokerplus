@@ -11,6 +11,7 @@ import { Linking } from "react-native";
 import { deepLinkConfig } from "./source";
 import { ToastProvider } from "react-native-toast-notifications";
 import * as SplashScreen from "expo-splash-screen";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 SplashScreen.preventAutoHideAsync();
 

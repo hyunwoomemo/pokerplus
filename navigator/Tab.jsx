@@ -16,6 +16,8 @@ import PolicyNav from "./PolicyNav";
 import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
 import { ActiveDrawer } from "../context";
 import TicketNav from "./TicketNav";
+import QrCreate from "../screens/qr/QrCreate";
+import QrScan from "../screens/qr/QrScan";
 
 const Tab = createBottomTabNavigator();
 
@@ -50,6 +52,8 @@ const Tabs = ({ route }) => {
       <Tab.Screen name="QnaNav" component={QnaNav} />
       <Tab.Screen name="Qna" component={Qna} />
       <Tab.Screen name="PolicyNav" component={PolicyNav} />
+      <Tab.Screen name="QrCreate" component={QrCreate} />
+      <Tab.Screen name="QrScan" component={QrScan} />
     </Tab.Navigator>
   );
 };
