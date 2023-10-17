@@ -4,15 +4,12 @@ import { SafeAreaView, Platform, StatusBar, Alert, View, Image, Text, StyleSheet
 import Root from "./navigator/Root";
 import { NavigationContainer, useNavigation } from "@react-navigation/native";
 import "react-native-gesture-handler";
-import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { RecoilRoot } from "recoil";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Linking } from "react-native";
 import { deepLinkConfig } from "./source";
 import { ToastProvider } from "react-native-toast-notifications";
-
-const queryClient = new QueryClient();
 
 const Nav = createNativeStackNavigator();
 export default function App() {
@@ -51,19 +48,15 @@ export default function App() {
     config: deepLinkConfig,
   };
 
-  const [login, setLogin] = useState(false);
-
   return (
     <RecoilRoot>
       <ToastProvider duration={1000} offset={30} swipeEnabled={true}>
-        <QueryClientProvider client={queryClient}>
-          <StatusBar barStyle="dark-content" backgroundColor="#fff" />
-          <NavigationContainer linking={linking}>
-            <Nav.Navigator>
-              <Nav.Screen name="Root" component={Root} options={{ headerShown: false }} />
-            </Nav.Navigator>
-          </NavigationContainer>
-        </QueryClientProvider>
+        <StatusBar barStyle="dark-content" backgroundColor="#fff" />
+        <NavigationContainer linking={linking}>
+          <Nav.Navigator>
+            <Nav.Screen name="Root" component={Root} options={{ headerShown: false }} />
+          </Nav.Navigator>
+        </NavigationContainer>
       </ToastProvider>
     </RecoilRoot>
   );

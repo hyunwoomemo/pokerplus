@@ -112,6 +112,7 @@ android {
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
         }
     }
+    
 }
 
 // Apply static values from `gradle.properties` to the `android.packagingOptions`

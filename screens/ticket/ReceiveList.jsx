@@ -2,14 +2,14 @@ import React from "react";
 import { Text, View } from "react-native";
 import Layout from "../../components/Layout";
 
-const Scan = () => {
+const ReceiveList = () => {
   return (
     <Layout>
       <View>
-        <Text>Ticket Receive List</Text>
+        <Text>ReceiveList</Text>
       </View>
     </Layout>
   );
 };
 
-export default Scan;
+export default ReceiveList;

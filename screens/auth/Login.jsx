@@ -10,7 +10,6 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios from "axios";
 import { useRecoilState } from "recoil";
 import { authState } from "../../recoil/auth/atom";
-import { useMutation } from "@tanstack/react-query";
 import { validateLogin } from "../../utils/validate";
 import { useToast } from "react-native-toast-notifications";
 import { getToast } from "../../utils/getToast";

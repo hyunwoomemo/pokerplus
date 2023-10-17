@@ -4,7 +4,6 @@ import Layout from "../components/Layout";
 import styled from "styled-components/native";
 import Carousel from "../components/Carousel";
 import { resourceApi } from "../api";
-import { useQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { useEffect } from "react";
 

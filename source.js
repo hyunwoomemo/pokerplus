@@ -11,14 +11,14 @@ export const Icon = {
 export const footerIcon = {
   active: {
     Home: "https://newgenerationdatadev.blob.core.windows.net/data/template/t08/common/footer_icon_home_on.png",
-    Ticket: "https://newgenerationdatadev.blob.core.windows.net/data/template/t08/common/footer_icon_ticket_on.png",
+    TicketNav: "https://newgenerationdatadev.blob.core.windows.net/data/template/t08/common/footer_icon_ticket_on.png",
     Championship: "https://newgenerationdatadev.blob.core.windows.net/data/template/t08/common/footer_icon_champion_on.png",
     Pub: "https://newgenerationdatadev.blob.core.windows.net/data/template/t08/common/footer_icon_pub_on.png",
     NoticeNav: "https://newgenerationdatadev.blob.core.windows.net/data/template/t08/common/footer_icon_notice_on.png",
   },
   basic: {
     Home: "https://newgenerationdatadev.blob.core.windows.net/data/template/t08/common/footer_icon_home.png",
-    Ticket: "https://newgenerationdatadev.blob.core.windows.net/data/template/t08/common/footer_icon_ticket.png",
+    TicketNav: "https://newgenerationdatadev.blob.core.windows.net/data/template/t08/common/footer_icon_ticket.png",
     Championship: "https://newgenerationdatadev.blob.core.windows.net/data/template/t08/common/footer_icon_champion.png",
     Pub: "https://newgenerationdatadev.blob.core.windows.net/data/template/t08/common/footer_icon_pub.png",
     NoticeNav: "https://newgenerationdatadev.blob.core.windows.net/data/template/t08/common/footer_icon_notice.png",

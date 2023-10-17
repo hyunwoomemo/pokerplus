@@ -15,6 +15,7 @@ import QnaNav from "./QnaNav";
 import PolicyNav from "./PolicyNav";
 import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
 import { ActiveDrawer } from "../context";
+import TicketNav from "./TicketNav";
 
 const Tab = createBottomTabNavigator();
 
@@ -38,7 +39,7 @@ const Tabs = ({ route }) => {
       }}
     >
       <Tab.Screen name="Home" component={Home} />
-      <Tab.Screen name="Ticket" component={Ticket} />
+      <Tab.Screen name="TicketNav" component={TicketNav} />
       <Tab.Screen name="Championship" component={Championship} />
       <Tab.Screen name="Pub" component={Pub} />
       <Tab.Screen name="NoticeNav" component={NoticeNav} />
