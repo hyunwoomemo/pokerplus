@@ -15,7 +15,6 @@ const Nav = createNativeStackNavigator();
 
 const Root = () => {
   const [user, setUser] = useRecoilState(authState);
-  console.log(user);
 
   return (
     <Nav.Navigator

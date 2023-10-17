@@ -4,11 +4,9 @@ import Layout from "../../components/Layout";
 
 const TicketList = () => {
   return (
-    <Layout>
-      <View>
-        <Text>TicketList</Text>
-      </View>
-    </Layout>
+    <View>
+      <Text>TicketList</Text>
+    </View>
   );
 };
 

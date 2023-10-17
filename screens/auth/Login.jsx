@@ -16,6 +16,7 @@ import { getToast } from "../../utils/getToast";
 import Button from "../../components/Button";
 // import SplashScreen from "react-native-splash-screen";
 import { getStorage, setStorage } from "../../utils/asyncStorage";
+import * as SplashScreen from "expo-splash-screen";
 
 const Container = styled.View`
   flex: 1;
@@ -103,6 +104,7 @@ const Login = ({ navigation: { navigate } }) => {
         setUser(JSON.parse(data));
       }
     });
+    // .then(() => SplashScreen.hideAsync());
   }, []);
 
   const onLogin = async () => {

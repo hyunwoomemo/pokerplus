@@ -4,11 +4,9 @@ import Layout from "../../components/Layout";
 
 const ReceiveList = () => {
   return (
-    <Layout>
-      <View>
-        <Text>ReceiveList</Text>
-      </View>
-    </Layout>
+    <View>
+      <Text>ReceiveList</Text>
+    </View>
   );
 };
 

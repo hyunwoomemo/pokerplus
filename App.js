@@ -10,6 +10,9 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Linking } from "react-native";
 import { deepLinkConfig } from "./source";
 import { ToastProvider } from "react-native-toast-notifications";
+import * as SplashScreen from "expo-splash-screen";
+
+SplashScreen.preventAutoHideAsync();
 
 const Nav = createNativeStackNavigator();
 export default function App() {

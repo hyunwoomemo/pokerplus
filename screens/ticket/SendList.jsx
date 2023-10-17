@@ -4,11 +4,9 @@ import Layout from "../../components/Layout";
 
 const SendList = () => {
   return (
-    <Layout>
-      <View>
-        <Text>SendList</Text>
-      </View>
-    </Layout>
+    <View>
+      <Text>SendList</Text>
+    </View>
   );
 };
 

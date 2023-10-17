@@ -11,6 +11,7 @@ import FindPw from "../screens/auth/FindPw";
 import { useRecoilState } from "recoil";
 import { authState } from "../recoil/auth/atom";
 import { getStorage } from "../utils/asyncStorage";
+import * as SplashScreen from "expo-splash-screen";
 
 const Nav = createNativeStackNavigator();
 
@@ -19,9 +20,12 @@ const OutNav = () => {
 
   useEffect(() => {
     getStorage("token").then((data) => {
+      const hideSplash = async () => {
+        await SplashScreen.hideAsync();
+      };
       if (!data) {
         setTimeout(() => {
-          // SplashScreen.hide();
+          hideSplash();
         }, 2000);
       }
     });

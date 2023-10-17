@@ -4,11 +4,9 @@ import Layout from "../../components/Layout";
 
 const Send = () => {
   return (
-    <Layout>
-      <View>
-        <Text>Send</Text>
-      </View>
-    </Layout>
+    <View>
+      <Text>Send</Text>
+    </View>
   );
 };
 

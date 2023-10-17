@@ -4,6 +4,7 @@ import styled from "styled-components/native";
 import CarouselItem from "./CarouselItem";
 import { LinearGradient } from "expo-linear-gradient";
 // import SplashScreen from "react-native-splash-screen";
+import * as SplashScreen from "expo-splash-screen";
 
 const Container = styled.View`
   height: 100%;
@@ -36,9 +37,13 @@ const ItemTitle = styled.Text`
 
 const Carousel = ({ data, pageWidth, gap, offset }) => {
   const [load, setLoad] = useState([]);
+  console.log(load.length);
   useEffect(() => {
-    if (load.length === 3) {
-      // SplashScreen.hide();
+    const hidleSplash = async () => {
+      await SplashScreen.hideAsync();
+    };
+    if (load.length === 2) {
+      hidleSplash();
     }
   }, [data, load]);
   const scrollX = useRef(new Animated.Value(0)).current;
