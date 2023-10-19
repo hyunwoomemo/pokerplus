@@ -150,7 +150,7 @@ const DrawerContent = (active) => {
   const navigation = useNavigation();
 
   useEffect(() => {
-    const count = user.ticket_info.reduce((acc, cur) => acc + cur.ticket_count, 0);
+    const count = user.ticket_info?.reduce((acc, cur) => acc + cur.ticket_count, 0);
     setTicketCount(count);
   }, []);
 

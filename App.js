@@ -65,7 +65,3 @@ export default function App() {
     </RecoilRoot>
   );
 }
-
-const styles = StyleSheet.create({
-  login: {},
-});

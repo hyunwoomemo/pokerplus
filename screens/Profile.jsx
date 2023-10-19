@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Animated, Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import Layout from "../components/Layout";
 import ScreenLayout from "../components/ScreenLayout";
@@ -20,8 +20,16 @@ const Title = styled.Text`
 const Profile = ({ navigation }) => {
   const [auth, setAuth] = useRecoilState(authState);
   const { user_profile_url, name, eng_name, ticket_info, hp, email } = auth;
+  const [ticketCount, setTicketCount] = useState(0);
+
+  useEffect(() => {
+    const count = ticket_info?.reduce((acc, cur) => acc + cur.ticket_count, 0);
+    setTicketCount(count);
+  }, []);
 
   const scrollViewRef = useRef();
+
+  console.log(ticket_info);
 
   useEffect(() => {
     scrollViewRef.current.scrollTo({ x: 0, y: 0, animated: true });
@@ -55,7 +63,7 @@ const Profile = ({ navigation }) => {
           <WithLabelDisableInput value={eng_name}>
             <Text>영문 이름 (GPI등재용)</Text>
           </WithLabelDisableInput>
-          <WithLabelDisableInput value={ticket_info ? ticket_info : "0장"}>
+          <WithLabelDisableInput value={ticket_info ? `${ticketCount}장` : "0장"}>
             <Text>보유 참가권</Text>
           </WithLabelDisableInput>
           <WithLabelDisableInput value={hp}>
