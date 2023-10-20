@@ -19,6 +19,7 @@ import TicketNav from "./TicketNav";
 import QrCreate from "../screens/qr/QrCreate";
 import QrScan from "../screens/qr/QrScan";
 import { Button, Text } from "react-native";
+import QrNav from "./QrNav";
 
 const Tab = createBottomTabNavigator();
 
@@ -55,8 +56,7 @@ const Tabs = ({ route }) => {
       <Tab.Screen name="QnaNav" component={QnaNav} />
       <Tab.Screen name="Qna" component={Qna} />
       <Tab.Screen name="PolicyNav" component={PolicyNav} />
-      <Tab.Screen name="QrCreate" component={QrCreate} />
-      <Tab.Screen name="QrScan" component={QrScan} />
+      <Tab.Screen name="QrNav" component={QrNav} />
     </Tab.Navigator>
   );
 };

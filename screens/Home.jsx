@@ -4,8 +4,8 @@ import Layout from "../components/Layout";
 import styled from "styled-components/native";
 import Carousel from "../components/Carousel";
 import { resourceApi } from "../api";
-import { useState } from "react";
-import { useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
+import { PosterContext } from "../context";
 
 const Container = styled.View`
   flex: 1;
@@ -16,16 +16,8 @@ const Container = styled.View`
 const screenWidth = Math.round(Dimensions.get("window").width);
 
 const Home = () => {
-  const [poster, setPoster] = useState([]);
+  const { poster, setPoster } = useContext(PosterContext);
 
-  useEffect(() => {
-    if (poster.length > 0) return;
-    resourceApi.posters().then((res) => {
-      if (res.CODE === "P000") {
-        setPoster(res.DATA);
-      }
-    });
-  }, []);
   return (
     <Layout>
       <Container>

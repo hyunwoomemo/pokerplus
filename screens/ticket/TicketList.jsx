@@ -55,7 +55,7 @@ const TicketList = () => {
       {loading ? (
         <ActivityIndicator style={StyleSheet.absoluteFillObject} color="#ff3183" size="large" />
       ) : tickets.length > 0 ? (
-        <FlatList data={tickets} keyExtractor={(item) => item.ticket_info_id} renderItem={({ item }) => <TicketItem item={item} />} />
+        <FlatList data={tickets} keyExtractor={(item, index) => `${index}-${item.ticket_info_id}`} renderItem={({ item }) => <TicketItem item={item} />} />
       ) : (
         <View style={{ justifyContent: "center", alignItems: "center", gap: 40, marginTop: 100 }}>
           <AntDesign name="warning" size={36} color="tomato" />

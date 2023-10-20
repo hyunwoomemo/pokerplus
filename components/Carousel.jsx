@@ -31,12 +31,11 @@ const ItemTitle = styled.Text`
 
 const Carousel = ({ data, pageWidth, gap, offset }) => {
   const [load, setLoad] = useState([]);
-  console.log(load.length);
   useEffect(() => {
     const hidleSplash = async () => {
       await SplashScreen.hideAsync();
     };
-    if (load.length === 2) {
+    if (load.length === 3) {
       hidleSplash();
     }
   }, [data, load]);

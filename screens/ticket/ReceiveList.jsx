@@ -34,7 +34,7 @@ const ReceiveList = () => {
 
   return (
     <View style={styles.container}>
-      <FlatList data={receiveList} keyExtractor={(item) => item.ticket_info_id} renderItem={({ item }) => <ReceiveItem item={item} />} />
+      <FlatList data={receiveList} keyExtractor={(item, index) => `${index}-${item.ticket_info_id}`} renderItem={({ item }) => <ReceiveItem item={item} />} />
     </View>
   );
 };

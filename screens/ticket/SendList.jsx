@@ -1,5 +1,5 @@
 import React, { useCallback, useContext, useEffect, useState } from "react";
-import { LayoutAnimation, Text, View } from "react-native";
+import { LayoutAnimation, Text, View, ActivityIndicator } from "react-native";
 import Layout from "../../components/Layout";
 import { ticketApi } from "../../api";
 import { StyleSheet } from "react-native";
@@ -39,7 +39,11 @@ const SendList = () => {
 
   return (
     <View style={styles.container}>
-      <FlatList data={sendList} keyExtractor={(item, index) => `${index}.${item.ticket_info_id}`} renderItem={({ item }) => <SendItem item={item} />} />
+      {loading ? (
+        <ActivityIndicator style={StyleSheet.absoluteFillObject} color="#ff3183" size="large" />
+      ) : (
+        <FlatList data={sendList} keyExtractor={(item, index) => `${index}.${item.ticket_info_id}`} renderItem={({ item }) => <SendItem item={item} />} />
+      )}
     </View>
   );
 };

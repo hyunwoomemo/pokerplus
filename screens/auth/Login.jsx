@@ -104,7 +104,6 @@ const Login = ({ navigation: { navigate } }) => {
         setUser(JSON.parse(data));
       }
     });
-    // .then(() => SplashScreen.hideAsync());
   }, []);
 
   const onLogin = async () => {
@@ -118,12 +117,9 @@ const Login = ({ navigation: { navigate } }) => {
       const res = await authApi.login(bodyData);
       if (res.CODE === "AL000") {
         setStorage("token", res.DATA.TOKEN);
-        // await AsyncStorage.setItem("token", res.DATA.TOKEN);
         const accountInfo = await authApi.info();
         setStorage("user", JSON.stringify(accountInfo?.DATA));
-        // await AsyncStorage.setItem("user", JSON.stringify(accountInfo?.DATA));
         setUser(accountInfo?.DATA);
-        // navigate("Root", { screen: "InNav" });
       } else {
         switch (res.CODE) {
           case "AL001":
@@ -168,7 +164,6 @@ const Login = ({ navigation: { navigate } }) => {
             placeholder="이메일 입력"
             placeholderTextColor="gray"
             value={values.email}
-            // onBlur={() => handleBlur("email")}
             onChangeText={(text) => handleChangeText("email", text)}
             error={error.email}
             touched={touched.email}

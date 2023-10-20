@@ -51,10 +51,10 @@ const Header = () => {
         <Image source={{ uri: "https://newgenerationdatadev.blob.core.windows.net/data/template/t08/common/logo.png" }} width={40} height={40} resizeMode="cover" />
       </Main>
       <QRWrapper>
-        <TouchableOpacity onPress={() => navigation.navigate("QrCreate")}>
+        <TouchableOpacity onPress={() => navigation.navigate("QrNav", { screen: "QrCreate" })}>
           <MaterialCommunityIcons name="qrcode-edit" size={24} color="black" />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate("QrScan")}>
+        <TouchableOpacity onPress={() => navigation.navigate("QrNav", { screen: "QrScan" })}>
           <MaterialCommunityIcons name="qrcode-scan" size={24} color="black" />
         </TouchableOpacity>
       </QRWrapper>

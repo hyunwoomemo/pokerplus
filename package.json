@@ -6,7 +6,8 @@
     "start": "expo start --dev-client",
     "android": "expo run:android",
     "ios": "expo run:ios",
-    "web": "expo start --web"
+    "web": "expo start --web",
+    "postinstall": "react-native setup-ios-permissions && pod-install"
   },
   "dependencies": {
     "@actbase/react-daum-postcode": "^1.0.4",
@@ -19,6 +20,8 @@
     "@tanstack/react-query": "^4.35.7",
     "axios": "^1.5.1",
     "expo": "^49.0.0",
+    "expo-barcode-scanner": "~12.5.3",
+    "expo-camera": "~13.4.4",
     "expo-image-picker": "~14.3.2",
     "expo-linear-gradient": "~12.3.0",
     "expo-splash-screen": "~0.20.5",
@@ -46,6 +49,27 @@
     "styled-components": "^6.0.8",
     "yarn": "^1.22.19"
   },
+  "reactNativePermissionsIOS": [
+    "AppTrackingTransparency",
+    "BluetoothPeripheral",
+    "Calendars",
+    "Camera",
+    "Contacts",
+    "FaceID",
+    "LocationAccuracy",
+    "LocationAlways",
+    "LocationWhenInUse",
+    "MediaLibrary",
+    "Microphone",
+    "Motion",
+    "Notifications",
+    "PhotoLibrary",
+    "PhotoLibraryAddOnly",
+    "Reminders",
+    "Siri",
+    "SpeechRecognition",
+    "StoreKit"
+  ],
   "devDependencies": {
     "@babel/core": "^7.20.0"
   },

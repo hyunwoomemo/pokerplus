@@ -33,8 +33,6 @@ export default function Page({ item, index, style, setLoad }) {
 
   return (
     <PageItem color={item.color} style={{ ...style, backgroundColor: "lightgray" }}>
-      {/* <PosterWrapper style={{ width: width, height: height }}> */}
-      {/* <Animated.View style={{ width: "80%", height: "100%", opacity: opacity, borderRadius: 15 }}> */}
       <PosterImg
         source={{ uri: item.poster_url }}
         // defaultSource={require("../assets/splash.jpg")}
@@ -46,8 +44,6 @@ export default function Page({ item, index, style, setLoad }) {
           opacityAnimation(opacity, "reset");
         }}
       />
-      {/* </Animated.View> */}
-      {/* </PosterWrapper> */}
     </PageItem>
   );
 }

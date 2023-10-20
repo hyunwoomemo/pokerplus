@@ -2,6 +2,7 @@ import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Layout from "../components/Layout";
 import Title from "../components/Title";
+import AppBar from "../components/AppBar";
 
 const Policy = ({ navigation }) => {
   const policy = [
@@ -10,8 +11,8 @@ const Policy = ({ navigation }) => {
     { text: "위치 정보 이용 약관 (필수)", name: "Location", type: "Position" },
   ];
   return (
-    <Layout>
-      <Title text="약관 및 정책" style={{ marginTop: 20 }} />
+    <View style={{ flex: 1, backgroundColor: "#fff" }}>
+      <AppBar title="약관 및 정책" />
       <View style={styles.container}>
         {policy.map((item) => (
           <View key={item.type} style={styles.item}>
@@ -22,7 +23,7 @@ const Policy = ({ navigation }) => {
           </View>
         ))}
       </View>
-    </Layout>
+    </View>
   );
 };
 

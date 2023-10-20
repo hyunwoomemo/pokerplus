@@ -18,6 +18,12 @@ const Send = ({ navigation }) => {
   const [loading, setLoading] = useState({});
   const [user, setUser] = useRecoilState(authState);
 
+  navigation.addListener("blur", () => {
+    setValues({
+      count: "1",
+    });
+  });
+
   const [values, setValues] = useState({
     count: "1",
   });
@@ -36,7 +42,7 @@ const Send = ({ navigation }) => {
 
   useEffect(() => {
     if (selectData?.length === 0) {
-      tickets.forEach((v) => {
+      tickets.forEach((v, i) => {
         setSelectData((prev) => [
           ...prev,
           {
@@ -107,10 +113,10 @@ const Send = ({ navigation }) => {
         target_user_id: values.userId,
         memo: values.memo ? values.memo : null,
       });
+      console.log("TH003", values.id, values.count, values.userId, values.memo);
       if (res.CODE === "TKS000") {
         console.log("성공");
         navigation.navigate("SendList");
-        setUser({ ...user, ticket_info: (ticket_info.find((v) => v.ticket_info_id === values.id).ticket_count = ticket_info.find((v) => v.ticket_info_id === values.id).ticket_count - values.count) });
       } else {
         switch (res.CODE) {
           case "TKS001":
@@ -174,6 +180,7 @@ const Send = ({ navigation }) => {
         </View>
         <View style={{ flexDirection: "row", gap: 10 }}>
           <TextInput
+            value={values.hp}
             onChangeText={(text) => {
               LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
               setValues({ ...values, name: "", hp: text });
