@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { Animated, FlatList, LayoutAnimation, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Animated, FlatList, LayoutAnimation, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Layout from "../components/Layout";
 import Title from "../components/Title";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -7,6 +7,7 @@ import { customerApi } from "../api";
 import { toggleAnimation } from "../animations/toggleAnimation";
 import Pagination from "../components/Pagination";
 import { useFocusEffect } from "@react-navigation/native";
+import AppBar from "../components/AppBar";
 
 const AccordionWrapper = ({ title, children, data, index }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -111,8 +112,8 @@ const Faq = () => {
   }, [totalPage]);
 
   return (
-    <Layout>
-      <Text style={styles.title}>FAQ</Text>
+    <View style={{ flex: 1, backgroundColor: "#fff" }}>
+      <AppBar title="FAQ" />
       <FlatList data={faq} keyExtractor={(item) => item.contents} renderItem={({ item, index }) => <AccordionWrapper title={item.subject} data={item.contents} index={index} />} />
       {/* <ScrollView>
         {faq &&
@@ -125,7 +126,7 @@ const Faq = () => {
       <View style={{ flexDirection: "row", gap: 10, justifyContent: "center", marginVertical: 10 }}>
         {totalPage > 1 && <Pagination totalPage={totalPage} currentPage={currentPage} setCurrentPage={setCurrentPage} />}
       </View>
-    </Layout>
+    </View>
   );
 };
 

@@ -32,7 +32,7 @@ const Pagination = ({ totalPage, currentPage, setCurrentPage }) => {
                 <Text style={currentPage === i + 1 ? { color: "#fff", fontWeight: "bold" } : {}}>{i + 1}</Text>
               </LinearGradient>
             ) : (
-              <View style={{ backgroundColor: "#ebf2f0", width: 35, height: 35, borderRadius: 18, justifyContent: "center", alignItems: "center", borderWidth: 1, borderColor: "rgba(0,0,0,0.2)" }}>
+              <View style={{ backgroundColor: "#fff", width: 35, height: 35, borderRadius: 18, justifyContent: "center", alignItems: "center", borderWidth: 1, borderColor: "rgba(0,0,0,0.2)" }}>
                 <Text>{i + 1}</Text>
               </View>
             )}

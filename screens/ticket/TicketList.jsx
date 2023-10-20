@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Text, View } from "react-native";
 import Layout from "../../components/Layout";
 import { AntDesign } from "@expo/vector-icons";
@@ -8,35 +8,59 @@ import TicketItem from "../../components/TicketItem";
 import { StyleSheet } from "react-native";
 import { TouchableOpacity } from "react-native";
 import { ActivityIndicator } from "react-native";
+import { useFocusEffect } from "@react-navigation/native";
 
 const TicketList = () => {
   const [tickets, setTickets] = useState();
-  const [loading, setLoading] = useState();
+  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    setLoading(true);
-    const getTicket = async () => {
-      try {
-        const res = await ticketApi.list();
-        setTickets(res.DATA);
-      } catch (err) {
-        console.error(err);
-      } finally {
-        setLoading(false);
-      }
-    };
+  // useEffect(() => {
+  //   setLoading(true);
+  //   const getTicket = async () => {
+  //     try {
+  //       const res = await ticketApi.list();
+  //       setTickets(res.DATA);
+  //     } catch (err) {
+  //       console.error(err);
+  //     } finally {
+  //       setLoading(false);
+  //     }
+  //   };
 
-    getTicket();
-  }, []);
+  //   getTicket();
+  // }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      setLoading(true);
+      const getTicket = async () => {
+        try {
+          const res = await ticketApi.list();
+          const filterData = res.DATA.filter((v) => v.ticket_count !== 0);
+          setTickets(filterData);
+          console.log(filterData);
+        } catch (err) {
+          console.error(err);
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      getTicket();
+    }, [])
+  );
 
   return (
     <View style={styles.container}>
       {loading ? (
         <ActivityIndicator style={StyleSheet.absoluteFillObject} color="#ff3183" size="large" />
-      ) : tickets ? (
+      ) : tickets.length > 0 ? (
         <FlatList data={tickets} keyExtractor={(item) => item.ticket_info_id} renderItem={({ item }) => <TicketItem item={item} />} />
       ) : (
-        <AntDesign name="warning" size={24} color="black" />
+        <View style={{ justifyContent: "center", alignItems: "center", gap: 40, marginTop: 100 }}>
+          <AntDesign name="warning" size={36} color="tomato" />
+          <Text style={{ fontSize: 20, color: "gray" }}>참가권이 존재하지 않습니다.</Text>
+        </View>
       )}
     </View>
   );

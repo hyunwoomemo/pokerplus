@@ -6,6 +6,7 @@ import moment from "moment";
 import { LinearGradient } from "expo-linear-gradient";
 import Pagination from "../components/Pagination";
 import { QnaContext } from "../context";
+import AppBar from "../components/AppBar";
 
 const QnaList = ({ route, navigation }) => {
   const [qna, setQna] = useState([]);
@@ -76,8 +77,8 @@ const QnaList = ({ route, navigation }) => {
   }, [total]);
 
   return (
-    <Layout>
-      <Text style={styles.title}>1:1 문의 내역</Text>
+    <View style={{ flex: 1, backgroundColor: "#fff" }}>
+      <AppBar title="1:1 문의 내역" />
       {loading ? (
         <ActivityIndicator style={StyleSheet.absoluteFillObject} color="#ff3183" size="large" />
       ) : (
@@ -115,7 +116,7 @@ const QnaList = ({ route, navigation }) => {
           </View>
         </>
       )}
-    </Layout>
+    </View>
   );
 };
 
@@ -134,7 +135,7 @@ const styles = StyleSheet.create({
     borderRadius: 15, // <-- Inner Border Radius
     flex: 1,
     margin: 2, // <-- Border Width
-    backgroundColor: "#ebf2f0",
+    backgroundColor: "#fff",
     justifyContent: "center",
   },
   itemWrapper: {

@@ -31,7 +31,7 @@ const InputField = forwardRef(({ touched, error, value, ...props }, ref) => {
   return (
     <Pressable onPress={handlePressInput} style={{ width: "95%" }}>
       <View>
-        <TextInput autoCapitalize="none" ref={mergeRefs(innerRef, ref)} {...props} autoCorrect={false} spellCheck={false} clearButtonMode="while-editing" />
+        <TextInput style={{ fontSize: 16 }} autoCapitalize="none" ref={mergeRefs(innerRef, ref)} {...props} autoCorrect={false} spellCheck={false} clearButtonMode="while-editing" />
         {error && value.length > 0 && <ErrorText>{error}</ErrorText>}
       </View>
     </Pressable>

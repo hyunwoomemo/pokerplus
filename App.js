@@ -11,9 +11,11 @@ import { Linking } from "react-native";
 import { deepLinkConfig } from "./source";
 import { ToastProvider } from "react-native-toast-notifications";
 import * as SplashScreen from "expo-splash-screen";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import "react-native-reanimated";
+import { LogLevel, OneSignal } from "react-native-onesignal";
+import { PaperProvider } from "react-native-paper";
 
-SplashScreen.preventAutoHideAsync();
+// SplashScreen.preventAutoHideAsync();
 
 const Nav = createNativeStackNavigator();
 export default function App() {
@@ -52,16 +54,35 @@ export default function App() {
     config: deepLinkConfig,
   };
 
+  useEffect(() => {
+    // Remove this method to stop OneSignal Debugging
+    OneSignal?.Debug.setLogLevel(LogLevel.Verbose);
+
+    // OneSignal Initialization
+    OneSignal?.initialize("ae232b11-fde8-419d-8069-9ec35bf73f62");
+
+    // requestPermission will show the native iOS or Android notification permission prompt.
+    // We recommend removing the following code and instead using an In-App Message to prompt for notification permission
+    OneSignal?.Notifications.requestPermission(true);
+
+    // Method for listening for notification clicks
+    OneSignal?.Notifications.addEventListener("click", (event) => {
+      console.log("OneSignal: notification clicked:", event);
+    });
+  }, []);
+
   return (
-    <RecoilRoot>
-      <ToastProvider duration={1000} offset={30} swipeEnabled={true}>
-        <StatusBar barStyle="dark-content" backgroundColor="#fff" />
-        <NavigationContainer linking={linking}>
-          <Nav.Navigator>
-            <Nav.Screen name="Root" component={Root} options={{ headerShown: false }} />
-          </Nav.Navigator>
-        </NavigationContainer>
-      </ToastProvider>
-    </RecoilRoot>
+    <PaperProvider>
+      <RecoilRoot>
+        <ToastProvider duration={1000} offset={30} swipeEnabled={true}>
+          <StatusBar barStyle="dark-content" backgroundColor="#fff" />
+          <NavigationContainer linking={linking}>
+            <Nav.Navigator>
+              <Nav.Screen name="Root" component={Root} options={{ headerShown: false }} />
+            </Nav.Navigator>
+          </NavigationContainer>
+        </ToastProvider>
+      </RecoilRoot>
+    </PaperProvider>
   );
 }

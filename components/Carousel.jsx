@@ -12,14 +12,6 @@ const Container = styled.View`
   align-items: center;
 `;
 
-const Indicator = styled.View`
-  margin: 0px 4px;
-  background-color: ${(props) => (props.focused ? "#262626" : "#dfdfdf")};
-  width: 6px;
-  height: 6px;
-  border-radius: 3px;
-`;
-
 const IndicatorWrapper = styled.View`
   flex-direction: row;
   align-items: center;
@@ -33,6 +25,8 @@ const ItemTitleWrapper = styled(Animated.createAnimatedComponent(View))`
 const ItemTitle = styled.Text`
   padding: 7px 10px;
   text-align: center;
+  font-size: 14px;
+  font-weight: bold;
 `;
 
 const Carousel = ({ data, pageWidth, gap, offset }) => {
@@ -70,7 +64,7 @@ const Carousel = ({ data, pageWidth, gap, offset }) => {
       <Animated.View style={[{ opacity, transform: [{ scale }] }]}>
         <ItemTitleWrapper style={{ opacity: titleOpacity }}>
           <LinearGradient colors={["#bc20a7", "#4c56fa"]} start={{ x: 0.3, y: 0.1 }} style={{ borderRadius: 30, width: "80%" }} end={{ x: 0.9, y: 0.1 }}>
-            <View style={{ borderRadius: 30, backgroundColor: "#ebf2f0", marginVertical: 2, marginHorizontal: 2, paddingVertical: 5 }}>
+            <View style={{ borderRadius: 30, backgroundColor: "#fff", marginVertical: 2, marginHorizontal: 2, paddingVertical: 5 }}>
               <ItemTitle>{item.title}</ItemTitle>
             </View>
           </LinearGradient>

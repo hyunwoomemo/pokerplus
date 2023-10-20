@@ -1,13 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Text, View } from "react-native";
 import Layout from "../../components/Layout";
 import { ticketApi } from "../../api";
 import { StyleSheet } from "react-native";
 import { FlatList } from "react-native";
 import ReceiveItem from "../../components/ReceiveItem";
+import { TicketContext } from "../../context";
 
 const ReceiveList = () => {
-  const [receives, setReceives] = useState([]);
+  const { receiveList, setReceiveList } = useContext(TicketContext);
   const [offset, setOffset] = useState(10);
   const [totalPage, setTotalPage] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
@@ -17,7 +18,7 @@ const ReceiveList = () => {
     setLoading(true);
     try {
       const res = await ticketApi.receiveList("receive", offset, currentPage);
-      setReceives(res.DATA);
+      setReceiveList(res.DATA);
       setTotalPage(Math.ceil(res.Total / 10));
       console.log(res);
     } catch (err) {
@@ -33,7 +34,7 @@ const ReceiveList = () => {
 
   return (
     <View style={styles.container}>
-      <FlatList data={receives} keyExtractor={(item) => item.ticket_info_id} renderItem={({ item }) => <ReceiveItem item={item} />} />
+      <FlatList data={receiveList} keyExtractor={(item) => item.ticket_info_id} renderItem={({ item }) => <ReceiveItem item={item} />} />
     </View>
   );
 };

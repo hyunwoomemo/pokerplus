@@ -1,6 +1,6 @@
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import Tabs from "./Tab";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { Animated, Image, LayoutAnimation, Platform, Text, TouchableOpacity, View } from "react-native";
 import { getFocusedRouteNameFromRoute, useNavigation, useRoute } from "@react-navigation/native";
 import styled from "styled-components/native";
@@ -15,7 +15,7 @@ import { FontAwesome } from "@expo/vector-icons";
 import { authApi } from "../api";
 import { SimpleLineIcons } from "@expo/vector-icons";
 import { getStorage, removeStorage } from "../utils/asyncStorage";
-import { ActiveDrawer } from "../context";
+import { ActiveDrawer, InNavContext } from "../context";
 import { opacityAnimation } from "../animations/opacityAnimation";
 
 const Drawer = createDrawerNavigator();
@@ -25,11 +25,10 @@ const DrawerContainer = styled.View`
   padding: 20px;
   gap: 15px;
   flex: 1;
-  background-color: #ebf2f0;
 `;
 
 const WrapperTitle = styled.Text`
-  font-size: 18px;
+  font-size: 24px;
   margin-bottom: 10px;
 `;
 
@@ -53,11 +52,12 @@ const InfoTextWrapper = styled.View`
   justify-content: center;
 `;
 const NickText = styled.Text`
-  font-size: 18px;
+  font-size: 20px;
   font-weight: bold;
 `;
 const MyTicketText = styled.Text`
   color: hotpink;
+  font-size: 16px;
 `;
 
 const AccordionWrapper = ({ title, children, data, active }) => {
@@ -113,7 +113,7 @@ const AccordionItem = ({ content, name, active }) => {
           navigation.navigate(name);
         }}
       >
-        <Text style={active === name ? { color: "#ff3183" } : { color: "#000" }}>{content}</Text>
+        <Text style={active === name ? { fontSize: 18, color: "#ff3183" } : { fontSize: 18, color: "#000" }}>{content}</Text>
       </TouchableOpacity>
     </ItemWrapper>
   );
@@ -141,17 +141,19 @@ const SignOut = styled.TouchableOpacity`
   gap: 10px;
 `;
 
-const SignOutText = styled.Text``;
+const SignOutText = styled.Text`
+  font-size: 16px;
+`;
 
 const DrawerContent = (active) => {
   const [user, setUser] = useRecoilState(authState);
-  const [ticketCount, setTicketCount] = useState(0);
+  const { myTicketCount, setMyTicketCount } = useContext(InNavContext);
 
   const navigation = useNavigation();
 
   useEffect(() => {
     const count = user.ticket_info?.reduce((acc, cur) => acc + cur.ticket_count, 0);
-    setTicketCount(count);
+    setMyTicketCount(count);
   }, []);
 
   const handleSignout = async () => {
@@ -192,7 +194,7 @@ const DrawerContent = (active) => {
         </ProfileWrapper>
         <InfoTextWrapper>
           <NickText>{user.nick}</NickText>
-          <MyTicketText>{ticketCount ? `${ticketCount}장` : "0장"}</MyTicketText>
+          <MyTicketText>{myTicketCount ? `${myTicketCount}장` : "0장"}</MyTicketText>
         </InfoTextWrapper>
       </InfoSection>
       <AccordionWrapper title="고객센터" data={customer} active={active}></AccordionWrapper>
@@ -200,11 +202,10 @@ const DrawerContent = (active) => {
       {/* 추가 아이템 */}
       <DrawerFooter>
         <SignOut onPress={handleSignout}>
-          {/* <FontAwesome name="sign-out" size={24} color="black" /> */}
           <SimpleLineIcons name="logout" size={20} color="black" />
           <SignOutText>로그아웃</SignOutText>
         </SignOut>
-        <Text style={{ color: "gray" }}>APP VER 1.0.1</Text>
+        <Text style={{ color: "gray", fontSize: 14 }}>APP VER 1.0.1</Text>
       </DrawerFooter>
     </DrawerContainer>
   );

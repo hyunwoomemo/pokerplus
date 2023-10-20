@@ -1,14 +1,12 @@
-import React from "react";
-import { Text, View } from "react-native";
-import Layout from "../../components/Layout";
+import React, { useEffect, useState } from "react";
+import { View } from "react-native";
+import AppBar from "../../components/AppBar";
 
 const QrScan = () => {
   return (
-    <Layout>
-      <View>
-        <Text>QrScan</Text>
-      </View>
-    </Layout>
+    <View style={{ flex: 1, backgroundColor: "#fff" }}>
+      <AppBar title="QR Scan" />
+    </View>
   );
 };
 

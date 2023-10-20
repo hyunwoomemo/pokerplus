@@ -56,7 +56,7 @@ const FindWrapper = styled.View`
 const FindItem = styled.TouchableOpacity``;
 
 const FindItemText = styled.Text`
-  font-size: 12px;
+  font-size: 14px;
 `;
 
 const ButtonWrapper = styled.View`

@@ -18,6 +18,7 @@ import { ActiveDrawer } from "../context";
 import TicketNav from "./TicketNav";
 import QrCreate from "../screens/qr/QrCreate";
 import QrScan from "../screens/qr/QrScan";
+import { Button, Text } from "react-native";
 
 const Tab = createBottomTabNavigator();
 
@@ -33,8 +34,10 @@ const Tabs = ({ route }) => {
       sceneContainerStyle={{}}
       screenOptions={{
         headerShown: false,
-        // tabBarActiveBackgroundColor: "pink",
         tabBarShowLabel: false,
+        headerStyle: {
+          backgroundColor: "#fff",
+        },
       }}
       tabBar={(props) => {
         return <CustomTabBar {...props} />;

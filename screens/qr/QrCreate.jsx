@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { ActivityIndicator, LayoutAnimation, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, LayoutAnimation, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Layout from "../../components/Layout";
 import Button from "../../components/Button";
 import { LinearGradient } from "expo-linear-gradient";
@@ -7,6 +7,7 @@ import { Fontisto } from "@expo/vector-icons";
 import { qrApi } from "../../api";
 import QRCode from "react-native-qrcode-svg";
 import { useFocusEffect } from "@react-navigation/native";
+import AppBar from "../../components/AppBar";
 
 const QrCreate = () => {
   const [qrInfoUrl, setQrInfoUrl] = useState("");
@@ -57,54 +58,55 @@ const QrCreate = () => {
   };
 
   return (
-    <Layout>
-      <View style={{ flex: 1 }}>
-        <View style={{ justifyContent: "center", alignItems: "center", paddingVertical: 25 }}>
-          <LinearGradient colors={["#bc20a7", "#4c56fa"]} start={{ x: 0.3, y: 0.1 }} style={{ borderRadius: 30, width: "80%" }} end={{ x: 0.9, y: 0.1 }}>
-            <View style={{ borderRadius: 30, backgroundColor: "#ebf2f0", marginVertical: 2, marginHorizontal: 2, paddingVertical: 5, justifyContent: "center", alignItems: "center" }}>
-              <Text style={{ fontSize: 18, fontWeight: "bold" }}>PCT QR CODE</Text>
-            </View>
-          </LinearGradient>
-        </View>
-        {qrInfoUrl ? (
-          <View style={{ flex: 1, alignItems: "center", justifyContent: "center", gap: 40 }}>
-            <View style={{ flexDirection: "row", gap: 10, alignItems: "center", justifyContent: "center" }}>
-              <Text style={{ fontSize: 14 }}>유효시간</Text>
-              <Text style={{ fontSize: 22, color: "#ff3183" }}>{formatTimer(timer)}</Text>
-              <TouchableOpacity
-                onPress={() => setTimer(180)}
-                style={{ marginLeft: 10, borderWidth: 1, padding: 3, borderRadius: 30, width: 30, height: 30, justifyContent: "center", alignItems: "center" }}
-              >
-                <Fontisto name="stopwatch" size={18} color="black" />
-              </TouchableOpacity>
-            </View>
-
-            <View
-              style={{
-                backgroundColor: "#fff",
-                padding: 40,
-                borderRadius: 30,
-                shadowColor: "#000",
-                shadowOffset: {
-                  width: 2,
-                  height: 3,
-                },
-              }}
+    <View style={{ flex: 1, backgroundColor: "#fff" }}>
+      {/* <AppBar title="QR CODE" /> */}
+      <AppBar />
+      <SafeAreaView />
+      <View style={{ justifyContent: "center", alignItems: "center", paddingVertical: 25 }}>
+        <LinearGradient colors={["#bc20a7", "#4c56fa"]} start={{ x: 0.3, y: 0.1 }} style={{ borderRadius: 30, width: "80%" }} end={{ x: 0.9, y: 0.1 }}>
+          <View style={{ borderRadius: 30, backgroundColor: "#fff", marginVertical: 2, marginHorizontal: 2, paddingVertical: 5, justifyContent: "center", alignItems: "center" }}>
+            <Text style={{ fontSize: 18, fontWeight: "bold" }}>PCT QR CODE</Text>
+          </View>
+        </LinearGradient>
+      </View>
+      {qrInfoUrl ? (
+        <View style={{ flex: 1, alignItems: "center", justifyContent: "center", gap: 40 }}>
+          <View style={{ flexDirection: "row", gap: 10, alignItems: "center", justifyContent: "center" }}>
+            <Text style={{ fontSize: 14 }}>유효시간</Text>
+            <Text style={{ fontSize: 22, color: "#ff3183" }}>{formatTimer(timer)}</Text>
+            <TouchableOpacity
+              onPress={() => setTimer(180)}
+              style={{ marginLeft: 10, borderWidth: 1, padding: 3, borderRadius: 30, width: 30, height: 30, justifyContent: "center", alignItems: "center" }}
             >
-              <View>
-                <QRCode value={qrInfoUrl} size={150} />
-              </View>
-            </View>
+              <Fontisto name="stopwatch" size={18} color="black" />
+            </TouchableOpacity>
+          </View>
 
-            <View style={{ paddingVertical: 10, paddingHorizontal: 15, borderWidth: 1, borderColor: "rgba(0,0,0,0.2)", borderRadius: 10 }}>
-              <Text>Download QR</Text>
+          <View
+            style={{
+              backgroundColor: "#fff",
+              padding: 40,
+              borderRadius: 30,
+              shadowColor: "#000",
+              shadowOffset: {
+                width: 2,
+                height: 3,
+              },
+            }}
+          >
+            <View>
+              <QRCode value={qrInfoUrl} size={150} />
             </View>
           </View>
-        ) : (
-          <ActivityIndicator style={{ ...StyleSheet.absoluteFillObject, flex: 1 }} size={"large"} color="#ff3183" />
-        )}
-      </View>
-    </Layout>
+
+          <View style={{ paddingVertical: 10, paddingHorizontal: 15, borderWidth: 1, borderColor: "rgba(0,0,0,0.2)", borderRadius: 10 }}>
+            <Text>Download QR</Text>
+          </View>
+        </View>
+      ) : (
+        <ActivityIndicator style={{ ...StyleSheet.absoluteFillObject, flex: 1 }} size={"large"} color="#ff3183" />
+      )}
+    </View>
   );
 };
 

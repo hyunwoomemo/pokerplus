@@ -35,7 +35,7 @@ const CustomTabBar = ({ state, descriptors, navigation, options }) => {
     );
   };
   return (
-    <View style={{ flexDirection: "row", backgroundColor: "#ebf2f0", paddingVertical: 5, paddingBottom: 20, borderTopWidth: 1, borderTopColor: "rgba(59,59,59,0.1)" }}>
+    <View style={{ flexDirection: "row", backgroundColor: "#fff", paddingVertical: 5, paddingBottom: 20, borderTopWidth: 1, borderTopColor: "rgba(59,59,59,0.1)" }}>
       {state.routes.map((route, index) => {
         if (index < 5) {
           // Display only the first 4 items

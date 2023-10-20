@@ -3,6 +3,7 @@ import styled from "styled-components/native";
 import { ActivityIndicator, Animated, Image, Text, View } from "react-native";
 import { Dimensions } from "react-native";
 import { opacityAnimation } from "../animations/opacityAnimation";
+import { Surface } from "react-native-paper";
 
 const PageItem = styled.View`
   background-color: ${(props) => props.color};
@@ -31,22 +32,22 @@ export default function Page({ item, index, style, setLoad }) {
   const opacity = useRef(new Animated.Value(1)).current;
 
   return (
-    <PageItem color={item.color} style={style}>
-      <PosterWrapper style={{ width: width, height: height }}>
-        <Animated.View style={{ width: "80%", height: "100%", backgroundColor: "rgba(0,0,0,0.2)", opacity: opacity, borderRadius: 15 }}>
-          <PosterImg
-            source={{ uri: item.poster_url }}
-            // defaultSource={require("../assets/splash.jpg")}
-            resizeMode={"stretch"}
-            style={{ borderRadius: 15 }}
-            onLoadStart={() => opacityAnimation(opacity, "start")}
-            onLoadEnd={() => {
-              setLoad((prev) => [...prev, index]);
-              opacityAnimation(opacity, "reset");
-            }}
-          />
-        </Animated.View>
-      </PosterWrapper>
+    <PageItem color={item.color} style={{ ...style, backgroundColor: "lightgray" }}>
+      {/* <PosterWrapper style={{ width: width, height: height }}> */}
+      {/* <Animated.View style={{ width: "80%", height: "100%", opacity: opacity, borderRadius: 15 }}> */}
+      <PosterImg
+        source={{ uri: item.poster_url }}
+        // defaultSource={require("../assets/splash.jpg")}
+        resizeMode={"contain"}
+        style={{ borderRadius: 15 }}
+        onLoadStart={() => opacityAnimation(opacity, "start")}
+        onLoadEnd={() => {
+          setLoad((prev) => [...prev, index]);
+          opacityAnimation(opacity, "reset");
+        }}
+      />
+      {/* </Animated.View> */}
+      {/* </PosterWrapper> */}
     </PageItem>
   );
 }

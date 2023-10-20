@@ -10,6 +10,7 @@ const Container = styled.View`
   justify-content: space-between;
   align-items: center;
   padding: 10px;
+  margin: 10px;
 `;
 
 const Hambuger = styled.TouchableOpacity`

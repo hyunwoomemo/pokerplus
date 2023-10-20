@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { ActivityIndicator, LayoutAnimation, Text, TextInput, View } from "react-native";
+import React, { useContext, useEffect, useState } from "react";
+import { ActivityIndicator, Dimensions, LayoutAnimation, Text, TextInput, View } from "react-native";
 import Layout from "../../components/Layout";
 import { ticketApi } from "../../api";
 import { SelectList } from "react-native-dropdown-select-list";
@@ -8,11 +8,15 @@ import { TouchableOpacity } from "react-native";
 import { useToast } from "react-native-toast-notifications";
 import Button from "../../components/Button";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { InNavContext } from "../../context";
+import { useRecoilState } from "recoil";
+import { authState } from "../../recoil/auth/atom";
 
-const Send = () => {
+const Send = ({ navigation }) => {
   const [tickets, setTickets] = useState([]);
   const [selectData, setSelectData] = useState([]);
   const [loading, setLoading] = useState({});
+  const [user, setUser] = useRecoilState(authState);
 
   const [values, setValues] = useState({
     count: "1",
@@ -20,8 +24,8 @@ const Send = () => {
 
   const getTickets = async () => {
     const res = await ticketApi.list();
-    console.log(res);
-    setTickets(res.DATA);
+
+    setTickets(res.DATA.filter((v) => v.ticket_count !== 0));
   };
 
   useEffect(() => {
@@ -66,7 +70,6 @@ const Send = () => {
     }
   };
 
-  console.log(values.count);
   const toast = useToast();
 
   const handleFindUser = async () => {
@@ -94,8 +97,6 @@ const Send = () => {
     }
   };
 
-  console.log(!(values.hp?.length > 0 && values.name?.length > 0));
-
   const handleSend = async () => {
     setLoading({ ...loading, send: true });
     try {
@@ -106,9 +107,10 @@ const Send = () => {
         target_user_id: values.userId,
         memo: values.memo ? values.memo : null,
       });
-      console.log(res);
       if (res.CODE === "TKS000") {
         console.log("성공");
+        navigation.navigate("SendList");
+        setUser({ ...user, ticket_info: (ticket_info.find((v) => v.ticket_info_id === values.id).ticket_count = ticket_info.find((v) => v.ticket_info_id === values.id).ticket_count - values.count) });
       } else {
         switch (res.CODE) {
           case "TKS001":
@@ -135,6 +137,8 @@ const Send = () => {
     }
   };
 
+  const { height } = Dimensions.get("window");
+
   return (
     <KeyboardAwareScrollView>
       <View style={{ padding: 20, flex: 1 }}>
@@ -154,11 +158,11 @@ const Send = () => {
           <TouchableOpacity onPress={() => handleCount("minus")} disabled={values.count < 1 || !values.id}>
             <Entypo name="circle-with-minus" size={28} color={values.count < 1 || !values.id ? "gray" : "#5a50ef"} />
           </TouchableOpacity>
+
           <TextInput
             value={values.count}
             onChangeText={(text) => {
-              if (parseInt(text) < 0 || parseInt(text) >= tickets.find((v) => v.ticket_info_id === values.id)?.ticket_count || !values.id) return;
-              // if (text < 0 || text >= tickets.find((v) => v.ticket_info_id === values.ticket_info_id)?.ticket_count) return;
+              if (parseInt(text) < 0 || parseInt(text) > tickets.find((v) => v.ticket_info_id === values.id)?.ticket_count || !values.id) return;
               setValues({ ...values, count: text });
             }}
             inputMode="numeric"
@@ -174,7 +178,7 @@ const Send = () => {
               LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
               setValues({ ...values, name: "", hp: text });
             }}
-            style={{ marginTop: 10, backgroundColor: "#fff", borderRadius: 15, paddingVertical: 18, paddingHorizontal: 20, flex: 4 }}
+            style={{ marginTop: 10, backgroundColor: "#fff", borderRadius: 15, paddingVertical: 18, paddingHorizontal: 20, flex: 3 }}
             onSubmitEditing={(text) => handleFindUser(text)}
             inputMode="tel"
             keyboardType="number-pad"
@@ -198,10 +202,21 @@ const Send = () => {
         <TextInput
           placeholder="메모를 입력하세요."
           multiline={true}
-          style={{ marginTop: 10, backgroundColor: "#fff", borderRadius: 15, paddingVertical: 18, paddingHorizontal: 20, flex: 1, marginBottom: 30 }}
+          style={{
+            marginTop: 10,
+            backgroundColor: "#fff",
+            borderRadius: 15,
+            paddingVertical: 18,
+            paddingHorizontal: 20,
+            flex: 1,
+            marginBottom: 30,
+            minHeight: height / 10,
+            paddingTop: 20,
+            fontSize: 16,
+          }}
           onChangeText={(text) => setValues({ ...values, memo: text })}
         ></TextInput>
-        <Button onPress={handleSend} primary label="전송" style={{ marginTop: "auto" }} disabled={!(values.hp?.length > 0 && values.name?.length > 0)} />
+        <Button loading={loading.send} onPress={handleSend} primary label="전송" style={{ marginTop: "auto" }} disabled={!(values.hp?.length > 0 && values.name?.length > 0)} />
       </View>
     </KeyboardAwareScrollView>
   );

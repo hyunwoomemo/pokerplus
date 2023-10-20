@@ -5,6 +5,7 @@ import { customerApi } from "../api";
 import { SelectList } from "react-native-dropdown-select-list";
 import { WithLabelInput } from "../components/Input";
 import Button from "../components/Button";
+import AppBar from "../components/AppBar";
 
 const Qna = ({ navigation }) => {
   const [config, setConfig] = useState([]);
@@ -49,8 +50,8 @@ const Qna = ({ navigation }) => {
   };
 
   return (
-    <Layout>
-      <Text style={styles.title}>1:1 문의하기</Text>
+    <View style={{ flex: 1, backgroundColor: "#fff" }}>
+      <AppBar title="1:1 문의하기" />
       <ScrollView style={{ paddingHorizontal: 32, marginTop: 20 }}>
         <SelectList
           boxStyles={{ marginTop: 10, backgroundColor: "#fff", borderRadius: 15, paddingVertical: 18, paddingHorizontal: 20, borderColor: "transparent" }}
@@ -82,7 +83,7 @@ const Qna = ({ navigation }) => {
           <Button label="전송" loading={loading} onPress={handleSubmit} primary style={{ flex: 1 }} />
         </View>
       </ScrollView>
-    </Layout>
+    </View>
   );
 };
 
