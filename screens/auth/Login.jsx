@@ -131,10 +131,8 @@ const Login = ({ navigation: { navigate } }) => {
         const accountInfo = await authApi.info();
         setStorage("user", JSON.stringify(accountInfo?.DATA));
         setUser(accountInfo?.DATA);
-        if (OneSignal.Notifications.hasPermission) {
-          OneSignal.login(accountInfo?.DATA.email);
-          console.log(OneSignal.Notifications.hasPermission, accountInfo?.DATA.email);
-        }
+        OneSignal.login(accountInfo?.DATA.email);
+        console.log(OneSignal.Notifications.hasPermission, accountInfo?.DATA.email);
       } else {
         switch (res.CODE) {
           case "AL001":
