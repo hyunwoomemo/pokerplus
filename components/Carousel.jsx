@@ -1,10 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Animated, FlatList, Text, View } from "react-native";
+import { Animated, FlatList, Text, View, TouchableOpacity } from "react-native";
 import styled from "styled-components/native";
 import CarouselItem from "./CarouselItem";
 import { LinearGradient } from "expo-linear-gradient";
-// import SplashScreen from "react-native-splash-screen";
+// import SplashScreen from "react-native-splash-scireen";
 import * as SplashScreen from "expo-splash-screen";
+import { OneSignal } from "react-native-onesignal";
+import axios from "axios";
+import { authState } from "../recoil/auth/atom";
+import { useRecoilState } from "recoil";
 
 const Container = styled.View`
   height: 100%;
@@ -73,8 +77,35 @@ const Carousel = ({ data, pageWidth, gap, offset }) => {
     );
   }
 
+  const headers = {
+    "Content-Type": "application/json; charset=utf-8",
+    Authorization: `Bearer YzFmMTg5NWUtOTI1MC00NjZlLWFjYjMtMGZjNmUwODgzNWYx`,
+  };
+
+  const [user, setUser] = useRecoilState(authState);
+
+  const handlePush = async () => {
+    console.log(user);
+    fetch("https://onesignal.com/api/v1/notifications", {
+      method: "POST",
+      body: JSON.stringify({
+        app_id: "ae232b11-fde8-419d-8069-9ec35bf73f62",
+        include_aliases: { external_id: [user.email] },
+        target_channel: "push",
+        data: { foo: "bar" },
+        contents: { en: user.name },
+      }),
+      headers: headers,
+    })
+      .then((res) => res.json())
+      .then((result) => console.log(result));
+  };
+
   return (
     <Container>
+      <TouchableOpacity onPress={handlePush}>
+        <Text>clickdskflk</Text>
+      </TouchableOpacity>
       <Animated.FlatList
         automaticallyAdjustContentInsets={false}
         contentContainerStyle={{
@@ -92,11 +123,6 @@ const Carousel = ({ data, pageWidth, gap, offset }) => {
         snapToAlignment="start"
         showsHorizontalScrollIndicator={false}
       />
-      <IndicatorWrapper>
-        {/* {Array.from({ length: pages.length }, (_, i) => i).map((i) => (
-          <Indicator key={`indicator_${i}`} focused={i === page} />
-        ))} */}
-      </IndicatorWrapper>
     </Container>
   );
 };

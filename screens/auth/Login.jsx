@@ -1,22 +1,16 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Text, Image, LayoutAnimation, Alert, StatusBar } from "react-native";
 import styled from "styled-components/native";
-import { LinearGradient } from "expo-linear-gradient";
 import { Icon } from "../../source";
-import GradientBtn from "../../components/GradientBtn";
 import InputField from "../../components/InputField";
 import { authApi } from "../../api";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import axios from "axios";
 import { useRecoilState } from "recoil";
 import { authState } from "../../recoil/auth/atom";
 import { validateLogin } from "../../utils/validate";
 import { useToast } from "react-native-toast-notifications";
-import { getToast } from "../../utils/getToast";
 import Button from "../../components/Button";
-// import SplashScreen from "react-native-splash-screen";
 import { getStorage, setStorage } from "../../utils/asyncStorage";
-import * as SplashScreen from "expo-splash-screen";
+import { LogLevel, OneSignal } from "react-native-onesignal";
 
 const Container = styled.View`
   flex: 1;
@@ -69,6 +63,23 @@ const Login = ({ navigation: { navigate } }) => {
   const passwordRef = useRef(null);
   const toast = useToast();
 
+  useEffect(() => {
+    // Remove this method to stop OneSignal Debugging
+    OneSignal?.Debug.setLogLevel(LogLevel.Verbose);
+
+    // OneSignal Initialization
+    OneSignal?.initialize("ae232b11-fde8-419d-8069-9ec35bf73f62");
+
+    // requestPermission will show the native iOS or Android notification permission prompt.
+    // We recommend removing the following code and instead using an In-App Message to prompt for notification permission
+    OneSignal?.Notifications.requestPermission(true);
+
+    // Method for listening for notification clicks
+    OneSignal?.Notifications.addEventListener("click", (event) => {
+      console.log("OneSignal: notification clicked:", event);
+    });
+  }, []);
+
   const onJoin = () => {
     navigate("Terms");
   };
@@ -120,6 +131,10 @@ const Login = ({ navigation: { navigate } }) => {
         const accountInfo = await authApi.info();
         setStorage("user", JSON.stringify(accountInfo?.DATA));
         setUser(accountInfo?.DATA);
+        if (OneSignal.Notifications.hasPermission) {
+          OneSignal.login(accountInfo?.DATA.user_id);
+          console.log(OneSignal.Notifications.hasPermission, accountInfo?.DATA.user_id);
+        }
       } else {
         switch (res.CODE) {
           case "AL001":
