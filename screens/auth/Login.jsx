@@ -132,8 +132,8 @@ const Login = ({ navigation: { navigate } }) => {
         setStorage("user", JSON.stringify(accountInfo?.DATA));
         setUser(accountInfo?.DATA);
         if (OneSignal.Notifications.hasPermission) {
-          OneSignal.login(accountInfo?.DATA.user_id);
-          console.log(OneSignal.Notifications.hasPermission, accountInfo?.DATA.user_id);
+          OneSignal.login(accountInfo?.DATA.email);
+          console.log(OneSignal.Notifications.hasPermission, accountInfo?.DATA.email);
         }
       } else {
         switch (res.CODE) {
