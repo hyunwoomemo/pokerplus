@@ -8,6 +8,7 @@ import { qrApi } from "../../api";
 import QRCode from "react-native-qrcode-svg";
 import { useFocusEffect } from "@react-navigation/native";
 import AppBar from "../../components/AppBar";
+import ScreenLayout from "../../components/ScreenLayout";
 
 const QrCreate = ({ navigation }) => {
   const [qrInfoUrl, setQrInfoUrl] = useState("");
@@ -58,11 +59,8 @@ const QrCreate = ({ navigation }) => {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: "#fff" }}>
-      {/* <AppBar title="QR CODE" /> */}
-      <AppBar back={() => navigation.navigate("Tabs", { screen: "Home" })} />
-      <SafeAreaView />
-      <View style={{ justifyContent: "center", alignItems: "center", paddingVertical: 25 }}>
+    <ScreenLayout>
+      <View style={{ justifyContent: "center", alignItems: "center" }}>
         <LinearGradient colors={["#bc20a7", "#4c56fa"]} start={{ x: 0.3, y: 0.1 }} style={{ borderRadius: 30, width: "80%" }} end={{ x: 0.9, y: 0.1 }}>
           <View style={{ borderRadius: 30, backgroundColor: "#fff", marginVertical: 2, marginHorizontal: 2, paddingVertical: 5, justifyContent: "center", alignItems: "center" }}>
             <Text style={{ fontSize: 18, fontWeight: "bold" }}>PCT QR CODE</Text>
@@ -95,7 +93,7 @@ const QrCreate = ({ navigation }) => {
             }}
           >
             <View>
-              <QRCode value={qrInfoUrl} size={150} />
+              <QRCode value={qrInfoUrl} size={250} />
             </View>
           </View>
 
@@ -106,7 +104,7 @@ const QrCreate = ({ navigation }) => {
       ) : (
         <ActivityIndicator style={{ ...StyleSheet.absoluteFillObject, flex: 1 }} size={"large"} color="#ff3183" />
       )}
-    </View>
+    </ScreenLayout>
   );
 };
 

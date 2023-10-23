@@ -11,6 +11,7 @@ const PageItem = styled.View`
   align-items: center;
   border-radius: 20px;
   margin-top: 20px;
+  margin-bottom: 30px;
 `;
 
 const PosterImg = styled.Image`

@@ -5,6 +5,7 @@ import BackBtn from "../../components/BackBtn";
 import Title from "../../components/Title";
 import { authApi } from "../../api";
 import Button from "../../components/Button";
+import ScreenLayout from "../../components/ScreenLayout";
 
 const Container = styled.View`
   padding: 20px;
@@ -32,35 +33,31 @@ const FindIdSuccess = ({ navigation: { navigate }, route }) => {
   });
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
-      <Container>
-        <BackBtn />
-        <Title text="이메일 찾기 성공" />
-        {authInfo?.name && <Text style={{ marginTop: 30 }}>{`${authInfo?.name}님의 이메일은 아래와 같습니다.`}</Text>}
-        <View
-          style={{
-            padding: 32,
-            marginVertical: 20,
-            alignItems: "center",
-            backgroundColor: "#fff",
-            borderRadius: 20,
-            shadowColor: "gray",
-            shadowOpacity: 0.5,
-            shadowRadius: 7,
-            shadowOffset: {
-              height: 0,
-              width: 0,
-            },
-          }}
-        >
-          {authInfo?.user_id && <Text style={{ fontSize: 24 }}>{`${authInfo?.user_id}`}</Text>}
-        </View>
-        <View style={{ flexDirection: "row", gap: 10, marginTop: 20 }}>
-          <Button dark style={{ flex: 1 }} label="로그인" onPress={() => navigate("Login")} />
-          <Button style={{ flex: 1 }} primary={true} label="비밀번호 찾기" />
-        </View>
-      </Container>
-    </SafeAreaView>
+    <ScreenLayout title="이메일 찾기" appbar>
+      {authInfo?.name && <Text style={{ marginTop: 30 }}>{`${authInfo?.name}님의 이메일은 아래와 같습니다.`}</Text>}
+      <View
+        style={{
+          padding: 32,
+          marginVertical: 20,
+          alignItems: "center",
+          backgroundColor: "#fff",
+          borderRadius: 20,
+          shadowColor: "gray",
+          shadowOpacity: 0.5,
+          shadowRadius: 7,
+          shadowOffset: {
+            height: 0,
+            width: 0,
+          },
+        }}
+      >
+        {authInfo?.user_id && <Text style={{ fontSize: 24 }}>{`${authInfo?.user_id}`}</Text>}
+      </View>
+      <View style={{ flexDirection: "row", gap: 10, marginTop: 20 }}>
+        <Button dark style={{ flex: 1 }} label="로그인" onPress={() => navigate("Login")} />
+        <Button style={{ flex: 1 }} primary={true} label="비밀번호 찾기" />
+      </View>
+    </ScreenLayout>
   );
 };
 

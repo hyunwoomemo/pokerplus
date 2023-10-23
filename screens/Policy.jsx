@@ -37,7 +37,9 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     paddingVertical: 15,
   },
-  itemText: {},
+  itemText: {
+    fontSize: 16,
+  },
   button: {
     color: "#ff3183",
     textDecorationLine: "underline",

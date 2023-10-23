@@ -64,7 +64,7 @@ const Login = ({ navigation: { navigate } }) => {
   const toast = useToast();
 
   const onJoin = () => {
-    navigate("Terms");
+    navigate("TermsNav");
   };
 
   const [values, setValues] = useState({

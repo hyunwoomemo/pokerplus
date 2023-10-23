@@ -14,6 +14,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getStorage, setStorage } from "../../utils/asyncStorage";
 import { useRecoilState } from "recoil";
 import { authState } from "../../recoil/auth/atom";
+import ScreenLayout from "../../components/ScreenLayout";
 
 const InfoEdit = ({ route, navigation }) => {
   const [user, setUser] = useRecoilState(authState);
@@ -160,9 +161,8 @@ const InfoEdit = ({ route, navigation }) => {
   };
 
   return (
-    <Layout>
-      <BackBtn title="정보 수정" onPress={() => navigation.popToTop()} />
-      <ScrollView style={{ paddingHorizontal: 32 }}>
+    <ScreenLayout title="정보 수정" back={() => navigation.popToTop()}>
+      <ScrollView>
         <TouchableOpacity onPress={() => useImageUpload(status, requestPermission, setImageUrl, setFilename)} style={{ alignItems: "center", paddingVertical: 30 }}>
           <Image source={{ uri: imageUrl ? imageUrl : user_profile_url }} width={120} height={120} borderRadius={60} resizeMode="cover" />
         </TouchableOpacity>
@@ -171,11 +171,10 @@ const InfoEdit = ({ route, navigation }) => {
           <WithLabelDisableInput value={name}>
             <Text>이름</Text>
           </WithLabelDisableInput>
-          <WithLabelErrorInput backgroundColor={"#fff"} defaultValue={eng_name}>
+          <WithLabelErrorInput defaultValue={eng_name}>
             <Text>영문 이름 (GPI등재용)</Text>
           </WithLabelErrorInput>
           <WithLabelCheckErrorInput
-            backgroundColor={"#fff"}
             defaultValue={email}
             onChangeText={(text) => handleChange("id", text)}
             disabled={email === changneValues.id}
@@ -188,7 +187,6 @@ const InfoEdit = ({ route, navigation }) => {
             <Text>이메일</Text>
           </WithLabelCheckErrorInput>
           <WithLabelCheckErrorInput
-            backgroundColor={"#fff"}
             defaultValue={nick}
             onChangeText={(text) => handleChange("nick", text)}
             disabled={nick === changneValues.nick}
@@ -218,18 +216,10 @@ const InfoEdit = ({ route, navigation }) => {
               // defaultOption={{ key: String(location_code), value: area.filter((v) => v.key === location_code)[0]?.value }}
             />
           )}
-          <WithLabelErrorInput
-            backgroundColor={"#fff"}
-            placeholder="새 비밀번호를 입력하세요."
-            placeholderTextColor="gray"
-            onChangeText={(text) => handleChange("password", text)}
-            error={error.password}
-            secureTextEntry
-          >
+          <WithLabelErrorInput placeholder="새 비밀번호를 입력하세요." placeholderTextColor="gray" onChangeText={(text) => handleChange("password", text)} error={error.password} secureTextEntry>
             <Text>비밀번호</Text>
           </WithLabelErrorInput>
           <WithLabelErrorInput
-            backgroundColor={"#fff"}
             placeholder="비밀번호를 한번 더 입력해주세요."
             placeholderTextColor="gray"
             onChangeText={(text) => handleChange("password2", text)}
@@ -246,7 +236,7 @@ const InfoEdit = ({ route, navigation }) => {
           onPress={handleSave}
         />
       </ScrollView>
-    </Layout>
+    </ScreenLayout>
   );
 };
 

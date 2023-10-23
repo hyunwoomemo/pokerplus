@@ -35,24 +35,25 @@ const Join = ({ navigation: { navigate }, route }) => {
   console.log(route.params);
   const { authkey, check, user_id } = route.params;
   const [authInfo, setAuthInfo] = useState();
+
   const toast = useToast();
 
   useEffect(() => {
-    if (!authInfo) {
-      authApi.authInfo(authkey).then((res) => {
-        if (res.CODE === "AAI000") {
-          if (res.DATA?.user_id?.length > 0) {
-            toast.show("이미 가입되어 있는 핸드폰 번호입니다.");
-            navigate("OutNav", { screen: "Login" });
-          } else {
-            setAuthInfo(res.DATA);
-          }
-        } else if (res.CODE === "AAI001") {
-          toast.show("탈퇴 회원입니다.");
-          navigate("OutNav", { screen: "Login" });
-        }
-      });
-    }
+    // if (!authInfo) {
+    //   authApi.authInfo(authkey).then((res) => {
+    //     if (res.CODE === "AAI000") {
+    //       if (res.DATA?.user_id?.length > 0) {
+    //         toast.show("이미 가입되어 있는 핸드폰 번호입니다.");
+    //         navigate("OutNav", { screen: "Login" });
+    //       } else {
+    //         setAuthInfo(res.DATA);
+    //       }
+    //     } else if (res.CODE === "AAI001") {
+    //       toast.show("탈퇴 회원입니다.");
+    //       navigate("OutNav", { screen: "Login" });
+    //     }
+    //   });
+    // }
   }, []);
 
   const [values, setValues] = useState({});
@@ -152,6 +153,10 @@ const Join = ({ navigation: { navigate }, route }) => {
   };
 
   const handleJoin = async () => {
+    setLoading({
+      ...loading,
+      join: true,
+    });
     try {
       const file = imageUrl.split("/").pop();
       const match = /\.(\w+)$/.exec(file ?? "");
@@ -174,13 +179,46 @@ const Join = ({ navigation: { navigate }, route }) => {
       };
 
       const res = await authApi.join(bodyData);
+      console.log(res);
       console.log(bodyData);
 
       if (res.CODE === "AR000") {
         Alert.alert("회원가입이 완료되었습니다.");
+      } else {
+        switch (res.CODE) {
+          case "AR100":
+            toast.show("회원가입에 오류가 발생했습니다.");
+            break;
+          case "AR200":
+            toast.show("본인인증 확인에 실패했습니다.");
+            break;
+          case "AR300":
+            toast.show("중복 가입입니다.");
+            break;
+          case "AR400":
+            toast.show("필수 약관 미동의로 회원가입에 실패했습니다.");
+            break;
+          case "ID_FALSE":
+            toast.show("아이디 중복확인은 필수입니다.");
+            break;
+          case "HP_FALSE":
+            toast.show("휴대폰 체크에 실패했습니다.");
+            break;
+          case "NICK_FALSE":
+            toast.show("닉네임 중복확인은 필수입니다.");
+            break;
+          case "PASS_FALSE":
+            toast.show("비밀번호 체그에 실패했습니다.");
+            break;
+        }
       }
     } catch (err) {
       console.log(err);
+    } finally {
+      setLoading({
+        ...loading,
+        join: false,
+      });
     }
   };
 
@@ -285,7 +323,7 @@ const Join = ({ navigation: { navigate }, route }) => {
         )}
         <View style={{ flexDirection: "row", gap: 10, marginTop: 30 }}>
           <Button label="취소" style={{ flex: 1 }} />
-          <Button label="가입하기" onPress={handleJoin} primary={true} style={{ flex: 1 }} />
+          <Button label="가입하기" loading={loading.join} onPress={handleJoin} primary={true} style={{ flex: 1 }} />
         </View>
       </ScrollView>
     </View>

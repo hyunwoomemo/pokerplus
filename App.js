@@ -57,7 +57,7 @@ export default function App() {
   return (
     <PaperProvider>
       <RecoilRoot>
-        <ToastProvider duration={1000} offset={30} swipeEnabled={true}>
+        <ToastProvider duration={2000} offset={100} swipeEnabled={true}>
           {/* <StatusBar barStyle="dark-content" backgroundColor="#fff" /> */}
           <NavigationContainer linking={linking}>
             <Nav.Navigator>

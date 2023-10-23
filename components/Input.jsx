@@ -25,8 +25,8 @@ const Input = forwardRef(({ style, disableStyle, backgroundColor, ...rest }, ref
         {...rest}
         style={
           disableStyle
-            ? { backgroundColor: "#c1c4cb", borderRadius: 15, paddingVertical: 18, paddingHorizontal: 20 }
-            : { backgroundColor: `${backgroundColor || "#edf0f7"}`, borderRadius: 15, paddingVertical: 18, paddingHorizontal: 20 }
+            ? { backgroundColor: "#c1c4cb", borderRadius: 15, paddingVertical: 18, paddingHorizontal: 20, fontSize: 16 }
+            : { backgroundColor: `${backgroundColor || "#edf0f7"}`, borderRadius: 15, paddingVertical: 18, paddingHorizontal: 20, fontSize: 16 }
         }
         ref={ref}
       />
@@ -101,7 +101,7 @@ const withError = (Component) => {
     return (
       <View>
         <Component ref={ref} error={error} {...rest} />
-        {error && <Text style={{ color: "tomato", paddingLeft: 10, fontSize: 12, paddingVertical: 10 }}>{error}</Text>}
+        {error && <Text style={{ color: "tomato", paddingLeft: 10, fontSize: 14, paddingVertical: 10 }}>{error}</Text>}
       </View>
     );
   });

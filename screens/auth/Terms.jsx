@@ -137,8 +137,7 @@ const Terms = () => {
   };
 
   return (
-    <ScreenLayout>
-      <AppBar />
+    <ScreenLayout title="이용 약관">
       <TextWrapper>
         <FirstLine>
           <Bold>서비스 이용 약관</Bold>

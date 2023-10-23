@@ -121,7 +121,6 @@ const QrSend = ({ navigation, route }) => {
 
   return (
     <View style={{ flex: 1, backgroundColor: "#fff", padding: 20 }}>
-      {/* <AppBar title="참가권 QR 전송" /> */}
       <Text style={{ fontSize: 20, alignItems: "center", marginTop: 10, textAlign: "center" }}>참가권 QR 전송</Text>
       <View style={{ padding: 20, borderWidth: StyleSheet.hairlineWidth, marginTop: 40, borderRadius: 10, gap: 20 }}>
         <View style={styles.item}>

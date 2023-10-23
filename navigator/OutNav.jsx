@@ -12,6 +12,7 @@ import { useRecoilState } from "recoil";
 import { authState } from "../recoil/auth/atom";
 import { getStorage } from "../utils/asyncStorage";
 import * as SplashScreen from "expo-splash-screen";
+import TermsNav from "./TermsNav";
 
 const Nav = createNativeStackNavigator();
 
@@ -44,7 +45,7 @@ const OutNav = () => {
     >
       <Nav.Screen name="Login" component={Login} />
       <Nav.Screen name="Join" component={Join} />
-      <Nav.Screen name="Terms" component={Terms} />
+      <Nav.Screen name="TermsNav" component={TermsNav} />
       <Nav.Screen name="FindId" component={FindId} />
       <Nav.Screen name="FindPw" component={FindPw} />
       <Nav.Screen name="FindIdSuccess" component={FindIdSuccess} />

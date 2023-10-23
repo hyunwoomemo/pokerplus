@@ -38,9 +38,7 @@ const Profile = ({ navigation }) => {
   const opacity = useRef(new Animated.Value(1)).current;
 
   return (
-    <Layout>
-      {/* <WithTitleBackBtn title="내 프로필" /> */}
-      <Title>내 프로필</Title>
+    <ScreenLayout title="내 프로필">
       <ScrollView ref={scrollViewRef} showsVerticalScrollIndicator={false}>
         <View style={{ alignItems: "center", paddingVertical: 30 }}>
           <Animated.View style={{ width: 120, height: 120, borderRadius: 60, backgroundColor: "rgba(0,0,0,0.2)", opacity: opacity }}>
@@ -56,7 +54,7 @@ const Profile = ({ navigation }) => {
           </Animated.View>
         </View>
         <Button onPress={() => navigation.navigate("InfoCheck")} dark label=" 정보 수정 " style={{ alignItems: "center" }} />
-        <View style={{ paddingHorizontal: 32 }}>
+        <View>
           <WithLabelDisableInput value={name}>
             <Text>이름</Text>
           </WithLabelDisableInput>
@@ -77,7 +75,7 @@ const Profile = ({ navigation }) => {
           <Text style={{ textDecorationLine: "underline", color: "gray" }}>회원 탈퇴</Text>
         </TouchableOpacity>
       </ScrollView>
-    </Layout>
+    </ScreenLayout>
   );
 };
 

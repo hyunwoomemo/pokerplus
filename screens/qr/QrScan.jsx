@@ -2,11 +2,11 @@ import React, { useState, useEffect, useCallback } from "react";
 import { StyleSheet, Text, TouchableOpacity, View, Button, Alert } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import { Camera } from "expo-camera";
-import axios from "axios";
 import { qrApi } from "../../api";
 import { useFocusEffect } from "@react-navigation/native";
 import { useToast } from "react-native-toast-notifications";
 import AppBar from "../../components/AppBar";
+import ScreenLayout from "../../components/ScreenLayout";
 
 export default function QrScan({ navigation }) {
   const [hasPermission, setHasPermission] = useState(null);
@@ -71,10 +71,7 @@ export default function QrScan({ navigation }) {
   }
 
   return (
-    <View style={styles.container}>
-      <AppBar title="참가권 QR스캔" />
-      {/* <Text style={styles.title}>Welcome to the Barcode Scanner App!</Text>
-      <Text style={styles.paragraph}>Scan a barcode to start your job.</Text> */}
+    <ScreenLayout title="참가권 QR스캔">
       <View style={{ justifyContent: "center", alignItems: "center", flex: 1, backgroundColor: "white" }}>
         {renderCamera()}
         <View style={{ gap: 10, alignItems: "center", marginTop: 20 }}>
@@ -82,7 +79,7 @@ export default function QrScan({ navigation }) {
           <Text style={{ fontSize: 24, fontWeight: "bold" }}>QR 코드를 스캔해주세요!</Text>
         </View>
       </View>
-    </View>
+    </ScreenLayout>
   );
 }
 

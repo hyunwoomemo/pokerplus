@@ -5,6 +5,7 @@ import Title from "../../components/Title";
 import styled from "styled-components/native";
 import { Icon } from "../../source";
 import AppBar from "../../components/AppBar";
+import ScreenLayout from "../../components/ScreenLayout";
 
 const Container = styled.View`
   padding: 20px;
@@ -22,13 +23,11 @@ const FindId = () => {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: "#fff" }}>
-      <AppBar title="이메일 찾기" />
+    <ScreenLayout title="이메일 찾기">
       <TouchableOpacity onPress={handleCheckAuth} style={{ paddingTop: 50, alignItems: "center" }}>
         <Image source={{ uri: Icon.checkPhone }} width={140} height={140} />
       </TouchableOpacity>
-      {/* </Container> */}
-    </View>
+    </ScreenLayout>
   );
 };
 
