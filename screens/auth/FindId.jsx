@@ -23,7 +23,6 @@ const FindId = () => {
 
   return (
     <View style={{ flex: 1, backgroundColor: "#fff" }}>
-      {/* <Container> */}
       <AppBar title="이메일 찾기" />
       <TouchableOpacity onPress={handleCheckAuth} style={{ paddingTop: 50, alignItems: "center" }}>
         <Image source={{ uri: Icon.checkPhone }} width={140} height={140} />

@@ -82,7 +82,7 @@
 	<key>NSMotionUsageDescription</key>
 	<string>YOUR TEXT</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
-	<string>YOUR TEXT</string>
+	<string></string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>YOUR TEXT</string>
 	<key>NSRemindersUsageDescription</key>
