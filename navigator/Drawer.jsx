@@ -17,6 +17,7 @@ import { SimpleLineIcons } from "@expo/vector-icons";
 import { getStorage, removeStorage } from "../utils/asyncStorage";
 import { ActiveDrawer, InNavContext } from "../context";
 import { opacityAnimation } from "../animations/opacityAnimation";
+import { OneSignal } from "react-native-onesignal";
 
 const Drawer = createDrawerNavigator();
 
@@ -159,6 +160,7 @@ const DrawerContent = (active) => {
   const handleSignout = async () => {
     try {
       await authApi.logout();
+      OneSignal.logout();
     } catch (err) {
       console.error(err);
     } finally {

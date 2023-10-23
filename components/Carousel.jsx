@@ -16,12 +16,6 @@ const Container = styled.View`
   align-items: center;
 `;
 
-const IndicatorWrapper = styled.View`
-  flex-direction: row;
-  align-items: center;
-  margin-top: 16px;
-`;
-
 const ItemTitleWrapper = styled(Animated.createAnimatedComponent(View))`
   /* padding-bottom: 10px; */
   align-items: center;

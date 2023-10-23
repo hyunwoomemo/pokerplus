@@ -9,7 +9,7 @@ import QRCode from "react-native-qrcode-svg";
 import { useFocusEffect } from "@react-navigation/native";
 import AppBar from "../../components/AppBar";
 
-const QrCreate = () => {
+const QrCreate = ({ navigation }) => {
   const [qrInfoUrl, setQrInfoUrl] = useState("");
   const [timer, setTimer] = useState(180);
 
@@ -60,7 +60,7 @@ const QrCreate = () => {
   return (
     <View style={{ flex: 1, backgroundColor: "#fff" }}>
       {/* <AppBar title="QR CODE" /> */}
-      <AppBar />
+      <AppBar back={() => navigation.navigate("Tabs", { screen: "Home" })} />
       <SafeAreaView />
       <View style={{ justifyContent: "center", alignItems: "center", paddingVertical: 25 }}>
         <LinearGradient colors={["#bc20a7", "#4c56fa"]} start={{ x: 0.3, y: 0.1 }} style={{ borderRadius: 30, width: "80%" }} end={{ x: 0.9, y: 0.1 }}>
@@ -99,9 +99,9 @@ const QrCreate = () => {
             </View>
           </View>
 
-          <View style={{ paddingVertical: 10, paddingHorizontal: 15, borderWidth: 1, borderColor: "rgba(0,0,0,0.2)", borderRadius: 10 }}>
+          {/* <View style={{ paddingVertical: 10, paddingHorizontal: 15, borderWidth: 1, borderColor: "rgba(0,0,0,0.2)", borderRadius: 10 }}>
             <Text>Download QR</Text>
-          </View>
+          </View> */}
         </View>
       ) : (
         <ActivityIndicator style={{ ...StyleSheet.absoluteFillObject, flex: 1 }} size={"large"} color="#ff3183" />

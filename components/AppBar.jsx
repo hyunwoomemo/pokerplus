@@ -2,12 +2,12 @@ import { useNavigation } from "@react-navigation/native";
 import React from "react";
 import { Appbar } from "react-native-paper";
 
-const AppBar = ({ bgc = "#fff", title, back, type }) => {
+const AppBar = ({ bgc = "#fff", title, back, mode }) => {
   const navigation = useNavigation();
   return (
-    <Appbar.Header style={{ backgroundColor: bgc }}>
-      <Appbar.BackAction onPress={back ? back : () => navigation.goBack()} />
-      <Appbar.Content title={title} />
+    <Appbar.Header style={{ backgroundColor: bgc }} mode={mode}>
+      <Appbar.BackAction color="#000" onPress={back ? back : () => navigation.goBack()} />
+      <Appbar.Content title={title} color="#000" />
     </Appbar.Header>
   );
 };

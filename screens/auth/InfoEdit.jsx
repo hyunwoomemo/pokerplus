@@ -17,6 +17,7 @@ import { authState } from "../../recoil/auth/atom";
 
 const InfoEdit = ({ route, navigation }) => {
   const [user, setUser] = useRecoilState(authState);
+  const [filename, setFilename] = useState();
 
   const { name, eng_name, user_profile_url, email, nick, hp, location_code } = user;
 
@@ -141,6 +142,7 @@ const InfoEdit = ({ route, navigation }) => {
 
     try {
       const res = await authApi.accountEdit(formData);
+      console.log(res);
       if (res.CODE === "AUI000") {
         const accountInfo = await authApi.info();
         await setStorage("user", JSON.stringify(accountInfo?.DATA));
@@ -161,7 +163,7 @@ const InfoEdit = ({ route, navigation }) => {
     <Layout>
       <BackBtn title="정보 수정" onPress={() => navigation.popToTop()} />
       <ScrollView style={{ paddingHorizontal: 32 }}>
-        <TouchableOpacity onPress={() => useImageUpload(status, requestPermission, setImageUrl)} style={{ alignItems: "center", paddingVertical: 30 }}>
+        <TouchableOpacity onPress={() => useImageUpload(status, requestPermission, setImageUrl, setFilename)} style={{ alignItems: "center", paddingVertical: 30 }}>
           <Image source={{ uri: imageUrl ? imageUrl : user_profile_url }} width={120} height={120} borderRadius={60} resizeMode="cover" />
         </TouchableOpacity>
         <Button onPress={() => navigation.navigate("Alliance")} dark label=" 제휴 등록 " style={{ alignItems: "center" }} />

@@ -54,28 +54,11 @@ export default function App() {
     config: deepLinkConfig,
   };
 
-  useEffect(() => {
-    // Remove this method to stop OneSignal Debugging
-    OneSignal?.Debug.setLogLevel(LogLevel.Verbose);
-
-    // OneSignal Initialization
-    OneSignal?.initialize("ae232b11-fde8-419d-8069-9ec35bf73f62");
-
-    // requestPermission will show the native iOS or Android notification permission prompt.
-    // We recommend removing the following code and instead using an In-App Message to prompt for notification permission
-    OneSignal?.Notifications.requestPermission(true);
-
-    // Method for listening for notification clicks
-    OneSignal?.Notifications.addEventListener("click", (event) => {
-      console.log("OneSignal: notification clicked:", event);
-    });
-  }, []);
-
   return (
     <PaperProvider>
       <RecoilRoot>
         <ToastProvider duration={1000} offset={30} swipeEnabled={true}>
-          <StatusBar barStyle="dark-content" backgroundColor="#fff" />
+          {/* <StatusBar barStyle="dark-content" backgroundColor="#fff" /> */}
           <NavigationContainer linking={linking}>
             <Nav.Navigator>
               <Nav.Screen name="Root" component={Root} options={{ headerShown: false }} />
