@@ -10,10 +10,6 @@ import { useImageUpload } from "../utils/useImageUpload";
 import { AntDesign } from "@expo/vector-icons";
 import ScreenLayout from "../components/ScreenLayout";
 
-const Container = styled.ScrollView`
-  padding: 0 32px;
-`;
-
 const Alliance = ({ navigation: { navigate }, route }) => {
   const [imageUrl, setImageUrl] = useState("");
   const [filename, setFilename] = useState("");

@@ -8,6 +8,8 @@ import { PosterContext } from "../context";
 import { OneSignal } from "react-native-onesignal";
 import { authState } from "../recoil/auth/atom";
 import { useRecoilState } from "recoil";
+import { useQuery } from "@tanstack/react-query";
+import { resourceApi } from "../api";
 
 const Container = styled.View`
   flex: 1;
@@ -18,10 +20,11 @@ const Container = styled.View`
 const screenWidth = Math.round(Dimensions.get("window").width);
 
 const Home = () => {
-  const { poster, setPoster } = useContext(PosterContext);
+  const { data, isLoading, isError } = useQuery(["poster"], resourceApi.posters);
   const [user, setUser] = useRecoilState(authState);
 
-  console.log("user", user);
+  console.log("poooo", data);
+  // console.log("user", user);
 
   useEffect(() => {
     OneSignal.login(user.email);
@@ -30,7 +33,7 @@ const Home = () => {
   return (
     <Layout>
       <Container>
-        <Carousel gap={4} offset={36} data={poster} pageWidth={screenWidth - (4 + 36) * 2} />
+        <Carousel gap={4} offset={36} data={data?.DATA} pageWidth={screenWidth - (4 + 36) * 2} />
       </Container>
     </Layout>
   );

@@ -1,13 +1,12 @@
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import Tabs from "./Tab";
 import { useContext, useEffect, useRef, useState } from "react";
-import { Animated, Image, LayoutAnimation, Platform, Text, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, Animated, Image, LayoutAnimation, Platform, Text, TouchableOpacity, View } from "react-native";
 import { getFocusedRouteNameFromRoute, useNavigation, useRoute } from "@react-navigation/native";
 import styled from "styled-components/native";
 import { toggleAnimation } from "../animations/toggleAnimation";
 import Profile from "../screens/Profile";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { authState } from "../recoil/auth/atom";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Notice from "../screens/Notice";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -18,6 +17,9 @@ import { getStorage, removeStorage } from "../utils/asyncStorage";
 import { ActiveDrawer, InNavContext } from "../context";
 import { opacityAnimation } from "../animations/opacityAnimation";
 import { OneSignal } from "react-native-onesignal";
+import { useQuery } from "@tanstack/react-query";
+import { authState } from "../recoil/auth/atom";
+import FastImage from "react-native-fast-image";
 
 const Drawer = createDrawerNavigator();
 
@@ -148,14 +150,10 @@ const SignOutText = styled.Text`
 
 const DrawerContent = (active) => {
   const [user, setUser] = useRecoilState(authState);
+  const { data: userData, isLoading, isError } = useQuery(["user"], authApi.info, { staleTime: 60 * 30 * 1000 });
   const { myTicketCount, setMyTicketCount } = useContext(InNavContext);
 
   const navigation = useNavigation();
-
-  useEffect(() => {
-    const count = user.ticket_info?.reduce((acc, cur) => acc + cur.ticket_count, 0);
-    setMyTicketCount(count);
-  }, []);
 
   const handleSignout = async () => {
     try {
@@ -172,31 +170,40 @@ const DrawerContent = (active) => {
 
   const opacity = useRef(new Animated.Value(1)).current;
 
+  if (isLoading) {
+    return <ActivityIndicator />;
+  }
+
+  if (isError) {
+    return;
+  }
+
   return (
     <DrawerContainer ios={Platform.OS === "ios"}>
       <InfoSection>
-        {/* <Text>{user.nick}</Text> */}
         <ProfileWrapper
           onPress={() => navigation.navigate("ProfileNav", { screen: "Profile" })}
           style={{ width: 70, height: 70, borderRadius: 70 / 2, backgroundColor: "rgba(0,0,0,0.2)", opacity: opacity }}
         >
-          {user.user_profile_url && (
-            <Image
-              source={{ uri: user.user_profile_url }}
+          {userData.DATA.user_profile_url && (
+            <FastImage
+              source={{ uri: userData.DATA.user_profile_url }}
               onLoadStart={() => opacityAnimation(opacity, "start")}
               onLoadEnd={() => {
                 opacityAnimation(opacity, "reset");
               }}
-              width={70}
-              height={70}
-              borderRadius={70 / 2}
-              resizeMode="cover"
+              style={{
+                width: 70,
+                height: 70,
+                borderRadius: 35,
+              }}
+              resizeMode={FastImage.resizeMode.cover}
             />
           )}
         </ProfileWrapper>
         <InfoTextWrapper>
-          <NickText>{user.nick}</NickText>
-          <MyTicketText>{myTicketCount ? `${myTicketCount}장` : "0장"}</MyTicketText>
+          <NickText>{userData?.DATA?.nick}</NickText>
+          <MyTicketText>{userData?.DATA?.ticket_info ? `${userData?.DATA?.ticket_info?.reduce((acc, cur) => acc + cur.ticket_count, 0)}장` : "0장"}</MyTicketText>
         </InfoTextWrapper>
       </InfoSection>
       <AccordionWrapper title="고객센터" data={customer} active={active}></AccordionWrapper>
