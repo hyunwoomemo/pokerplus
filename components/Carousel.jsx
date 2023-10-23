@@ -69,7 +69,7 @@ const Carousel = ({ data, pageWidth, gap, offset }) => {
   return (
     <Container>
       <TouchableOpacity>
-        <Text>clickdskflk</Text>
+        <Text>click</Text>
       </TouchableOpacity>
       <Animated.FlatList
         automaticallyAdjustContentInsets={false}

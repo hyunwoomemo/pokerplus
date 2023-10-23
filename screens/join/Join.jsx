@@ -3,15 +3,14 @@ import { Text, Image, LayoutAnimation, Alert, View, TouchableOpacity, ScrollView
 import styled from "styled-components/native";
 import { Icon } from "../../source";
 import { DisabledInput, WithEngInput, WithLabelCheckErrorInput, WithLabelCheckInput, WithLabelDisableInput, WithLabelErrorInput, WithLabelInput } from "../../components/Input";
-import BackBtn from "../../components/BackBtn";
-import Title from "../../components/Title";
 import { authApi } from "../../api";
 import * as ImagePicker from "expo-image-picker";
-// import { ImagePicker } from "react-native-image-picker";
 import { useImageUpload } from "../../utils/useImageUpload";
 import { SelectList } from "react-native-dropdown-select-list";
 import Button from "../../components/Button";
 import { useValidate } from "./hooks/useValidate";
+import AppBar from "../../components/AppBar";
+import { useToast } from "react-native-toast-notifications";
 
 const Profile = styled.Image`
   padding: 20px 0;
@@ -36,11 +35,22 @@ const Join = ({ navigation: { navigate }, route }) => {
   console.log(route.params);
   const { authkey, check, user_id } = route.params;
   const [authInfo, setAuthInfo] = useState();
+  const toast = useToast();
 
   useEffect(() => {
     if (!authInfo) {
       authApi.authInfo(authkey).then((res) => {
-        setAuthInfo(res.DATA);
+        if (res.CODE === "AAI000") {
+          if (res.DATA?.user_id?.length > 0) {
+            toast.show("이미 가입되어 있는 핸드폰 번호입니다.");
+            navigate("OutNav", { screen: "Login" });
+          } else {
+            setAuthInfo(res.DATA);
+          }
+        } else if (res.CODE === "AAI001") {
+          toast.show("탈퇴 회원입니다.");
+          navigate("OutNav", { screen: "Login" });
+        }
       });
     }
   }, []);
@@ -176,8 +186,7 @@ const Join = ({ navigation: { navigate }, route }) => {
 
   return (
     <View style={styles.main}>
-      <BackBtn />
-      <Title text="회원가입" />
+      <AppBar title="회원가입" />
       <ScrollView ref={scrollViewRef} showsVerticalScrollIndicator={false}>
         <TouchableOpacity style={{ alignItems: "center", paddingVertical: 20 }} onPress={() => useImageUpload(status, requestPermission, setImageUrl)}>
           <Profile source={{ uri: imageUrl ? imageUrl : Icon.profile }} width={110} height={110} borderRadius={55} resizeMode="cover" />

@@ -1,16 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Alert, Image, Linking, SafeAreaView, Text, TouchableOpacity, View } from "react-native";
-import BackBtn from "../../components/BackBtn";
 import styled from "styled-components/native";
-import { Icon } from "../../source";
-import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import ScreenLayout from "../../components/ScreenLayout";
-import GradientBtn from "../../components/GradientBtn";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
-import { authApi } from "../../api";
 import AppBar from "../../components/AppBar";
+import Button from "../../components/Button";
 
 const TextWrapper = styled.View``;
 
@@ -22,11 +17,11 @@ const FirstLine = styled.View`
 
 const Bold = styled.Text`
   font-weight: 900;
-  font-size: 24px;
+  font-size: 28px;
 `;
 
 const Basic = styled.Text`
-  font-size: 24px;
+  font-size: 26px;
 `;
 
 const SecondLine = styled.View``;
@@ -41,7 +36,9 @@ const CheckRow = styled.View`
   align-items: center;
   gap: 15px;
 `;
-const CheckText = styled.Text``;
+const CheckText = styled.Text`
+  font-size: 16px;
+`;
 
 const Circle = styled.TextInput`
   width: 20px;
@@ -54,7 +51,9 @@ const CheckCircle = styled.View``;
 const Show = styled.TouchableOpacity`
   margin-left: auto;
 `;
-const ShowText = styled.Text``;
+const ShowText = styled.Text`
+  font-size: 16px;
+`;
 
 const Terms = () => {
   const navigation = useNavigation();
@@ -79,10 +78,9 @@ const Terms = () => {
       text: "서비스 이용 약관에 동의 (필수)",
       ref: provisionRef,
       showBtn: () =>
-        navigation.navigate("OutNav", {
-          screen: "TermsNav",
+        navigation.navigate("TermsDetail", {
           type: "Provision",
-          text: "서비스 이용 약관에 동의 (필수)",
+          name: "서비스 이용 약관에 동의 (필수)",
         }),
     },
     {
@@ -90,30 +88,27 @@ const Terms = () => {
       ref: privacyRef,
 
       showBtn: () =>
-        navigation.navigate("OutNav", {
-          screen: "TermsNav",
+        navigation.navigate("TermsDetail", {
           type: "Privacy",
-          text: "개인정보 수집 및 이용에 동의 (필수)",
+          name: "개인정보 수집 및 이용에 동의 (필수)",
         }),
     },
     {
       text: "위치 정보 이용 약관에 동의 (필수)",
       ref: positionRef,
       showBtn: () =>
-        navigation.navigate("OutNav", {
-          screen: "TermsNav",
+        navigation.navigate("TermsDetail", {
           type: "Position",
-          text: "위치 정보 이용 약관에 동의 (필수)",
+          name: "위치 정보 이용 약관에 동의 (필수)",
         }),
     },
     {
       text: "마켓팅 및 이용정보 수신 동의 (선택)",
       ref: privacyOptionRef,
       showBtn: () =>
-        navigation.navigate("OutNav", {
-          screen: "TermsNav",
+        navigation.navigate("TermsDetail", {
           type: "Privacy_Option",
-          text: "마켓팅 및 이용정보 수신 동의 (선택)",
+          name: "마켓팅 및 이용정보 수신 동의 (선택)",
         }),
     },
   ];
@@ -142,8 +137,7 @@ const Terms = () => {
   };
 
   return (
-    <View style={{ flex: 1, padding: 20, backgroundColor: "#fff" }}>
-      {/* <BackBtn /> */}
+    <ScreenLayout>
       <AppBar />
       <TextWrapper>
         <FirstLine>
@@ -171,8 +165,8 @@ const Terms = () => {
           );
         })}
       </CheckWrapper>
-      <GradientBtn onPress={handleCheckAuth} disabled={check.filter((v) => v !== 4).length !== 3} label="휴대폰 본인 인증" style={{ marginTop: "auto" }} />
-    </View>
+      <Button onPress={handleCheckAuth} disabled={check.filter((v) => v !== 4).length !== 3} label="휴대폰 본인 인증" style={{ marginTop: "auto", marginBottom: 20 }} primary />
+    </ScreenLayout>
   );
 };
 
