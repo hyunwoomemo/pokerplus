@@ -10,7 +10,14 @@ import com.facebook.react.defaults.DefaultReactActivityDelegate;
 
 import expo.modules.ReactActivityDelegateWrapper;
 
+import com.onesignal.OneSignal;
+import com.onesignal.debug.LogLevel;
+import com.onesignal.Continue;
+
 public class MainActivity extends ReactActivity {
+  
+  private static final String ONESIGNAL_APP_ID = "ae232b11-fde8-419d-8069-9ec35bf73f62";
+
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     // Set the theme to AppTheme BEFORE onCreate to support 
@@ -18,6 +25,28 @@ public class MainActivity extends ReactActivity {
     // This is required for expo-splash-screen.
     setTheme(R.style.AppTheme);
     super.onCreate(null);
+
+    // Verbose Logging set to help debug issues, remove before releasing your app.
+    OneSignal.getDebug().setLogLevel(LogLevel.VERBOSE);
+        
+    // OneSignal Initialization
+    OneSignal.initWithContext(this, ONESIGNAL_APP_ID);
+  
+    // requestPermission will show the native Android notification permission prompt.
+    // NOTE: It's recommended to use a OneSignal In-App Message to prompt instead.
+    OneSignal.getNotifications().requestPermission(true, Continue.with(r -> {
+        if (r.isSuccess()) {
+          if (r.getData()) {
+            // `requestPermission` completed successfully and the user has accepted permission
+          }
+          else {
+            // `requestPermission` completed successfully but the user has rejected permission
+          }
+        }
+        else {
+          // `requestPermission` completed unsuccessfully, check `r.getThrowable()` for more info on the failure reason
+        }
+    }));
   }
 
   /**

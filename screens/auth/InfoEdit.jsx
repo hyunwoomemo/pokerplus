@@ -207,8 +207,8 @@ const InfoEdit = ({ route, navigation }) => {
           </View>
           {area.length > 0 && (
             <SelectList
-              boxStyles={{ marginTop: 10, backgroundColor: "#fff", borderRadius: 15, paddingVertical: 18, paddingHorizontal: 20, borderColor: "transparent" }}
-              dropdownStyles={{ backgroundColor: "#fff", borderWidth: 0 }}
+              boxStyles={{ marginTop: 10, backgroundColor: "#edf0f7", borderRadius: 15, paddingVertical: 18, paddingHorizontal: 20, borderColor: "transparent" }}
+              dropdownStyles={{ backgroundColor: "#edf0f7", borderWidth: 0 }}
               dropdownItemStyles={{ paddingVertical: 10 }}
               setSelected={(val) => setSelected(val)}
               data={area}

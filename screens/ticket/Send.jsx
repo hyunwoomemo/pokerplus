@@ -163,8 +163,8 @@ const Send = ({ navigation }) => {
     <KeyboardAwareScrollView>
       <View style={{ padding: 20, flex: 1 }}>
         <SelectList
-          boxStyles={{ marginTop: 10, backgroundColor: "#fff", borderRadius: 15, paddingVertical: 18, paddingHorizontal: 20, borderColor: "transparent" }}
-          dropdownStyles={{ backgroundColor: "#fff", borderWidth: 0 }}
+          boxStyles={{ marginTop: 10, backgroundColor: "#edf0f7", borderRadius: 15, paddingVertical: 18, paddingHorizontal: 20, borderColor: "transparent" }}
+          dropdownStyles={{ backgroundColor: "#edf0f7", borderWidth: 0 }}
           dropdownItemStyles={{ paddingVertical: 10 }}
           setSelected={(val) => handleChange("id", val)}
           data={selectData}
@@ -173,7 +173,16 @@ const Send = ({ navigation }) => {
           defaultOption={{ key: "", value: "" }}
         />
         <View
-          style={{ marginTop: 10, backgroundColor: "#fff", borderRadius: 15, paddingVertical: 18, paddingHorizontal: 20, flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}
+          style={{
+            marginTop: 10,
+            backgroundColor: "#edf0f7",
+            borderRadius: 15,
+            paddingVertical: 18,
+            paddingHorizontal: 20,
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
         >
           <TouchableOpacity onPress={() => handleCount("minus")} disabled={values.count < 1 || !values.id}>
             <Entypo name="circle-with-minus" size={28} color={values.count < 1 || !values.id ? "gray" : "#5a50ef"} />
@@ -199,7 +208,7 @@ const Send = ({ navigation }) => {
               LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
               setValues({ ...values, name: "", hp: text });
             }}
-            style={{ marginTop: 10, backgroundColor: "#fff", borderRadius: 15, paddingVertical: 18, paddingHorizontal: 20, flex: 3 }}
+            style={{ marginTop: 10, backgroundColor: "#edf0f7", borderRadius: 15, paddingVertical: 18, paddingHorizontal: 20, flex: 3 }}
             onSubmitEditing={(text) => handleFindUser(text)}
             inputMode="tel"
             keyboardType="number-pad"
@@ -225,7 +234,7 @@ const Send = ({ navigation }) => {
           multiline={true}
           style={{
             marginTop: 10,
-            backgroundColor: "#fff",
+            backgroundColor: "#edf0f7",
             borderRadius: 15,
             paddingVertical: 18,
             paddingHorizontal: 20,

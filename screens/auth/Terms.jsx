@@ -53,6 +53,7 @@ const Show = styled.TouchableOpacity`
 `;
 const ShowText = styled.Text`
   font-size: 16px;
+  color: #ff3183;
 `;
 
 const Terms = () => {
@@ -164,7 +165,7 @@ const Terms = () => {
           );
         })}
       </CheckWrapper>
-      <Button onPress={handleCheckAuth} disabled={check.filter((v) => v !== 4).length !== 3} label="휴대폰 본인 인증" style={{ marginTop: "auto", marginBottom: 20 }} primary />
+      <Button onPress={handleCheckAuth} disabled={check.filter((v) => v !== 4).length !== 3} label="휴대폰 본인 인증" style={{ marginTop: "auto" }} primary />
     </ScreenLayout>
   );
 };

@@ -6,10 +6,12 @@ import Button from "../../components/Button";
 import { Entypo } from "@expo/vector-icons";
 import { ticketApi } from "../../api";
 import { useToast } from "react-native-toast-notifications";
+import { OneSignal } from "react-native-onesignal";
+import { useRecoilState } from "recoil";
+import { authState } from "../../recoil/auth/atom";
 
 const QrSend = ({ navigation, route }) => {
   const { data } = route.params;
-  console.log(data);
   const [info, setInfo] = useState([]);
   const [tickets, setTickets] = useState([]);
   const [selectData, setSelectData] = useState([]);
@@ -17,6 +19,7 @@ const QrSend = ({ navigation, route }) => {
   const [values, setValues] = useState({
     count: "1",
   });
+  const [user, setUser] = useRecoilState(authState);
 
   const toast = useToast();
 
@@ -78,21 +81,39 @@ const QrSend = ({ navigation, route }) => {
 
   const handleSend = async () => {
     setLoading({ ...loading, send: true });
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: "Bearer YzFmMTg5NWUtOTI1MC00NjZlLWFjYjMtMGZjNmUwODgzNWYx",
+    };
     try {
       const res = await ticketApi.send({
         send_type: "TH004",
         ticket_info_id: String(values.id),
         send_count: values.count,
         target_user_id: data.targetUser,
-        // phone: data.hp,
-        // name: data.name,
         memo: values.memo ? values.memo : null,
       });
       console.log("TH004", values.id, values.count, data.hp, data.name, data.targetUser, values.memo);
       console.log(res);
       if (res.CODE === "TKS000") {
         console.log("성공");
-        navigation.popToTop();
+        fetch("https://onesignal.com/api/v1/notifications", {
+          method: "POST",
+          body: JSON.stringify({
+            app_id: "ae232b11-fde8-419d-8069-9ec35bf73f62",
+            include_aliases: { external_id: [data.targetUser] },
+            target_channel: "push",
+            data: { foo: "bar" },
+            contents: { en: `${user.name}님이 티켓 ${values.count}장을 전송했습니다.` },
+          }),
+          headers: headers,
+        })
+          .then((res) => res.json())
+          .then((result) => console.log("pushpush", result));
+        // console.log('sdf')
+        navigation.goBack();
+        navigation.navigate("Tabs", { screen: "Home" });
+        console.log("123");
       } else {
         switch (res.CODE) {
           case "TKS001":
