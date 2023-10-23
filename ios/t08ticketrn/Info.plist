@@ -20,6 +20,17 @@
 	<string>1.0</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>pokerplusapp</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
 	<string>1</string>
 	<key>LSRequiresIPhoneOS</key>
@@ -27,20 +38,61 @@
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSAllowsArbitraryLoads</key>
-	<true/>
-	<key>NSAllowsArbitraryLoadsInWebContent</key>
-	<true/>
-	<key>NSAllowsLocalNetworking</key>
-	<true/>
-	<key>NSExceptionDomains</key>
-	<dict>
-		<key>localhost</key>
+		<true/>
+		<key>NSAllowsArbitraryLoadsInWebContent</key>
+		<true/>
+		<key>NSAllowsLocalNetworking</key>
+		<true/>
+		<key>NSExceptionDomains</key>
 		<dict>
-			<key>NSExceptionAllowsInsecureHTTPLoads</key>
-			<true/>
+			<key>localhost</key>
+			<dict>
+				<key>NSExceptionAllowsInsecureHTTPLoads</key>
+				<true/>
+			</dict>
 		</dict>
 	</dict>
+	<key>NSAppleMusicUsageDescription</key>
+	<string>YOUR TEXT</string>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>YOUR TEXT</string>
+	<key>NSBluetoothPeripheralUsageDescription</key>
+	<string>YOUR TEXT</string>
+	<key>NSCalendarsUsageDescription</key>
+	<string>YOUR TEXT</string>
+	<key>NSCameraUsageDescription</key>
+	<string>YOUR TEXT</string>
+	<key>NSContactsUsageDescription</key>
+	<string>YOUR TEXT</string>
+	<key>NSFaceIDUsageDescription</key>
+	<string>YOUR TEXT</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>YOUR TEXT</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>YOUR TEXT</string>
+	<key>NSLocationTemporaryUsageDescriptionDictionary</key>
+	<dict>
+		<key>YOUR-PURPOSE-KEY</key>
+		<string>YOUR TEXT</string>
 	</dict>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>YOUR TEXT</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>YOUR TEXT</string>
+	<key>NSMotionUsageDescription</key>
+	<string>YOUR TEXT</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>YOUR TEXT</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>YOUR TEXT</string>
+	<key>NSRemindersUsageDescription</key>
+	<string>YOUR TEXT</string>
+	<key>NSSiriUsageDescription</key>
+	<string>YOUR TEXT</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>YOUR TEXT</string>
+	<key>NSUserTrackingUsageDescription</key>
+	<string>YOUR TEXT</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>remote-notification</string>
@@ -61,46 +113,5 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
-  <key>NSAppleMusicUsageDescription</key>
-  <string>YOUR TEXT</string>
-  <key>NSBluetoothAlwaysUsageDescription</key>
-  <string>YOUR TEXT</string>
-  <key>NSBluetoothPeripheralUsageDescription</key>
-  <string>YOUR TEXT</string>
-  <key>NSCalendarsUsageDescription</key>
-  <string>YOUR TEXT</string>
-  <key>NSCameraUsageDescription</key>
-  <string>YOUR TEXT</string>
-  <key>NSContactsUsageDescription</key>
-  <string>YOUR TEXT</string>
-  <key>NSFaceIDUsageDescription</key>
-  <string>YOUR TEXT</string>
-  <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-  <string>YOUR TEXT</string>
-  <key>NSLocationAlwaysUsageDescription</key>
-  <string>YOUR TEXT</string>
-  <key>NSLocationTemporaryUsageDescriptionDictionary</key>
-  <dict>
-    <key>YOUR-PURPOSE-KEY</key>
-    <string>YOUR TEXT</string>
-  </dict>
-  <key>NSLocationWhenInUseUsageDescription</key>
-  <string>YOUR TEXT</string>
-  <key>NSMicrophoneUsageDescription</key>
-  <string>YOUR TEXT</string>
-  <key>NSMotionUsageDescription</key>
-  <string>YOUR TEXT</string>
-  <key>NSPhotoLibraryUsageDescription</key>
-  <string>YOUR TEXT</string>
-  <key>NSPhotoLibraryAddUsageDescription</key>
-  <string>YOUR TEXT</string>
-  <key>NSRemindersUsageDescription</key>
-  <string>YOUR TEXT</string>
-  <key>NSSpeechRecognitionUsageDescription</key>
-  <string>YOUR TEXT</string>
-  <key>NSSiriUsageDescription</key>
-  <string>YOUR TEXT</string>
-  <key>NSUserTrackingUsageDescription</key>
-  <string>YOUR TEXT</string>
 </dict>
 </plist>

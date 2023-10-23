@@ -3,8 +3,11 @@ import { ActivityIndicator, Dimensions, StatusBar, StyleSheet, Text, View } from
 import Layout from "../components/Layout";
 import styled from "styled-components/native";
 import Carousel from "../components/Carousel";
-import { useContext } from "react";
+import { useState, useEffect, useContext } from "react";
 import { PosterContext } from "../context";
+import { OneSignal } from "react-native-onesignal";
+import { authState } from "../recoil/auth/atom";
+import { useRecoilState } from "recoil";
 
 const Container = styled.View`
   flex: 1;
@@ -16,6 +19,33 @@ const screenWidth = Math.round(Dimensions.get("window").width);
 
 const Home = () => {
   const { poster, setPoster } = useContext(PosterContext);
+  const { user, setUser } = useRecoilState(authState);
+
+  useEffect(() => {
+    const headers = {
+      "Content-Type": "application/json; charset=utf-8",
+      Authorization: `Bearer YzFmMTg5NWUtOTI1MC00NjZlLWFjYjMtMGZjNmUwODgzNWYx`,
+    };
+    const handlePush = async () => {
+      const res = await axios.post(
+        "https://onesignal.com/api/v1/notifications",
+        {
+          app_id: "ae232b11-fde8-419d-8069-9ec35bf73f62",
+          include_aliases: { external_id: [user.user_id] },
+          target_channel: "push",
+          data: { foo: "bar" },
+          contents: { en: "hi" },
+        },
+        {
+          headers,
+        }
+      );
+
+      console.log(res);
+    };
+
+    handlePush();
+  }, []);
 
   return (
     <Layout>

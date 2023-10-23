@@ -116,6 +116,20 @@ const Send = ({ navigation }) => {
       console.log("TH003", values.id, values.count, values.userId, values.memo);
       if (res.CODE === "TKS000") {
         console.log("성공");
+        console.log(user);
+        fetch("https://onesignal.com/api/v1/notifications", {
+          method: "POST",
+          body: JSON.stringify({
+            app_id: "ae232b11-fde8-419d-8069-9ec35bf73f62",
+            include_aliases: { external_id: [values.userId] },
+            target_channel: "push",
+            data: { foo: "bar" },
+            contents: { en: `${user.name}님이 티켓을 전송했습니다.` },
+          }),
+          headers: headers,
+        })
+          .then((res) => res.json())
+          .then((result) => console.log(result));
         navigation.navigate("SendList");
       } else {
         switch (res.CODE) {

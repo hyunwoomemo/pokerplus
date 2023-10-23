@@ -6,6 +6,7 @@ import axios from "axios";
 import { qrApi } from "../../api";
 import { useFocusEffect } from "@react-navigation/native";
 import { useToast } from "react-native-toast-notifications";
+import AppBar from "../../components/AppBar";
 
 export default function QrScan({ navigation }) {
   const [hasPermission, setHasPermission] = useState(null);
@@ -71,12 +72,16 @@ export default function QrScan({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Welcome to the Barcode Scanner App!</Text>
-      <Text style={styles.paragraph}>Scan a barcode to start your job.</Text>
-      {renderCamera()}
-      <TouchableOpacity style={styles.button} onPress={() => setScanned(false)}>
-        <Text style={styles.buttonText}>Scan QR to Start your job</Text>
-      </TouchableOpacity>
+      <AppBar title="참가권 QR스캔" />
+      {/* <Text style={styles.title}>Welcome to the Barcode Scanner App!</Text>
+      <Text style={styles.paragraph}>Scan a barcode to start your job.</Text> */}
+      <View style={{ justifyContent: "center", alignItems: "center", flex: 1, backgroundColor: "white" }}>
+        {renderCamera()}
+        <View style={{ gap: 10, alignItems: "center", marginTop: 20 }}>
+          <Text style={{ fontSize: 18 }}>참가권 전송 ∙ 대회 바이인</Text>
+          <Text style={{ fontSize: 24, fontWeight: "bold" }}>QR 코드를 스캔해주세요!</Text>
+        </View>
+      </View>
     </View>
   );
 }
@@ -84,8 +89,6 @@ export default function QrScan({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
   },
   title: {
     fontSize: 24,
@@ -102,6 +105,8 @@ const styles = StyleSheet.create({
     overflow: "hidden",
     borderRadius: 10,
     marginBottom: 40,
+    borderWidth: 6,
+    borderColor: "#ff3183",
   },
   camera: {
     flex: 1,

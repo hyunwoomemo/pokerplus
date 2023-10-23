@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Alert, Image, Linking, Text, TouchableOpacity, View } from "react-native";
+import { Alert, Image, Linking, SafeAreaView, Text, TouchableOpacity, View } from "react-native";
 import BackBtn from "../../components/BackBtn";
 import styled from "styled-components/native";
 import { Icon } from "../../source";
@@ -10,6 +10,7 @@ import ScreenLayout from "../../components/ScreenLayout";
 import GradientBtn from "../../components/GradientBtn";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
 import { authApi } from "../../api";
+import AppBar from "../../components/AppBar";
 
 const TextWrapper = styled.View``;
 
@@ -119,7 +120,6 @@ const Terms = () => {
 
   const [check, setCheck] = useState([]);
 
-
   const handleCheck = (i) => {
     if (i === 0) {
       check.length !== 4 ? setCheck([1, 2, 3, 4]) : setCheck([]);
@@ -132,6 +132,7 @@ const Terms = () => {
     }
   };
 
+  console.log(check.length, check, check.includes(2));
   const handleCheckAuth = async () => {
     try {
       Linking.openURL(`https://ngapi.dev.pokerzone.io/auth/create?next=pokerplusapp://join?check=${check.sort((a, b) => a - b).join(",")}`);
@@ -141,8 +142,9 @@ const Terms = () => {
   };
 
   return (
-    <ScreenLayout>
-      <BackBtn />
+    <View style={{ flex: 1, padding: 20, backgroundColor: "#fff" }}>
+      {/* <BackBtn /> */}
+      <AppBar />
       <TextWrapper>
         <FirstLine>
           <Bold>서비스 이용 약관</Bold>
@@ -156,7 +158,7 @@ const Terms = () => {
         {terms.map((term, i) => {
           return (
             <CheckRow key={term.text}>
-              <BouncyCheckbox ref={term.ref} fillColor="#ff3183" isChecked={i === 0 ? check.length === 4 : check.includes(i)} onPress={() => handleCheck(i)} />
+              <BouncyCheckbox disableBuiltInState ref={term.ref} fillColor="#ff3183" isChecked={i === 0 ? check.length === 4 : check.includes(i)} onPress={() => handleCheck(i)} />
               <TouchableOpacity onPress={() => term.ref?.current.onPress()}>
                 <CheckText style={term.style && { ...term.style }}>{term.text}</CheckText>
               </TouchableOpacity>
@@ -170,7 +172,7 @@ const Terms = () => {
         })}
       </CheckWrapper>
       <GradientBtn onPress={handleCheckAuth} disabled={check.filter((v) => v !== 4).length !== 3} label="휴대폰 본인 인증" style={{ marginTop: "auto" }} />
-    </ScreenLayout>
+    </View>
   );
 };
 

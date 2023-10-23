@@ -63,23 +63,6 @@ const Login = ({ navigation: { navigate } }) => {
   const passwordRef = useRef(null);
   const toast = useToast();
 
-  useEffect(() => {
-    // Remove this method to stop OneSignal Debugging
-    OneSignal?.Debug.setLogLevel(LogLevel.Verbose);
-
-    // OneSignal Initialization
-    OneSignal?.initialize("ae232b11-fde8-419d-8069-9ec35bf73f62");
-
-    // requestPermission will show the native iOS or Android notification permission prompt.
-    // We recommend removing the following code and instead using an In-App Message to prompt for notification permission
-    OneSignal?.Notifications.requestPermission(true);
-
-    // Method for listening for notification clicks
-    OneSignal?.Notifications.addEventListener("click", (event) => {
-      console.log("OneSignal: notification clicked:", event);
-    });
-  }, []);
-
   const onJoin = () => {
     navigate("Terms");
   };
@@ -110,12 +93,28 @@ const Login = ({ navigation: { navigate } }) => {
 
   useEffect(() => {
     getStorage("user").then((data) => {
-      console.log(data);
       if (data) {
         setUser(JSON.parse(data));
       }
     });
   }, []);
+
+  const onesignalSetting = () => {
+    // Remove this method to stop OneSignal Debugging
+    OneSignal?.Debug.setLogLevel(LogLevel.Verbose);
+
+    // OneSignal Initialization
+    OneSignal?.initialize("ae232b11-fde8-419d-8069-9ec35bf73f62");
+
+    // requestPermission will show the native iOS or Android notification permission prompt.
+    // We recommend removing the following code and instead using an In-App Message to prompt for notification permission
+    OneSignal?.Notifications.requestPermission(true);
+
+    // Method for listening for notification clicks
+    OneSignal?.Notifications.addEventListener("click", (event) => {
+      console.log("OneSignal: notification clicked:", event);
+    });
+  };
 
   const onLogin = async () => {
     setLoading(true);
@@ -131,8 +130,7 @@ const Login = ({ navigation: { navigate } }) => {
         const accountInfo = await authApi.info();
         setStorage("user", JSON.stringify(accountInfo?.DATA));
         setUser(accountInfo?.DATA);
-        OneSignal.login(accountInfo?.DATA.email);
-        console.log(OneSignal.Notifications.hasPermission, accountInfo?.DATA.email);
+        onesignalSetting();
       } else {
         switch (res.CODE) {
           case "AL001":

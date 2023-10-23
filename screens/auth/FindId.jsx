@@ -4,6 +4,7 @@ import BackBtn from "../../components/BackBtn";
 import Title from "../../components/Title";
 import styled from "styled-components/native";
 import { Icon } from "../../source";
+import AppBar from "../../components/AppBar";
 
 const Container = styled.View`
   padding: 20px;
@@ -21,15 +22,14 @@ const FindId = () => {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
-      <Container>
-        <BackBtn />
-        <Title text="본인 인증" />
-        <TouchableOpacity onPress={handleCheckAuth} style={{ paddingTop: 50, alignItems: "center" }}>
-          <Image source={{ uri: Icon.checkPhone }} width={140} height={140} />
-        </TouchableOpacity>
-      </Container>
-    </SafeAreaView>
+    <View style={{ flex: 1, backgroundColor: "#fff" }}>
+      {/* <Container> */}
+      <AppBar title="이메일 찾기" />
+      <TouchableOpacity onPress={handleCheckAuth} style={{ paddingTop: 50, alignItems: "center" }}>
+        <Image source={{ uri: Icon.checkPhone }} width={140} height={140} />
+      </TouchableOpacity>
+      {/* </Container> */}
+    </View>
   );
 };
 
