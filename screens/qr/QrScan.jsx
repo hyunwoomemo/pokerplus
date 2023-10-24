@@ -71,7 +71,7 @@ export default function QrScan({ navigation }) {
   }
 
   return (
-    <ScreenLayout title="참가권 QR스캔">
+    <ScreenLayout title="참가권 QR스캔" back={() => navigation.navigate("Home")}>
       <View style={{ justifyContent: "center", alignItems: "center", flex: 1, backgroundColor: "white" }}>
         {renderCamera()}
         <View style={{ gap: 10, alignItems: "center", marginTop: 20 }}>

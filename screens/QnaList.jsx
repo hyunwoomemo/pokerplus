@@ -48,6 +48,7 @@ const QnaList = ({ route, navigation }) => {
           <FlatList
             style={styles.main}
             data={data.DATA.data}
+            showsVerticalScrollIndicator={false}
             keyExtractor={(item, index) => index}
             renderItem={({ item, index }) => (
               <TouchableOpacity key={item.id} style={styles.itemWrapper} onPress={() => navigation.navigate("QnaDetail", { qna: item })}>
@@ -118,9 +119,6 @@ const styles = StyleSheet.create({
     borderRadius: 18, // <-- Outer Border Radius
   },
   status: {
-    // fontSize: 16,
-    // fontFamily: "Gill Sans",
-    // fontWeight: "bold",
     textAlign: "center",
     margin: 5,
     color: "#cc2b5e",

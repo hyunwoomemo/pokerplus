@@ -51,7 +51,7 @@ const Notice = ({ navigation }) => {
     }
   }, [currentPage, queryClient]);
 
-  // console.log(data);
+  console.log(data);
 
   // useEffect(() => {
   //   setLoading(true);
@@ -105,22 +105,22 @@ const Notice = ({ navigation }) => {
       )}
 
       {!isLoading && data?.DATA.total > offset && (
-        <DataTable>
-          <DataTable.Pagination
-            page={currentPage}
-            numberofPages={Math.ceil(data?.DATA.total / offset)}
-            onPageChange={(page) => {
-              if (page > 0 && page <= Math.ceil(data?.DATA.total / 10)) {
-                setCurrentPage(page);
-              }
-            }}
-            label={`${(currentPage - 1) * offset + 1}-${Math.min(currentPage * offset, data?.DATA.total)} of ${data?.DATA.total}`}
-            selectPageDropdownLabel={"Rows per page"}
-          />
-        </DataTable>
-        // <View style={{ flexDirection: "row", gap: 10, justifyContent: "center", marginVertical: 20 }}>
-        //   <Pagination totalPage={totalPage} currentPage={currentPage} setCurrentPage={setCurrentPage} />
-        // </View>
+        // <DataTable>
+        //   <DataTable.Pagination
+        //     page={currentPage}
+        //     numberofPages={Math.ceil(data?.DATA.total / offset)}
+        //     onPageChange={(page) => {
+        //       if (page > 0 && page <= Math.ceil(data?.DATA.total / 10)) {
+        //         setCurrentPage(page);
+        //       }
+        //     }}
+        //     label={`${(currentPage - 1) * offset + 1}-${Math.min(currentPage * offset, data?.DATA.total)} of ${data?.DATA.total}`}
+        //     selectPageDropdownLabel={"Rows per page"}
+        //   />
+        // </DataTable>
+        <View style={{ flexDirection: "row", gap: 10, justifyContent: "center", marginVertical: 20 }}>
+          <Pagination totalPage={totalPage} currentPage={currentPage} setCurrentPage={setCurrentPage} />
+        </View>
       )}
     </View>
   );

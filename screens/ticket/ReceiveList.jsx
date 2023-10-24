@@ -10,7 +10,6 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import Pagination from "../../components/Pagination";
 
 const ReceiveList = () => {
-  const { receiveList, setReceiveList } = useContext(TicketContext);
   const [offset, setOffset] = useState(10);
   const [totalPage, setTotalPage] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);

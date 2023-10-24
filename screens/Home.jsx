@@ -23,9 +23,6 @@ const Home = () => {
   const { data, isLoading, isError } = useQuery(["poster"], resourceApi.posters);
   const [user, setUser] = useRecoilState(authState);
 
-  console.log("poooo", data);
-  // console.log("user", user);
-
   useEffect(() => {
     OneSignal.login(user.email);
   }, []);

@@ -34,7 +34,7 @@ const Send = ({ navigation }) => {
   const { data, isLoading, isError } = useQuery(["myticket"], ticketApi.list);
 
   useEffect(() => {
-    setTickets(data?.DATA.filter((v) => v.ticket_count !== 0));
+    setTickets(data?.DATA?.filter((v) => v.ticket_count !== 0));
   }, [data]);
 
   useEffect(() => {
