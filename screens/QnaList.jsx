@@ -15,6 +15,8 @@ const QnaList = ({ route, navigation }) => {
   const [totalPage, setTotalPage] = useState(1);
   const [status, setStatus] = useState([]);
 
+  const flatRef = useRef();
+
   const queryClient = useQueryClient();
 
   const itemStatus = (code) => {
@@ -27,6 +29,7 @@ const QnaList = ({ route, navigation }) => {
   });
 
   useEffect(() => {
+    flatRef.current.scrollToOffset({ offset: 0, animated: true });
     if (currentPage < totalPage) {
       const nextPage = currentPage + 1;
       queryClient.prefetchQuery(["qna", nextPage], () => customerApi.customerList(0, offset, nextPage));
@@ -48,6 +51,7 @@ const QnaList = ({ route, navigation }) => {
           <FlatList
             style={styles.main}
             data={data.DATA.data}
+            ref={flatRef}
             showsVerticalScrollIndicator={false}
             keyExtractor={(item, index) => index}
             renderItem={({ item, index }) => (

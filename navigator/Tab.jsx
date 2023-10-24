@@ -1,7 +1,6 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import React, { useContext, useEffect } from "react";
 import Home from "../screens/Home";
-import Ticket from "../screens/Ticket";
 import CustomTabBar from "../components/CustomTabBar";
 import InfoCheck from "../screens/auth/InfoCheck";
 import InfoEdit from "../screens/auth/InfoEdit";

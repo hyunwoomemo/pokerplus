@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { LayoutAnimation, Text, View, ActivityIndicator } from "react-native";
 import Layout from "../../components/Layout";
 import { ticketApi } from "../../api";
@@ -17,11 +17,14 @@ const SendList = () => {
   const [totalPage, setTotalPage] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
 
+  const flatRef = useRef();
+
   const queryClient = useQueryClient();
 
   const { data, isLoading } = useQuery(["send", currentPage], () => ticketApi.sendList("send", offset, currentPage));
 
   useEffect(() => {
+    flatRef.current.scrollToOffset({ offset: 0, animated: true });
     if (currentPage < totalPage) {
       const nextPage = currentPage + 1;
       queryClient.prefetchQuery(["send", nextPage], () => ticketApi.sendList("send", offset, nextPage));
@@ -41,7 +44,7 @@ const SendList = () => {
       ) : (
         <>
           <View style={styles.container}>
-            <FlatList data={data?.DATA} keyExtractor={(item, index) => `${index}-${item.ticket_info_id}`} renderItem={({ item }) => <ReceiveItem item={item} />} />
+            <FlatList ref={flatRef} data={data?.DATA} keyExtractor={(item, index) => `${index}-${item.ticket_info_id}`} renderItem={({ item }) => <ReceiveItem item={item} />} />
           </View>
           <View style={{ flexDirection: "row", gap: 10, justifyContent: "center", marginVertical: 10 }}>
             {totalPage > 1 && <Pagination totalPage={totalPage} currentPage={currentPage} setCurrentPage={setCurrentPage} />}

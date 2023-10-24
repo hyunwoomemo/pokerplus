@@ -13,43 +13,6 @@ import { useQuery } from "@tanstack/react-query";
 
 const TicketList = () => {
   const [tickets, setTickets] = useState();
-  const [loading, setLoading] = useState(true);
-
-  // useEffect(() => {
-  //   setLoading(true);
-  //   const getTicket = async () => {
-  //     try {
-  //       const res = await ticketApi.list();
-  //       setTickets(res.DATA);
-  //     } catch (err) {
-  //       console.error(err);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   };
-
-  //   getTicket();
-  // }, []);
-
-  // useFocusEffect(
-  //   useCallback(() => {
-  //     setLoading(true);
-  //     const getTicket = async () => {
-  //       try {
-  //         const res = await ticketApi.list();
-  //         const filterData = res?.DATA.filter((v) => v.ticket_count !== 0);
-  //         setTickets(filterData);
-  //         console.log(filterData);
-  //       } catch (err) {
-  //         console.error(err);
-  //       } finally {
-  //         setLoading(false);
-  //       }
-  //     };
-
-  //     getTicket();
-  //   }, [])
-  // );
 
   const { data, isLoading, isError } = useQuery(["myticket"], ticketApi.list);
 

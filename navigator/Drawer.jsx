@@ -151,6 +151,7 @@ const SignOutText = styled.Text`
 const DrawerContent = (active) => {
   const [user, setUser] = useRecoilState(authState);
   const { data: userData, isLoading, isError } = useQuery(["user"], authApi.info);
+
   const { myTicketCount, setMyTicketCount } = useContext(InNavContext);
 
   const navigation = useNavigation();

@@ -16,6 +16,7 @@ import { useRecoilState } from "recoil";
 import { authState } from "../../recoil/auth/atom";
 import ScreenLayout from "../../components/ScreenLayout";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useToast } from "react-native-toast-notifications";
 
 const InfoEdit = ({ route, navigation }) => {
   // const [user, setUser] = useRecoilState(authState);
@@ -45,6 +46,8 @@ const InfoEdit = ({ route, navigation }) => {
   const [error, setError] = useState({});
   const [success, setSuccess] = useState({});
   const [loading, setLoading] = useState({});
+
+  const toast = useToast();
 
   const handleChange = (type, text) => {
     setChangeValues({
@@ -158,6 +161,9 @@ const InfoEdit = ({ route, navigation }) => {
         setUser(accountInfo?.DATA);
         queryClient.invalidateQueries(["user"]);
         navigation.navigate("Profile");
+        toast.show("정보가 수정되었습니다.");
+      } else {
+        toast.show("정보 수정에 실패했습니다");
       }
     } catch (err) {
       console.error(err);

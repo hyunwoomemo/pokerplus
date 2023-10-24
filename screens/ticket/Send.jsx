@@ -1,6 +1,5 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ActivityIndicator, Dimensions, LayoutAnimation, Text, TextInput, View } from "react-native";
-import Layout from "../../components/Layout";
 import { ticketApi } from "../../api";
 import { SelectList } from "react-native-dropdown-select-list";
 import { Entypo } from "@expo/vector-icons";
@@ -8,7 +7,6 @@ import { TouchableOpacity } from "react-native";
 import { useToast } from "react-native-toast-notifications";
 import Button from "../../components/Button";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import { InNavContext } from "../../context";
 import { useRecoilState } from "recoil";
 import { authState } from "../../recoil/auth/atom";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -33,22 +31,21 @@ const Send = ({ navigation }) => {
 
   const { data, isLoading, isError } = useQuery(["myticket"], ticketApi.list);
 
+  console.log("sdfsdf", data);
+
   useEffect(() => {
     setTickets(data?.DATA?.filter((v) => v.ticket_count !== 0));
   }, [data]);
 
   useEffect(() => {
-    if (selectData?.length === 0) {
-      tickets?.forEach((v, i) => {
-        setSelectData((prev) => [
-          ...prev,
-          {
-            key: v.ticket_info_id,
-            value: v.ticket_name + ` (${v.ticket_count})`,
-          },
-        ]);
-      });
-    }
+    tickets?.forEach((v, i) => {
+      setSelectData([
+        {
+          key: v.ticket_info_id,
+          value: v.ticket_name + ` (${v.ticket_count})`,
+        },
+      ]);
+    });
   }, [tickets]);
 
   const handleChange = (type, val) => {

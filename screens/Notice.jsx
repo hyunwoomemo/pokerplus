@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useState } from "react";
+import React, { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { ActivityIndicator, Dimensions, FlatList, LayoutAnimation, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Layout from "../components/Layout";
 import { customerApi } from "../api";
@@ -19,6 +19,9 @@ const Notice = ({ navigation }) => {
   const [loading, setLoading] = useState(true);
   const numberOfItemsPerPageList = [2, 3, 4];
   const [numberOfItemsPerPage, onItemsPerPageChange] = React.useState(numberOfItemsPerPageList[0]);
+
+  const flatRef = useRef();
+
   const queryClient = useQueryClient();
 
   // useEffect(() => {
@@ -45,6 +48,7 @@ const Notice = ({ navigation }) => {
   });
 
   useEffect(() => {
+    flatRef.current.scrollToOffset({ offset: 0, animated: true });
     if (currentPage < totalPage) {
       const nextPage = currentPage + 1;
       queryClient.prefetchQuery(["notice", nextPage], () => customerApi.noticeList({ board_id: "notice", offset, page: nextPage }));
@@ -72,7 +76,7 @@ const Notice = ({ navigation }) => {
 
   useEffect(() => {
     setTotalPage(Math.ceil(data?.DATA.total / offset));
-  }, []);
+  }, [data?.DATA.total]);
 
   const { height } = Dimensions.get("window");
 
@@ -85,6 +89,7 @@ const Notice = ({ navigation }) => {
       ) : (
         <FlatList
           data={data?.DATA.data}
+          ref={flatRef}
           keyExtractor={(item, index) => index}
           // horizontal
           renderItem={({ item, index }) => (

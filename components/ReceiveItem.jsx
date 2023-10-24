@@ -127,6 +127,7 @@ const styles = StyleSheet.create({
   },
   codetext: {
     color: "gray",
+    textAlign: "center",
   },
 });
 
