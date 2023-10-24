@@ -24,7 +24,7 @@ const SendList = () => {
   const { data, isLoading } = useQuery(["send", currentPage], () => ticketApi.sendList("send", offset, currentPage));
 
   useEffect(() => {
-    flatRef.current.scrollToOffset({ offset: 0, animated: true });
+    flatRef?.current?.scrollToOffset({ offset: 0, animated: true });
     if (currentPage < totalPage) {
       const nextPage = currentPage + 1;
       queryClient.prefetchQuery(["send", nextPage], () => ticketApi.sendList("send", offset, nextPage));
@@ -35,7 +35,11 @@ const SendList = () => {
     setTotalPage(Math.ceil(data?.TOTAL / 10));
   }, [data?.TOTAL]);
 
-  console.log(data);
+  useEffect(() => {
+    if (currentPage === 1) {
+      queryClient.prefetchQuery(["send", 2], () => ticketApi.sendList("send", offset, 2));
+    }
+  }, []);
 
   return (
     <View style={{ flex: 1, backgroundColor: "#fff" }}>

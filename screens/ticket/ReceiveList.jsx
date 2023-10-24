@@ -19,12 +19,18 @@ const ReceiveList = () => {
   const queryClient = useQueryClient();
 
   useEffect(() => {
-    flatRef.current.scrollToOffset({ offset: 0, animated: true });
+    flatRef?.current?.scrollToOffset({ offset: 0, animated: true });
     if (currentPage < totalPage) {
       const nextPage = currentPage + 1;
       queryClient.prefetchQuery(["receive", nextPage], () => ticketApi.receiveList("receive", offset, nextPage));
     }
   }, [currentPage, queryClient]);
+
+  useEffect(() => {
+    if (currentPage === 1) {
+      queryClient.prefetchQuery(["receive", 2], () => ticketApi.receiveList("receive", offset, 2));
+    }
+  }, []);
 
   const { data, isLoading, isError } = useQuery(["receive", currentPage], () => ticketApi.receiveList("receive", offset, currentPage), {
     staleTime: 2000,

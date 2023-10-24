@@ -29,12 +29,18 @@ const QnaList = ({ route, navigation }) => {
   });
 
   useEffect(() => {
-    flatRef.current.scrollToOffset({ offset: 0, animated: true });
+    flatRef?.current?.scrollToOffset({ offset: 0, animated: true });
     if (currentPage < totalPage) {
       const nextPage = currentPage + 1;
       queryClient.prefetchQuery(["qna", nextPage], () => customerApi.customerList(0, offset, nextPage));
     }
   }, [currentPage, queryClient]);
+
+  useEffect(() => {
+    if (currentPage === 1) {
+      queryClient.prefetchQuery(["qna", 2], () => customerApi.customerList(0, offset, 2));
+    }
+  }, []);
 
   useEffect(() => {
     setTotalPage(Math.ceil(data?.DATA.total / offset));

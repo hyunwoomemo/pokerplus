@@ -48,12 +48,18 @@ const Notice = ({ navigation }) => {
   });
 
   useEffect(() => {
-    flatRef.current.scrollToOffset({ offset: 0, animated: true });
+    flatRef?.current?.scrollToOffset({ offset: 0, animated: true });
     if (currentPage < totalPage) {
       const nextPage = currentPage + 1;
       queryClient.prefetchQuery(["notice", nextPage], () => customerApi.noticeList({ board_id: "notice", offset, page: nextPage }));
     }
   }, [currentPage, queryClient]);
+
+  useEffect(() => {
+    if (currentPage === 1) {
+      queryClient.prefetchQuery(["notice", 2], () => customerApi.noticeList({ board_id: "notice", offset, page: 2 }));
+    }
+  }, []);
 
   console.log(data);
 
