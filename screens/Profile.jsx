@@ -9,6 +9,8 @@ import { useRecoilState } from "recoil";
 import { authState } from "../recoil/auth/atom";
 import BackBtn, { WithTitleBackBtn } from "../components/BackBtn";
 import { opacityAnimation } from "../animations/opacityAnimation";
+import { useQuery } from "@tanstack/react-query";
+import { authApi } from "../api";
 
 const Title = styled.Text`
   text-align: center;
@@ -18,18 +20,17 @@ const Title = styled.Text`
 `;
 
 const Profile = ({ navigation }) => {
-  const [auth, setAuth] = useRecoilState(authState);
-  const { user_profile_url, name, eng_name, ticket_info, hp, email } = auth;
   const [ticketCount, setTicketCount] = useState(0);
+  const { data, isLoading, isError } = useQuery(["user"], authApi.info);
+
+  console.log("123123", data);
 
   useEffect(() => {
-    const count = ticket_info?.reduce((acc, cur) => acc + cur.ticket_count, 0);
+    const count = data.DATA.ticket_info?.reduce((acc, cur) => acc + cur.ticket_count, 0);
     setTicketCount(count);
   }, []);
 
   const scrollViewRef = useRef();
-
-  console.log(ticket_info);
 
   useEffect(() => {
     scrollViewRef.current.scrollTo({ x: 0, y: 0, animated: true });
@@ -43,7 +44,7 @@ const Profile = ({ navigation }) => {
         <View style={{ alignItems: "center", paddingVertical: 30 }}>
           <Animated.View style={{ width: 120, height: 120, borderRadius: 60, backgroundColor: "rgba(0,0,0,0.2)", opacity: opacity }}>
             <Image
-              source={{ uri: user_profile_url }}
+              source={{ uri: data.DATA.user_profile_url }}
               width={120}
               height={120}
               borderRadius={60}
@@ -55,19 +56,19 @@ const Profile = ({ navigation }) => {
         </View>
         <Button onPress={() => navigation.navigate("InfoCheck")} dark label=" 정보 수정 " style={{ alignItems: "center" }} />
         <View>
-          <WithLabelDisableInput value={name}>
+          <WithLabelDisableInput value={data.DATA.name}>
             <Text>이름</Text>
           </WithLabelDisableInput>
-          <WithLabelDisableInput value={eng_name}>
+          <WithLabelDisableInput value={data.DATA.eng_name}>
             <Text>영문 이름 (GPI등재용)</Text>
           </WithLabelDisableInput>
-          <WithLabelDisableInput value={ticket_info ? `${ticketCount}장` : "0장"}>
+          <WithLabelDisableInput value={data.DATA.ticket_info ? `${ticketCount}장` : "0장"}>
             <Text>보유 참가권</Text>
           </WithLabelDisableInput>
-          <WithLabelDisableInput value={hp}>
+          <WithLabelDisableInput value={data.DATA.hp}>
             <Text>연락처</Text>
           </WithLabelDisableInput>
-          <WithLabelDisableInput value={email}>
+          <WithLabelDisableInput value={data.DATA.email}>
             <Text>이메일</Text>
           </WithLabelDisableInput>
         </View>

@@ -15,19 +15,25 @@ import { getStorage, setStorage } from "../../utils/asyncStorage";
 import { useRecoilState } from "recoil";
 import { authState } from "../../recoil/auth/atom";
 import ScreenLayout from "../../components/ScreenLayout";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 const InfoEdit = ({ route, navigation }) => {
-  const [user, setUser] = useRecoilState(authState);
+  // const [user, setUser] = useRecoilState(authState);
   const [filename, setFilename] = useState();
 
-  const { name, eng_name, user_profile_url, email, nick, hp, location_code } = user;
+  const { data, isLoading, isError } = useQuery(["user"]);
 
+  const queryClient = useQueryClient();
+
+  // const { name, eng_name, user_profile_url, email, nick, hp, location_code } = user;
+
+  const [user, setUser] = useRecoilState(authState);
   const [selected, setSelected] = useState("");
   const [area, setArea] = useState([]);
   const [defaultValue, setDefaultValue] = useState({
-    id: email,
-    nick,
-    location_code,
+    id: data.DATA.email,
+    nick: data.DATA.nick,
+    location_code: data.DATA.location_code,
   });
   const [imageUrl, setImageUrl] = useState("");
 
@@ -141,6 +147,8 @@ const InfoEdit = ({ route, navigation }) => {
       }
     }
 
+    console.log(bodyData);
+
     try {
       const res = await authApi.accountEdit(formData);
       console.log(res);
@@ -148,6 +156,7 @@ const InfoEdit = ({ route, navigation }) => {
         const accountInfo = await authApi.info();
         await setStorage("user", JSON.stringify(accountInfo?.DATA));
         setUser(accountInfo?.DATA);
+        queryClient.invalidateQueries(["user"]);
         navigation.navigate("Profile");
       }
     } catch (err) {
@@ -162,22 +171,22 @@ const InfoEdit = ({ route, navigation }) => {
 
   return (
     <ScreenLayout title="정보 수정" back={() => navigation.popToTop()}>
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <TouchableOpacity onPress={() => useImageUpload(status, requestPermission, setImageUrl, setFilename)} style={{ alignItems: "center", paddingVertical: 30 }}>
-          <Image source={{ uri: imageUrl ? imageUrl : user_profile_url }} width={120} height={120} borderRadius={60} resizeMode="cover" />
+          <Image source={{ uri: imageUrl ? imageUrl : data.DATA.user_profile_url }} width={120} height={120} borderRadius={60} resizeMode="cover" />
         </TouchableOpacity>
         <Button onPress={() => navigation.navigate("Alliance")} dark label=" 제휴 등록 " style={{ alignItems: "center" }} />
         <View gap={10}>
-          <WithLabelDisableInput value={name}>
+          <WithLabelDisableInput value={data.DATA.name}>
             <Text>이름</Text>
           </WithLabelDisableInput>
-          <WithLabelErrorInput defaultValue={eng_name}>
+          <WithLabelErrorInput defaultValue={data.DATA.eng_name}>
             <Text>영문 이름 (GPI등재용)</Text>
           </WithLabelErrorInput>
           <WithLabelCheckErrorInput
-            defaultValue={email}
+            defaultValue={data.DATA.email}
             onChangeText={(text) => handleChange("id", text)}
-            disabled={email === changneValues.id}
+            disabled={data.DATA.email === changneValues.id}
             dark={true}
             error={error.id}
             onCheck={() => handleCheck("id")}
@@ -187,10 +196,10 @@ const InfoEdit = ({ route, navigation }) => {
             <Text>이메일</Text>
           </WithLabelCheckErrorInput>
           <WithLabelCheckErrorInput
-            defaultValue={nick}
+            defaultValue={data.DATA.nick}
             onChangeText={(text) => handleChange("nick", text)}
-            disabled={nick === changneValues.nick}
-            dark={nick !== changneValues.nick}
+            disabled={data.DATA.nick === changneValues.nick}
+            dark={data.DATA.nick !== changneValues.nick}
             error={error.nick}
             onCheck={() => handleCheck("nick")}
             success={success.nick}
@@ -198,12 +207,12 @@ const InfoEdit = ({ route, navigation }) => {
           >
             <Text>닉네임</Text>
           </WithLabelCheckErrorInput>
-          <WithLabelDisableInput value={hp}>
+          <WithLabelDisableInput value={data.DATA.hp}>
             <Text>연락처</Text>
           </WithLabelDisableInput>
           <View style={{ paddingHorizontal: 10, flexDirection: "row", alignItems: "center", marginTop: 30, justifyContent: "space-between" }}>
             <Text>지역(시/도)</Text>
-            <Text>현재 지역: {area.filter((v) => v.key === location_code)[0]?.value}</Text>
+            <Text>현재 지역: {area.filter((v) => v.key === data.DATA.location_code)[0]?.value}</Text>
           </View>
           {area.length > 0 && (
             <SelectList

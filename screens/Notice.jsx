@@ -33,7 +33,7 @@ const Notice = ({ navigation }) => {
   //         LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
 
   //         setTotal(res.DATA.total);
-  //         setNotice(res.DATA.data);
+  //         setNotice(res.DATA?.data);
   //       })
   //       .then(() => setLoading(false));
   //   }
@@ -65,7 +65,7 @@ const Notice = ({ navigation }) => {
   //       LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
 
   //       setTotal(res.DATA.total);
-  //       setNotice(res.DATA.data);
+  //       setNotice(res.DATA?.data);
   //     })
   //     .then(() => setLoading(false));
   // }, [currentPage]);
@@ -77,14 +77,14 @@ const Notice = ({ navigation }) => {
   const { height } = Dimensions.get("window");
 
   return (
-    <View style={{ flex: 1, backgroundColor: "#fff" }}>
+    <View style={{ flex: 1, backgroundColor: "#ffffff" }}>
       <AppBar title="Notice" />
       {/* <Text style={{ textAlign: "center", fontSize: 20, paddingVertical: 20 }}>공지사항</Text> */}
       {isLoading ? (
         <ActivityIndicator style={StyleSheet.absoluteFillObject} color="#ff3183" size="large" />
       ) : (
         <FlatList
-          data={data.DATA.data}
+          data={data?.DATA.data}
           keyExtractor={(item, index) => index}
           // horizontal
           renderItem={({ item, index }) => (
@@ -92,7 +92,7 @@ const Notice = ({ navigation }) => {
               style={{ padding: 20, gap: 5, borderBottomWidth: 1, borderBottomColor: "rgba(0,0,0,0.1)" }}
               onPress={() =>
                 navigation.navigate("NoticeDetail", {
-                  notice: data.DATA.data,
+                  notice: data?.DATA.data,
                   index: index,
                 })
               }
@@ -104,17 +104,17 @@ const Notice = ({ navigation }) => {
         />
       )}
 
-      {!isLoading && data.DATA.total > offset && (
+      {!isLoading && data?.DATA.total > offset && (
         <DataTable>
           <DataTable.Pagination
             page={currentPage}
-            numberofPages={Math.ceil(data.DATA.total / offset)}
+            numberofPages={Math.ceil(data?.DATA.total / offset)}
             onPageChange={(page) => {
-              if (page > 0 && page <= Math.ceil(data.DATA.total / 10)) {
+              if (page > 0 && page <= Math.ceil(data?.DATA.total / 10)) {
                 setCurrentPage(page);
               }
             }}
-            label={`${(currentPage - 1) * offset + 1}-${Math.min(currentPage * offset, data.DATA.total)} of ${data.DATA.total}`}
+            label={`${(currentPage - 1) * offset + 1}-${Math.min(currentPage * offset, data?.DATA.total)} of ${data?.DATA.total}`}
             selectPageDropdownLabel={"Rows per page"}
           />
         </DataTable>

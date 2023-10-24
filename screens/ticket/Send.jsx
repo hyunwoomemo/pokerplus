@@ -11,12 +11,15 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { InNavContext } from "../../context";
 import { useRecoilState } from "recoil";
 import { authState } from "../../recoil/auth/atom";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 const Send = ({ navigation }) => {
   const [tickets, setTickets] = useState([]);
   const [selectData, setSelectData] = useState([]);
   const [loading, setLoading] = useState({});
   const [user, setUser] = useRecoilState(authState);
+
+  const queryClient = useQueryClient();
 
   navigation.addListener("blur", () => {
     setValues({
@@ -28,21 +31,15 @@ const Send = ({ navigation }) => {
     count: "1",
   });
 
-  const getTickets = async () => {
-    const res = await ticketApi.list();
-
-    setTickets(res.DATA.filter((v) => v.ticket_count !== 0));
-  };
+  const { data, isLoading, isError } = useQuery(["myticket"], ticketApi.list);
 
   useEffect(() => {
-    if (tickets?.length === 0) {
-      getTickets();
-    }
-  }, []);
+    setTickets(data?.DATA.filter((v) => v.ticket_count !== 0));
+  }, [data]);
 
   useEffect(() => {
     if (selectData?.length === 0) {
-      tickets.forEach((v, i) => {
+      tickets?.forEach((v, i) => {
         setSelectData((prev) => [
           ...prev,
           {
@@ -71,7 +68,7 @@ const Send = ({ navigation }) => {
     } else {
       setValues({
         ...values,
-        count: values.count >= tickets.find((v) => v.id === values.id)?.ticket_count ? String(tickets.find((v) => v.ticket_info_id === values.id)?.ticket_count) : String(parseInt(values.count) + 1),
+        count: values.count >= tickets?.find((v) => v.id === values.id)?.ticket_count ? String(tickets?.find((v) => v.ticket_info_id === values.id)?.ticket_count) : String(parseInt(values.count) + 1),
       });
     }
   };
@@ -105,6 +102,10 @@ const Send = ({ navigation }) => {
 
   const handleSend = async () => {
     setLoading({ ...loading, send: true });
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: "Bearer YzFmMTg5NWUtOTI1MC00NjZlLWFjYjMtMGZjNmUwODgzNWYx",
+    };
     try {
       const res = await ticketApi.send({
         send_type: "TH003",
@@ -130,6 +131,9 @@ const Send = ({ navigation }) => {
         })
           .then((res) => res.json())
           .then((result) => console.log(result));
+        queryClient.invalidateQueries(["myticket"]);
+        queryClient.invalidateQueries(["send"]);
+        queryClient.invalidateQueries(["user"]);
         navigation.navigate("SendList");
       } else {
         switch (res.CODE) {
@@ -191,21 +195,21 @@ const Send = ({ navigation }) => {
           <TextInput
             value={values.count}
             onChangeText={(text) => {
-              if (parseInt(text) < 0 || parseInt(text) > tickets.find((v) => v.ticket_info_id === values.id)?.ticket_count || !values.id) return;
+              if (parseInt(text) < 0 || parseInt(text) > tickets?.find((v) => v.ticket_info_id === values.id)?.ticket_count || !values.id) return;
               setValues({ ...values, count: text });
             }}
             inputMode="numeric"
             keyboardType="numeric"
           ></TextInput>
-          <TouchableOpacity onPress={() => handleCount("plus")} disabled={parseInt(values.count) >= tickets.find((v) => v.ticket_info_id === values.id)?.ticket_count || !values.id}>
-            <Entypo name="circle-with-plus" size={28} color={values.count >= tickets.find((v) => v.ticket_info_id === values.id)?.ticket_count || !values.id ? "gray" : "#ff2d84"} />
+          <TouchableOpacity onPress={() => handleCount("plus")} disabled={parseInt(values.count) >= tickets?.find((v) => v.ticket_info_id === values.id)?.ticket_count || !values.id}>
+            <Entypo name="circle-with-plus" size={28} color={values.count >= tickets?.find((v) => v.ticket_info_id === values.id)?.ticket_count || !values.id ? "gray" : "#ff2d84"} />
           </TouchableOpacity>
         </View>
         <View style={{ flexDirection: "row", gap: 10 }}>
           <TextInput
             value={values.hp}
             onChangeText={(text) => {
-              LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
+              // LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
               setValues({ ...values, name: "", hp: text });
             }}
             style={{ marginTop: 10, backgroundColor: "#edf0f7", borderRadius: 15, paddingVertical: 18, paddingHorizontal: 20, flex: 3 }}

@@ -43,6 +43,7 @@ const styles = StyleSheet.create({
   button: {
     color: "#ff3183",
     textDecorationLine: "underline",
+    fontSize: 16,
   },
 });
 

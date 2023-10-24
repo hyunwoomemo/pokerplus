@@ -8,41 +8,45 @@ import ReceiveItem from "../../components/ReceiveItem";
 import SendItem from "../../components/SendItem";
 import { useFocusEffect } from "@react-navigation/native";
 import { TicketContext } from "../../context";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import Pagination from "../../components/Pagination";
 
 const SendList = () => {
   const { sendList, setSendList } = useContext(TicketContext);
   const [offset, setOffset] = useState(10);
   const [totalPage, setTotalPage] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
-  const [loading, setLoading] = useState(false);
 
-  const getSends = async () => {
-    setLoading(true);
-    try {
-      const res = await ticketApi.sendList("send", offset, currentPage);
-      LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
-      setSendList(res.DATA);
-      setTotalPage(Math.ceil(res.Total / 10));
-      console.log(res);
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
+  const queryClient = useQueryClient();
+
+  const { data, isLoading } = useQuery(["send", currentPage], () => ticketApi.sendList("send", offset, currentPage));
+
+  useEffect(() => {
+    if (currentPage < totalPage) {
+      const nextPage = currentPage + 1;
+      queryClient.prefetchQuery(["send", nextPage], () => ticketApi.sendList("send", offset, nextPage));
     }
-  };
+  }, [currentPage, queryClient]);
 
-  useFocusEffect(
-    useCallback(() => {
-      getSends();
-    }, [])
-  );
+  useEffect(() => {
+    setTotalPage(Math.ceil(data?.TOTAL / 10));
+  }, [data?.TOTAL]);
+
+  console.log(data);
 
   return (
-    <View style={styles.container}>
-      {loading ? (
+    <View style={{ flex: 1, backgroundColor: "#fff" }}>
+      {isLoading ? (
         <ActivityIndicator style={StyleSheet.absoluteFillObject} color="#ff3183" size="large" />
       ) : (
-        <FlatList data={sendList} keyExtractor={(item, index) => `${index}.${item.ticket_info_id}`} renderItem={({ item }) => <SendItem item={item} />} />
+        <>
+          <View style={styles.container}>
+            <FlatList data={data?.DATA} keyExtractor={(item, index) => `${index}-${item.ticket_info_id}`} renderItem={({ item }) => <ReceiveItem item={item} />} />
+          </View>
+          <View style={{ flexDirection: "row", gap: 10, justifyContent: "center", marginVertical: 10 }}>
+            {totalPage > 1 && <Pagination totalPage={totalPage} currentPage={currentPage} setCurrentPage={setCurrentPage} />}
+          </View>
+        </>
       )}
     </View>
   );

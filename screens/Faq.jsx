@@ -96,7 +96,6 @@ const Faq = () => {
   }, []);
 
   useEffect(() => {
-    LayoutAnimation.configureNext(toggleAnimation);
     setTotalPage(Math.ceil(total / offset));
   }, [total]);
 

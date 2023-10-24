@@ -11,7 +11,7 @@ const Container = styled.View`
   background-color: #fff;
   flex: 1;
 `;
-const ScreenLayout = ({ back, children, title, appbar, right }) => {
+const ScreenLayout = ({ back, children, title, appbar }) => {
   const navigation = useNavigation();
 
   return (
@@ -23,7 +23,7 @@ const ScreenLayout = ({ back, children, title, appbar, right }) => {
           <Title text={title} />
         </View>
       ) : (
-        <AppBar title={title} right={right} back={back ? back : () => navigation.goBack()} />
+        <AppBar title={title} back={back ? back : () => navigation.goBack()} />
       )}
       <View style={{ padding: 20, flex: 1 }}>{children}</View>
       <SafeAreaView></SafeAreaView>

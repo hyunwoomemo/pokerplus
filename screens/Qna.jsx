@@ -6,11 +6,14 @@ import { SelectList } from "react-native-dropdown-select-list";
 import { WithLabelInput } from "../components/Input";
 import Button from "../components/Button";
 import AppBar from "../components/AppBar";
+import { useQueryClient } from "@tanstack/react-query";
 
 const Qna = ({ navigation }) => {
   const [config, setConfig] = useState([]);
   const [values, setValues] = useState({});
   const [loading, setLoading] = useState(false);
+
+  const queryClient = useQueryClient();
 
   navigation.addListener("blur", () => {
     setValues({});
@@ -41,6 +44,7 @@ const Qna = ({ navigation }) => {
       if (res.CODE === "DU000") {
         navigation.navigate("QnaNav", { data: res.DATA });
         setValues({});
+        queryClient.invalidateQueries(["qna"]);
       }
     } catch (err) {
       console.error(err);
@@ -54,20 +58,21 @@ const Qna = ({ navigation }) => {
       <AppBar title="1:1 문의하기" />
       <ScrollView style={{ paddingHorizontal: 32, marginTop: 20 }}>
         <SelectList
-          boxStyles={{ marginTop: 10, backgroundColor: "#fff", borderRadius: 15, paddingVertical: 18, paddingHorizontal: 20, borderColor: "transparent" }}
-          dropdownStyles={{ backgroundColor: "#fff", borderWidth: 0 }}
+          boxStyles={{ marginTop: 10, backgroundColor: "#edf0f7", borderRadius: 15, paddingVertical: 18, paddingHorizontal: 20, borderColor: "transparent" }}
+          dropdownStyles={{ backgroundColor: "#edf0f7", borderWidth: 0 }}
           dropdownItemStyles={{ paddingVertical: 10 }}
           setSelected={(val) => handleChange("host_id", val)}
+          dropdownTextStyles={{ fontSize: 16 }}
           data={config}
           save="key"
           placeholder="문의 대상을 선택하세요."
           defaultOption={{ key: "", value: "" }}
         />
         <WithLabelInput onChangeText={(text) => handleChange("subject", text)} backgroundColor="#fff" placeholder="문의 제목을 입력하세요." placeholderTextColor="gray" value={values.subject}>
-          <Text>제목</Text>
+          <Text style={{ fontSize: 16 }}>제목</Text>
         </WithLabelInput>
         <View style={styles.textAreaWrapper}>
-          <Text>문의 내용</Text>
+          <Text style={{ fontSize: 16 }}>문의 내용</Text>
           <TextInput
             value={values.contents}
             onChangeText={(text) => handleChange("contents", text)}
@@ -76,6 +81,7 @@ const Qna = ({ navigation }) => {
             style={styles.textArea}
             numberOfLines={10}
             placeholder="200자 내외로 입력하세요."
+            placeholderTextColor={"gray"}
           />
         </View>
         <View style={styles.buttonWrapper}>
@@ -103,7 +109,7 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     marginTop: 20,
     paddingHorizontal: 20,
-    // fontSize: 16,
+    fontSize: 16,
     paddingVertical: 40,
     paddingTop: 20,
     height: 100,

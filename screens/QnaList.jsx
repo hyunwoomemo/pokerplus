@@ -7,85 +7,47 @@ import { LinearGradient } from "expo-linear-gradient";
 import Pagination from "../components/Pagination";
 import { QnaContext } from "../context";
 import AppBar from "../components/AppBar";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 
 const QnaList = ({ route, navigation }) => {
-  const [qna, setQna] = useState([]);
   const [offset, setOffset] = useState(10);
   const { currentPage, setCurrentPage } = useContext(QnaContext);
-  const [total, setTotal] = useState(1);
   const [totalPage, setTotalPage] = useState(1);
   const [status, setStatus] = useState([]);
-  const [loading, setLoading] = useState(true);
+
+  const queryClient = useQueryClient();
 
   const itemStatus = (code) => {
-    return status.filter((item) => item.code === code)[0]?.title;
+    return status?.filter((item) => item.code === code)[0]?.title;
   };
 
-  useEffect(() => {
-    setCurrentPage(1);
-    customerApi
-      .customerList(0, offset, currentPage)
-      .then((res) => {
-        if (res.CODE === "DCL000") {
-          setQna(res.DATA.data);
-          setStatus(res.DATA.stat);
-          setTotal(res.DATA.total);
-        }
-      })
-      .then(() => setLoading(false));
-  }, [route.params?.data]);
+  const { data, isLoading, isError } = useQuery(["qna", currentPage], () => customerApi.customerList(0, offset, currentPage), {
+    staleTime: 2000,
+    keepPreviousData: true,
+  });
 
   useEffect(() => {
-    setLoading(true);
-    customerApi
-      .customerList(0, offset, currentPage)
-      .then((res) => {
-        if (res.CODE === "DCL000") {
-          LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
-
-          setQna(res.DATA.data);
-          setStatus(res.DATA.stat);
-          setTotal(res.DATA.total);
-        }
-      })
-      .then(() => setLoading(false));
-  }, [currentPage]);
-
-  useEffect(() => {
-    setLoading(true);
-    if (qna.length === 0) {
-      customerApi
-        .customerList(0, offset, currentPage)
-        .then((res) => {
-          if (res.CODE === "DCL000") {
-            LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
-            setQna(res.DATA.data);
-            setStatus(res.DATA.stat);
-            setTotal(res.DATA.total);
-          }
-        })
-        .then(() => setLoading(false));
+    if (currentPage < totalPage) {
+      const nextPage = currentPage + 1;
+      queryClient.prefetchQuery(["qna", nextPage], () => customerApi.customerList(0, offset, nextPage));
     }
-
-    return () => {
-      setCurrentPage(1);
-    };
-  }, []);
+  }, [currentPage, queryClient]);
 
   useEffect(() => {
-    setTotalPage(Math.ceil(total / offset));
-  }, [total]);
+    setTotalPage(Math.ceil(data?.DATA.total / offset));
+    setStatus(data?.DATA.stat);
+  }, [data?.DATA]);
 
   return (
     <View style={{ flex: 1, backgroundColor: "#fff" }}>
       <AppBar title="1:1 문의 내역" />
-      {loading ? (
+      {isLoading ? (
         <ActivityIndicator style={StyleSheet.absoluteFillObject} color="#ff3183" size="large" />
       ) : (
         <>
           <FlatList
             style={styles.main}
-            data={qna}
+            data={data.DATA.data}
             keyExtractor={(item, index) => index}
             renderItem={({ item, index }) => (
               <TouchableOpacity key={item.id} style={styles.itemWrapper} onPress={() => navigation.navigate("QnaDetail", { qna: item })}>
@@ -104,13 +66,6 @@ const QnaList = ({ route, navigation }) => {
               </TouchableOpacity>
             )}
           />
-          {/* <ScrollView style={styles.main} ref={scrollViewRef}>
-            {qna.map((item) => {
-              return (
-                
-              );
-            })}
-          </ScrollView> */}
           <View style={{ flexDirection: "row", gap: 10, justifyContent: "center", marginVertical: 10 }}>
             {totalPage > 1 && <Pagination totalPage={totalPage} currentPage={currentPage} setCurrentPage={setCurrentPage} />}
           </View>

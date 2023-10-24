@@ -9,6 +9,7 @@ import { StyleSheet } from "react-native";
 import { TouchableOpacity } from "react-native";
 import { ActivityIndicator } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
+import { useQuery } from "@tanstack/react-query";
 
 const TicketList = () => {
   const [tickets, setTickets] = useState();
@@ -30,31 +31,37 @@ const TicketList = () => {
   //   getTicket();
   // }, []);
 
-  useFocusEffect(
-    useCallback(() => {
-      setLoading(true);
-      const getTicket = async () => {
-        try {
-          const res = await ticketApi.list();
-          const filterData = res.DATA.filter((v) => v.ticket_count !== 0);
-          setTickets(filterData);
-          console.log(filterData);
-        } catch (err) {
-          console.error(err);
-        } finally {
-          setLoading(false);
-        }
-      };
+  // useFocusEffect(
+  //   useCallback(() => {
+  //     setLoading(true);
+  //     const getTicket = async () => {
+  //       try {
+  //         const res = await ticketApi.list();
+  //         const filterData = res?.DATA.filter((v) => v.ticket_count !== 0);
+  //         setTickets(filterData);
+  //         console.log(filterData);
+  //       } catch (err) {
+  //         console.error(err);
+  //       } finally {
+  //         setLoading(false);
+  //       }
+  //     };
 
-      getTicket();
-    }, [])
-  );
+  //     getTicket();
+  //   }, [])
+  // );
+
+  const { data, isLoading, isError } = useQuery(["myticket"], ticketApi.list);
+
+  useEffect(() => {
+    setTickets(data?.DATA.filter((v) => v.ticket_count !== 0));
+  }, [data]);
 
   return (
     <View style={styles.container}>
-      {loading ? (
+      {isLoading ? (
         <ActivityIndicator style={StyleSheet.absoluteFillObject} color="#ff3183" size="large" />
-      ) : tickets.length > 0 ? (
+      ) : tickets?.length > 0 ? (
         <FlatList data={tickets} keyExtractor={(item, index) => `${index}-${item.ticket_info_id}`} renderItem={({ item }) => <TicketItem item={item} />} />
       ) : (
         <View style={{ justifyContent: "center", alignItems: "center", gap: 40, marginTop: 100 }}>

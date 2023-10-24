@@ -7,7 +7,8 @@ import ScreenLayout from "../components/ScreenLayout";
 const NoticeDetail = ({ navigation: { goBack }, route }) => {
   const { notice, index } = route.params;
   return (
-    <ScreenLayout title={notice[index].subject} right={moment(notice[index].created_at).utc().format("YY/MM/DD")}>
+    <ScreenLayout title={notice[index].subject}>
+      <Text style={{ marginLeft: "auto", fontSize: 14, color: "gray" }}>{moment(notice[index].created_at).utc().format("YY/MM/DD")}</Text>
       <Text style={styles.contents}>{notice[index].contents}</Text>
       <Button label="     목록    " style={styles.button} onPress={() => goBack()} />
     </ScreenLayout>

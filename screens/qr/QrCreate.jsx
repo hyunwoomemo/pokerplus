@@ -59,7 +59,7 @@ const QrCreate = ({ navigation }) => {
   };
 
   return (
-    <ScreenLayout>
+    <ScreenLayout back={() => navigation.navigate("Home")}>
       <View style={{ justifyContent: "center", alignItems: "center" }}>
         <LinearGradient colors={["#bc20a7", "#4c56fa"]} start={{ x: 0.3, y: 0.1 }} style={{ borderRadius: 30, width: "80%" }} end={{ x: 0.9, y: 0.1 }}>
           <View style={{ borderRadius: 30, backgroundColor: "#fff", marginVertical: 2, marginHorizontal: 2, paddingVertical: 5, justifyContent: "center", alignItems: "center" }}>

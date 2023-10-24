@@ -150,7 +150,7 @@ const SignOutText = styled.Text`
 
 const DrawerContent = (active) => {
   const [user, setUser] = useRecoilState(authState);
-  const { data: userData, isLoading, isError } = useQuery(["user"], authApi.info, { staleTime: 60 * 30 * 1000 });
+  const { data: userData, isLoading, isError } = useQuery(["user"], authApi.info);
   const { myTicketCount, setMyTicketCount } = useContext(InNavContext);
 
   const navigation = useNavigation();
@@ -185,18 +185,18 @@ const DrawerContent = (active) => {
           onPress={() => navigation.navigate("ProfileNav", { screen: "Profile" })}
           style={{ width: 70, height: 70, borderRadius: 70 / 2, backgroundColor: "rgba(0,0,0,0.2)", opacity: opacity }}
         >
-          {userData.DATA.user_profile_url && (
-            <FastImage
-              source={{ uri: userData.DATA.user_profile_url }}
+          {userData?.DATA.user_profile_url && (
+            <Image
+              source={{
+                uri: userData?.DATA.user_profile_url,
+              }}
               onLoadStart={() => opacityAnimation(opacity, "start")}
               onLoadEnd={() => {
                 opacityAnimation(opacity, "reset");
               }}
-              style={{
-                width: 70,
-                height: 70,
-                borderRadius: 35,
-              }}
+              width={70}
+              height={70}
+              borderRadius={35}
               resizeMode={FastImage.resizeMode.cover}
             />
           )}
