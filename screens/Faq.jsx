@@ -8,6 +8,8 @@ import { toggleAnimation } from "../animations/toggleAnimation";
 import Pagination from "../components/Pagination";
 import { useFocusEffect } from "@react-navigation/native";
 import AppBar from "../components/AppBar";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { offsetValue } from "../config";
 
 const AccordionWrapper = ({ title, children, data, index }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -24,13 +26,13 @@ const AccordionWrapper = ({ title, children, data, index }) => {
       Animated.spring(opacity, {
         toValue: 1,
         useNativeDriver: true,
-        delay: 300 + index * 100,
+        delay: 100 + index * 100,
       }).start();
       return () => {
         Animated.spring(opacity, {
           toValue: 1,
           useNativeDriver: true,
-          delay: 300 + index * 100,
+          delay: 100 + index * 100,
         }).reset();
       };
     }, [])
@@ -79,48 +81,29 @@ const AccordionItem = ({ content, isOpen, name }) => {
 
 const Faq = () => {
   const [faq, setFaq] = useState();
-  const [offset, setOffset] = useState(10);
   const [total, setTotal] = useState(1);
   const [totalPage, setTotalPage] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
 
-  useEffect(() => {
-    customerApi.faqList(offset, currentPage).then((res) => {
-      if (res.CODE === "DFL000") {
-        LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
-        setTotal(res.DATA.total);
-        setFaq(res.DATA.data);
-        // setTotalPage()
-      }
-    });
-  }, []);
+  const queryClient = useQueryClient();
+
+  const { data, isLoading } = useQuery(["faq", currentPage], () => customerApi.faqList(offsetValue, currentPage));
 
   useEffect(() => {
-    setTotalPage(Math.ceil(total / offset));
+    if (currentPage < totalPage) {
+      const nextPage = currentPage + 1;
+      queryClient.prefetchQuery(["faq", nextPage], () => customerApi.faqList(offset, nextPage));
+    }
+  }, [currentPage, queryClient]);
+
+  useEffect(() => {
+    setTotalPage(Math.ceil(total / offsetValue));
   }, [total]);
-
-  useEffect(() => {
-    customerApi.faqList(offset, currentPage).then((res) => {
-      if (res.CODE === "DFL000") {
-        LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
-        setTotal(res.DATA.total);
-        setFaq(res.DATA.data);
-        // setTotalPage()
-      }
-    });
-  }, [totalPage]);
 
   return (
     <View style={{ flex: 1, backgroundColor: "#fff" }}>
       <AppBar title="FAQ" />
-      <FlatList data={faq} keyExtractor={(item) => item.contents} renderItem={({ item, index }) => <AccordionWrapper title={item.subject} data={item.contents} index={index} />} />
-      {/* <ScrollView>
-        {faq &&
-          faq.map((item, index) => {
-            return <AccordionWrapper key={index} title={item.subject} data={item.contents} />;
-          })}
-        <AccordionWrapper title="Q. 로그아웃과 회원탈퇴는 어떻게 하나요?" data="A. 로그아웃은 사이드바 하단에 있으며, 회원탈퇴는 정보 수정 탭의 하단에 회원 탈퇴를 이용해주시면 됩니다." />
-      </ScrollView> */}
+      <FlatList data={data?.DATA.data} keyExtractor={(item) => item.contents} renderItem={({ item, index }) => <AccordionWrapper title={item.subject} data={item.contents} index={index} />} />
 
       <View style={{ flexDirection: "row", gap: 10, justifyContent: "center", marginVertical: 10 }}>
         {totalPage > 1 && <Pagination totalPage={totalPage} currentPage={currentPage} setCurrentPage={setCurrentPage} />}

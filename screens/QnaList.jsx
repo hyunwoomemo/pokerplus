@@ -8,9 +8,9 @@ import Pagination from "../components/Pagination";
 import { QnaContext } from "../context";
 import AppBar from "../components/AppBar";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { offsetValue } from "../config";
 
 const QnaList = ({ route, navigation }) => {
-  const [offset, setOffset] = useState(10);
   const { currentPage, setCurrentPage } = useContext(QnaContext);
   const [totalPage, setTotalPage] = useState(1);
   const [status, setStatus] = useState([]);
@@ -23,7 +23,7 @@ const QnaList = ({ route, navigation }) => {
     return status?.filter((item) => item.code === code)[0]?.title;
   };
 
-  const { data, isLoading, isError } = useQuery(["qna", currentPage], () => customerApi.customerList(0, offset, currentPage), {
+  const { data, isLoading, isError } = useQuery(["qna", currentPage], () => customerApi.customerList(0, offsetValue, currentPage), {
     staleTime: 2000,
     keepPreviousData: true,
   });
@@ -32,18 +32,18 @@ const QnaList = ({ route, navigation }) => {
     flatRef?.current?.scrollToOffset({ offset: 0, animated: true });
     if (currentPage < totalPage) {
       const nextPage = currentPage + 1;
-      queryClient.prefetchQuery(["qna", nextPage], () => customerApi.customerList(0, offset, nextPage));
+      queryClient.prefetchQuery(["qna", nextPage], () => customerApi.customerList(0, offsetValue, nextPage));
     }
   }, [currentPage, queryClient]);
 
   useEffect(() => {
     if (currentPage === 1) {
-      queryClient.prefetchQuery(["qna", 2], () => customerApi.customerList(0, offset, 2));
+      queryClient.prefetchQuery(["qna", 2], () => customerApi.customerList(0, offsetValue, 2));
     }
   }, []);
 
   useEffect(() => {
-    setTotalPage(Math.ceil(data?.DATA.total / offset));
+    setTotalPage(Math.ceil(data?.DATA.total / offsetValue));
     setStatus(data?.DATA.stat);
   }, [data?.DATA]);
 
@@ -72,7 +72,7 @@ const QnaList = ({ route, navigation }) => {
                     <Text style={styles.itemheaderText}>{item.company_name}</Text>
                     <Text style={styles.itemheaderText}>{moment(item.created_at).utc().add(9, "h").format("YY/MM/DD HH:mm:ss")}</Text>
                   </View>
-                  <Text>{item.contents}</Text>
+                  <Text style={{ fontSize: 18 }}>{item.contents}</Text>
                 </View>
               </TouchableOpacity>
             )}
@@ -94,9 +94,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: "rgba(0, 0,0,0.2)",
   },
-  main: {
-    paddingHorizontal: 32,
-  },
+  main: {},
   innerContainer: {
     borderRadius: 15, // <-- Inner Border Radius
     flex: 1,
@@ -105,6 +103,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   itemWrapper: {
+    paddingHorizontal: 20,
     flexDirection: "row",
     alignItems: "center",
     gap: 20,
@@ -122,6 +121,7 @@ const styles = StyleSheet.create({
   },
   itemheaderText: {
     color: "gray",
+    fontSize: 16,
   },
   gradient: {
     height: 50,
@@ -133,6 +133,7 @@ const styles = StyleSheet.create({
     margin: 5,
     color: "#cc2b5e",
     backgroundColor: "transparent",
+    fontSize: 16,
   },
 });
 export default QnaList;

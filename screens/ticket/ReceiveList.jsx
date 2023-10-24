@@ -8,9 +8,9 @@ import ReceiveItem from "../../components/ReceiveItem";
 import { TicketContext } from "../../context";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import Pagination from "../../components/Pagination";
+import { offsetValue } from "../../config";
 
 const ReceiveList = () => {
-  const [offset, setOffset] = useState(10);
   const [totalPage, setTotalPage] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -22,23 +22,23 @@ const ReceiveList = () => {
     flatRef?.current?.scrollToOffset({ offset: 0, animated: true });
     if (currentPage < totalPage) {
       const nextPage = currentPage + 1;
-      queryClient.prefetchQuery(["receive", nextPage], () => ticketApi.receiveList("receive", offset, nextPage));
+      queryClient.prefetchQuery(["receive", nextPage], () => ticketApi.receiveList("receive", offsetValue, nextPage));
     }
   }, [currentPage, queryClient]);
 
   useEffect(() => {
     if (currentPage === 1) {
-      queryClient.prefetchQuery(["receive", 2], () => ticketApi.receiveList("receive", offset, 2));
+      queryClient.prefetchQuery(["receive", 2], () => ticketApi.receiveList("receive", offsetValue, 2));
     }
   }, []);
 
-  const { data, isLoading, isError } = useQuery(["receive", currentPage], () => ticketApi.receiveList("receive", offset, currentPage), {
+  const { data, isLoading, isError } = useQuery(["receive", currentPage], () => ticketApi.receiveList("receive", offsetValue, currentPage), {
     staleTime: 2000,
     keepPreviousData: true,
   });
 
   useEffect(() => {
-    setTotalPage(Math.ceil(data?.TOTAL / 10));
+    setTotalPage(Math.ceil(data?.TOTAL / offsetValue));
   }, [data?.TOTAL]);
 
   return (

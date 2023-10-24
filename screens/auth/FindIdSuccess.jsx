@@ -55,7 +55,7 @@ const FindIdSuccess = ({ navigation: { navigate }, route }) => {
       </View>
       <View style={{ flexDirection: "row", gap: 10, marginTop: 20 }}>
         <Button dark style={{ flex: 1 }} label="로그인" onPress={() => navigate("Login")} />
-        <Button style={{ flex: 1 }} primary={true} label="비밀번호 찾기" />
+        <Button style={{ flex: 1 }} onPress={() => navigate("FindPw")} primary={true} label="비밀번호 찾기" />
       </View>
     </ScreenLayout>
   );

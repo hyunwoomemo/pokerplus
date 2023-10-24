@@ -5,7 +5,6 @@ import { SafeAreaView, ScrollView, View } from "react-native";
 import Title from "./Title";
 import AppBar from "./AppBar";
 import { useNavigation } from "@react-navigation/native";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 const Container = styled.View`
   background-color: #fff;

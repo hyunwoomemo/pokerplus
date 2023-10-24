@@ -4,6 +4,7 @@ import { ActivityIndicator, Animated, Image, Linking, Text, View } from "react-n
 import { Dimensions } from "react-native";
 import { opacityAnimation } from "../animations/opacityAnimation";
 import { Surface } from "react-native-paper";
+import FastImage from "react-native-fast-image";
 
 const PageItem = styled.Pressable`
   background-color: ${(props) => props.color};
@@ -14,27 +15,18 @@ const PageItem = styled.Pressable`
   margin-bottom: 30px;
 `;
 
-const PosterImg = styled.Image`
+const PosterImg = styled(FastImage)`
   flex: 1;
   width: 100%;
   height: 100%;
   overflow: hidden;
 `;
 
-const PosterWrapper = styled.TouchableHighlight`
-  flex: 1;
-  justify-content: center;
-  align-items: center;
-`;
-
 export default function Page({ item, index, style, setLoad }) {
-  const { width, height } = Dimensions.get("window");
-
   const opacity = useRef(new Animated.Value(1)).current;
-  console.log("sdf", item);
 
   return (
-    <PageItem color={item.color} style={{ ...style, backgroundColor: "lightgray" }} onPress={() => Linking.openURL(item.link)}>
+    <PageItem color={item.color} style={{ ...style, backgroundColor: "#ececec" }} onPress={() => Linking.openURL(item.link)}>
       <PosterImg
         source={{ uri: item.poster_url }}
         // defaultSource={require("../assets/splash.jpg")}

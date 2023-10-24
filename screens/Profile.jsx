@@ -11,6 +11,7 @@ import BackBtn, { WithTitleBackBtn } from "../components/BackBtn";
 import { opacityAnimation } from "../animations/opacityAnimation";
 import { useQuery } from "@tanstack/react-query";
 import { authApi } from "../api";
+import FastImage from "react-native-fast-image";
 
 const Title = styled.Text`
   text-align: center;
@@ -23,12 +24,10 @@ const Profile = ({ navigation }) => {
   const [ticketCount, setTicketCount] = useState(0);
   const { data, isLoading, isError } = useQuery(["user"], authApi.info);
 
-  console.log("123123", data);
-
   useEffect(() => {
     const count = data.DATA.ticket_info?.reduce((acc, cur) => acc + cur.ticket_count, 0);
     setTicketCount(count);
-  }, []);
+  }, [data.DATA.ticket_info]);
 
   const scrollViewRef = useRef();
 
@@ -43,11 +42,16 @@ const Profile = ({ navigation }) => {
       <ScrollView ref={scrollViewRef} showsVerticalScrollIndicator={false}>
         <View style={{ alignItems: "center", paddingVertical: 30 }}>
           <Animated.View style={{ width: 120, height: 120, borderRadius: 60, backgroundColor: "rgba(0,0,0,0.2)", opacity: opacity }}>
-            <Image
+            <FastImage
               source={{ uri: data.DATA.user_profile_url }}
-              width={120}
-              height={120}
-              borderRadius={60}
+              style={{
+                width: 120,
+                height: 120,
+                borderRadius: 60,
+              }}
+              // width={120}
+              // height={120}
+              // borderRadius={60}
               resizeMode="cover"
               onLoadStart={() => opacityAnimation(opacity, "start")}
               onLoadEnd={() => opacityAnimation(opacity, "reset")}

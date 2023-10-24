@@ -7,6 +7,8 @@ export const validateLogin = (name, text, error, setError) => {
       LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
       setError({ ...error, email: "올바른 이메일 형식이 아닙니다." });
     } else {
+      LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
+
       setError({ ...error, email: "" });
     }
   } else {
@@ -75,8 +77,6 @@ export const validateJoin = (name, text, values, error, setError) => {
     if (!regEmail.test(text) && text?.length > 0) {
       LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
       setError({ ...error, email: "올바른 이메일 형식이 아닙니다." });
-    } else {
-      setError({ ...error, email: "" });
     }
     return;
   } else if (name === "password") {
@@ -91,6 +91,7 @@ export const validateJoin = (name, text, values, error, setError) => {
       LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
       setError({ ...error, password: "8자 이상 영문, 숫자, 특수문자 혼합 사용하여 입력바랍니다." });
     } else {
+      LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
       setError({ ...error, password: "" });
     }
     let samePass_0 = 0; //동일문자 카운트
@@ -146,6 +147,7 @@ export const validateJoin = (name, text, values, error, setError) => {
 
       setError({ ...error, password2: "비밀번호가 일치하지 않습니다. " });
     } else {
+      LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
       setError({ ...error, password2: "" });
     }
     return;

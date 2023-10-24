@@ -17,6 +17,7 @@ import { authState } from "../../recoil/auth/atom";
 import ScreenLayout from "../../components/ScreenLayout";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useToast } from "react-native-toast-notifications";
+import FastImage from "react-native-fast-image";
 
 const InfoEdit = ({ route, navigation }) => {
   // const [user, setUser] = useRecoilState(authState);
@@ -179,7 +180,7 @@ const InfoEdit = ({ route, navigation }) => {
     <ScreenLayout title="정보 수정" back={() => navigation.popToTop()}>
       <ScrollView showsVerticalScrollIndicator={false}>
         <TouchableOpacity onPress={() => useImageUpload(status, requestPermission, setImageUrl, setFilename)} style={{ alignItems: "center", paddingVertical: 30 }}>
-          <Image source={{ uri: imageUrl ? imageUrl : data.DATA.user_profile_url }} width={120} height={120} borderRadius={60} resizeMode="cover" />
+          <FastImage source={{ uri: imageUrl ? imageUrl : data.DATA.user_profile_url }} style={{ width: 120, height: 120, borderRadius: 60 }} resizeMode="cover" />
         </TouchableOpacity>
         <Button onPress={() => navigation.navigate("Alliance")} dark label=" 제휴 등록 " style={{ alignItems: "center" }} />
         <View gap={10}>

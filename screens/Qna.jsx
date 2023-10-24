@@ -56,7 +56,7 @@ const Qna = ({ navigation }) => {
   return (
     <View style={{ flex: 1, backgroundColor: "#fff" }}>
       <AppBar title="1:1 문의하기" />
-      <ScrollView style={{ paddingHorizontal: 32, marginTop: 20 }}>
+      <ScrollView style={{ paddingHorizontal: 20, marginTop: 20 }}>
         <SelectList
           boxStyles={{ marginTop: 10, backgroundColor: "#edf0f7", borderRadius: 15, paddingVertical: 18, paddingHorizontal: 20, borderColor: "transparent" }}
           dropdownStyles={{ backgroundColor: "#edf0f7", borderWidth: 0 }}

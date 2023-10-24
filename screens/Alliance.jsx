@@ -17,25 +17,25 @@ const Alliance = ({ navigation: { navigate }, route }) => {
   const [status, requestPermission] = ImagePicker.useMediaLibraryPermissions();
   return (
     <ScreenLayout title="제휴 매장 신청">
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <WithLabelInput require>
-          <Text>매장명</Text>
+          <StyledText>매장명</StyledText>
         </WithLabelInput>
         <WithLabelInput require placeholder="- 제외하고 입력하세요." placeholderTextColor="gray">
-          <Text>사업자번호</Text>
+          <StyledText>사업자번호</StyledText>
         </WithLabelInput>
         <WithLabelInput require>
-          <Text>대표자명</Text>
+          <StyledText>대표자명</StyledText>
         </WithLabelInput>
         <WithLabelInput require placeholder="- 제외하고 입력하세요." placeholderTextColor="gray">
-          <Text>대표자 번호</Text>
+          <StyledText>대표자 번호</StyledText>
         </WithLabelInput>
         <WithButtonLabelInput require label="검색" onPress={() => navigate("SearchPostcode")} value={route.params?.address}>
-          <Text>매장 주소</Text>
+          <StyledText>매장 주소</StyledText>
         </WithButtonLabelInput>
         <Input style={{ marginTop: 10 }} placeholder="상세 주소 입력" placeholderTextColor="gray" />
         <WithButtonLabelInput value={filename ? filename : ""} label="파일 첨부" onPress={() => useImageUpload(status, requestPermission, setImageUrl, setFilename)}>
-          <Text>사업자등록증</Text>
+          <StyledText>사업자등록증</StyledText>
         </WithButtonLabelInput>
         {imageUrl && (
           <View style={{ flexDirection: "row", marginVertical: 20, gap: 10 }}>
@@ -52,12 +52,16 @@ const Alliance = ({ navigation: { navigate }, route }) => {
           </View>
         )}
         <WithLabelInput>
-          <Text>오픈톡 링크</Text>
+          <StyledText>오픈톡 링크</StyledText>
         </WithLabelInput>
       </ScrollView>
       <Button label="제휴 신청" primary style={{ marginTop: 20 }} />
     </ScreenLayout>
   );
 };
+
+const StyledText = styled.Text`
+  font-size: 16px;
+`;
 
 export default Alliance;

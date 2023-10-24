@@ -4,6 +4,7 @@ import { ActivityIndicator, LayoutAnimation, StyleSheet, Text, View } from "reac
 import { WithTitleBackBtn } from "../components/BackBtn";
 import moment from "moment";
 import { customerApi } from "../api";
+import ScreenLayout from "../components/ScreenLayout";
 
 const QnaDetail = ({ route }) => {
   const { qna } = route.params;
@@ -12,7 +13,6 @@ const QnaDetail = ({ route }) => {
   const [qnaItem, setQnaItem] = useState([]);
   const [answer, setAnswer] = useState([]);
   const [prevItem, setPrevItem] = useState([]);
-
 
   useEffect(() => {
     customerApi
@@ -45,8 +45,8 @@ const QnaDetail = ({ route }) => {
   }, []);
 
   return (
-    <Layout>
-      <WithTitleBackBtn title={qna.subject} subTitle={moment(qna.created_at).utc().format("YY/MM/DD")} />
+    <ScreenLayout title={qna.subject}>
+      <Text style={{ marginLeft: "auto", color: "gray", marginBottom: 20 }}>{moment(qna.created_at).utc().format("YY/MM/DD")}</Text>
       <View style={styles.container}>
         <Text style={styles.contentsTitle}>문의 내용</Text>
         <View style={styles.contentsWrapper}>
@@ -61,13 +61,13 @@ const QnaDetail = ({ route }) => {
           </View>
         </View>
       )}
-    </Layout>
+    </ScreenLayout>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 32,
+    paddingHorizontal: 20,
   },
   contentsTitle: {
     fontSize: 16,

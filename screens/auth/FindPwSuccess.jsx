@@ -1,7 +1,5 @@
 import React, { useRef, useState } from "react";
 import { Alert, SafeAreaView, Text, View } from "react-native";
-import BackBtn from "../../components/BackBtn";
-import Title from "../../components/Title";
 import ScreenLayout from "../../components/ScreenLayout";
 import styled from "styled-components/native";
 import { WithLabelErrorInput } from "../../components/Input";
@@ -9,7 +7,6 @@ import { validateJoin } from "../../utils/validate";
 import Button from "../../components/Button";
 import { authApi } from "../../api";
 import { useToast } from "react-native-toast-notifications";
-import { getToast } from "../../utils/getToast";
 
 const Container = styled.View`
   padding: 20px;
@@ -38,13 +35,10 @@ const FindPwSuccess = ({ route, navigation: { navigate } }) => {
       const res = await authApi.passwordChange(user_id, authkey, values.password);
 
       if (res.CODE === "APC000") {
-        toast.show("비밀번호가 변경되었습니다.", {
-          type: "success",
-          successColor: "#ff3183",
-          textStyle: { color: "#fff" },
-        });
+        toast.show("비밀번호가 변경되었습니다.");
         navigate("Login");
       } else {
+        toast.show("비밀번호 변경에 실패했습니다.");
         setValues({});
         setError({});
       }
@@ -67,6 +61,7 @@ const FindPwSuccess = ({ route, navigation: { navigate } }) => {
           placeholderTextColor="gray"
           secureTextEntry
           error={error.password}
+          ref={pwRef}
           onSubmitEditing={() => {
             pw2Ref.current.focus();
           }}
@@ -88,7 +83,7 @@ const FindPwSuccess = ({ route, navigation: { navigate } }) => {
         </WithLabelErrorInput>
       </View>
       <View style={{ flexDirection: "row", marginTop: "auto", gap: 10 }}>
-        <Button label="취소" style={{ flex: 1, color: "#000" }} />
+        <Button label="취소" onPress={() => navigate("Login")} style={{ flex: 1, color: "#000" }} />
         <Button onPress={handleChangePassword} primary label="변경 완료" style={{ flex: 1 }} loading={loading} disabled={!disabled} />
       </View>
     </ScreenLayout>

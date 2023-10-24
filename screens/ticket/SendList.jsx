@@ -10,10 +10,9 @@ import { useFocusEffect } from "@react-navigation/native";
 import { TicketContext } from "../../context";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import Pagination from "../../components/Pagination";
+import { offsetValue } from "../../config";
 
 const SendList = () => {
-  const { sendList, setSendList } = useContext(TicketContext);
-  const [offset, setOffset] = useState(10);
   const [totalPage, setTotalPage] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -21,13 +20,13 @@ const SendList = () => {
 
   const queryClient = useQueryClient();
 
-  const { data, isLoading } = useQuery(["send", currentPage], () => ticketApi.sendList("send", offset, currentPage));
+  const { data, isLoading } = useQuery(["send", currentPage], () => ticketApi.sendList("send", offsetValue, currentPage));
 
   useEffect(() => {
     flatRef?.current?.scrollToOffset({ offset: 0, animated: true });
     if (currentPage < totalPage) {
       const nextPage = currentPage + 1;
-      queryClient.prefetchQuery(["send", nextPage], () => ticketApi.sendList("send", offset, nextPage));
+      queryClient.prefetchQuery(["send", nextPage], () => ticketApi.sendList("send", offsetValue, nextPage));
     }
   }, [currentPage, queryClient]);
 
@@ -37,7 +36,7 @@ const SendList = () => {
 
   useEffect(() => {
     if (currentPage === 1) {
-      queryClient.prefetchQuery(["send", 2], () => ticketApi.sendList("send", offset, 2));
+      queryClient.prefetchQuery(["send", 2], () => ticketApi.sendList("send", offsetValue, 2));
     }
   }, []);
 

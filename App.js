@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Alert } from "react-native";
 import Root from "./navigator/Root";
 import { NavigationContainer } from "@react-navigation/native";
@@ -10,7 +10,13 @@ import { deepLinkConfig } from "./source";
 import { ToastProvider } from "react-native-toast-notifications";
 import "react-native-reanimated";
 import { PaperProvider } from "react-native-paper";
+import * as SplashScreen from "expo-splash-screen";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { preventAutoHideAsync } from "expo-splash-screen";
+import { authApi, customerApi, resourceApi, ticketApi } from "./api";
+import { offset, offsetValue } from "./config";
+
+SplashScreen.preventAutoHideAsync();
 
 const queryClient = new QueryClient();
 const Nav = createNativeStackNavigator();
@@ -33,8 +39,9 @@ export default function App() {
       const onReceiveURL = (event) => {
         const { url } = event;
         if (url.includes("authkey")) {
-          Alert.alert("인증 성공");
+          // 인증 성공시 로직
         }
+
         console.log("link has url", url, event);
 
         return listener(url);
@@ -50,11 +57,25 @@ export default function App() {
     config: deepLinkConfig,
   };
 
+  useEffect(() => {
+    const prefetch = async () => {
+      await queryClient.prefetchQuery(["poster"], resourceApi.posters);
+      await queryClient.prefetchQuery(["notice", 1], () => customerApi.noticeList({ board_id: "notice", offset: offsetValue, page: 1 }));
+      await queryClient.prefetchQuery(["myticket"], ticketApi.list);
+      await queryClient.prefetchQuery(["qna", 1], () => customerApi.customerList(0, offsetValue, 1));
+      await queryClient.prefetchQuery(["user"], authApi.info);
+
+      await SplashScreen.hideAsync();
+    };
+
+    prefetch();
+  }, []);
+
   return (
     <QueryClientProvider client={queryClient}>
       <PaperProvider>
         <RecoilRoot>
-          <ToastProvider duration={2000} offset={100} swipeEnabled={true}>
+          <ToastProvider duration={2000} offset={30} swipeEnabled={true}>
             <NavigationContainer linking={linking}>
               <Nav.Navigator>
                 <Nav.Screen name="Root" component={Root} options={{ headerShown: false }} />

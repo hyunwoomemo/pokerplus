@@ -7,12 +7,6 @@ import { Icon } from "../../source";
 import AppBar from "../../components/AppBar";
 import ScreenLayout from "../../components/ScreenLayout";
 
-const Container = styled.View`
-  padding: 20px;
-  background-color: #fff;
-  flex: 1;
-`;
-
 const FindId = () => {
   const handleCheckAuth = async () => {
     try {

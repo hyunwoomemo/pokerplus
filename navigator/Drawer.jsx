@@ -171,14 +171,6 @@ const DrawerContent = (active) => {
 
   const opacity = useRef(new Animated.Value(1)).current;
 
-  if (isLoading) {
-    return <ActivityIndicator />;
-  }
-
-  if (isError) {
-    return;
-  }
-
   return (
     <DrawerContainer ios={Platform.OS === "ios"}>
       <InfoSection>
@@ -187,7 +179,7 @@ const DrawerContent = (active) => {
           style={{ width: 70, height: 70, borderRadius: 70 / 2, backgroundColor: "rgba(0,0,0,0.2)", opacity: opacity }}
         >
           {userData?.DATA.user_profile_url && (
-            <Image
+            <FastImage
               source={{
                 uri: userData?.DATA.user_profile_url,
               }}
@@ -195,9 +187,14 @@ const DrawerContent = (active) => {
               onLoadEnd={() => {
                 opacityAnimation(opacity, "reset");
               }}
-              width={70}
-              height={70}
-              borderRadius={35}
+              style={{
+                width: 70,
+                height: 70,
+                borderRadius: 35,
+              }}
+              // width={70}
+              // height={70}
+              // borderRadius={35}
               resizeMode={FastImage.resizeMode.cover}
             />
           )}

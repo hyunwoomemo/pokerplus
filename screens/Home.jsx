@@ -4,7 +4,6 @@ import Layout from "../components/Layout";
 import styled from "styled-components/native";
 import Carousel from "../components/Carousel";
 import { useState, useEffect, useContext } from "react";
-import { PosterContext } from "../context";
 import { OneSignal } from "react-native-onesignal";
 import { authState } from "../recoil/auth/atom";
 import { useRecoilState } from "recoil";
