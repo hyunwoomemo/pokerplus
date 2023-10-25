@@ -54,12 +54,12 @@ const Qna = ({ navigation }) => {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: "#fff" }}>
+    <View style={{ flex: 1, backgroundColor: "#e8f0ee" }}>
       <AppBar title="1:1 문의하기" />
       <ScrollView style={{ paddingHorizontal: 20, marginTop: 20 }}>
         <SelectList
-          boxStyles={{ marginTop: 10, backgroundColor: "#edf0f7", borderRadius: 15, paddingVertical: 18, paddingHorizontal: 20, borderColor: "transparent" }}
-          dropdownStyles={{ backgroundColor: "#edf0f7", borderWidth: 0 }}
+          boxStyles={{ marginTop: 10, backgroundColor: "#fff", borderRadius: 15, paddingVertical: 18, paddingHorizontal: 20, borderColor: "transparent" }}
+          dropdownStyles={{ backgroundColor: "#fff", borderWidth: 0 }}
           dropdownItemStyles={{ paddingVertical: 10 }}
           setSelected={(val) => handleChange("host_id", val)}
           dropdownTextStyles={{ fontSize: 16 }}

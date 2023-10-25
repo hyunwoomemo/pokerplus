@@ -48,7 +48,7 @@ const Notice = ({ navigation }) => {
   }, [data?.DATA.total]);
 
   return (
-    <View style={{ flex: 1, backgroundColor: "#ffffff" }}>
+    <View style={{ flex: 1, backgroundColor: "#e8f0ee" }}>
       <AppBar title="Notice" />
       <FlatList
         showsVerticalScrollIndicator={false}

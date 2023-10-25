@@ -7,12 +7,6 @@ import { authApi } from "../../api";
 import Button from "../../components/Button";
 import ScreenLayout from "../../components/ScreenLayout";
 
-const Container = styled.View`
-  padding: 20px;
-  background-color: #fff;
-  flex: 1;
-`;
-
 const FindIdSuccess = ({ navigation: { navigate }, route }) => {
   const { authkey, user_id } = route.params;
 
@@ -40,7 +34,7 @@ const FindIdSuccess = ({ navigation: { navigate }, route }) => {
           padding: 32,
           marginVertical: 20,
           alignItems: "center",
-          backgroundColor: "#fff",
+          backgroundColor: "#e8f0ee",
           borderRadius: 20,
           shadowColor: "gray",
           shadowOpacity: 0.5,

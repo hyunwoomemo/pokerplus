@@ -8,12 +8,6 @@ import Button from "../../components/Button";
 import { authApi } from "../../api";
 import { useToast } from "react-native-toast-notifications";
 
-const Container = styled.View`
-  padding: 20px;
-  background-color: #fff;
-  flex: 1;
-`;
-
 const FindPwSuccess = ({ route, navigation: { navigate } }) => {
   const [values, setValues] = useState({});
   const [error, setError] = useState({});

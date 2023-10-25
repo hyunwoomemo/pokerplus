@@ -9,6 +9,7 @@ import { QnaContext } from "../context";
 import AppBar from "../components/AppBar";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { offsetValue } from "../config";
+import NoItem from "../components/NoItem";
 
 const QnaList = ({ route, navigation }) => {
   const { currentPage, setCurrentPage } = useContext(QnaContext);
@@ -48,38 +49,46 @@ const QnaList = ({ route, navigation }) => {
   }, [data?.DATA]);
 
   return (
-    <View style={{ flex: 1, backgroundColor: "#fff" }}>
+    <View style={{ flex: 1, backgroundColor: "#e8f0ee" }}>
       <AppBar title="1:1 문의 내역" />
       {isLoading ? (
         <ActivityIndicator style={StyleSheet.absoluteFillObject} color="#ff3183" size="large" />
       ) : (
         <>
-          <FlatList
-            style={styles.main}
-            data={data.DATA.data}
-            ref={flatRef}
-            showsVerticalScrollIndicator={false}
-            keyExtractor={(item, index) => index}
-            renderItem={({ item, index }) => (
-              <TouchableOpacity key={item.id} style={styles.itemWrapper} onPress={() => navigation.navigate("QnaDetail", { qna: item })}>
-                <LinearGradient colors={["#4c56fa", "#bb21a8"]} start={{ x: 1, y: 0 }} style={styles.gradient} end={{ x: 0, y: 0 }}>
-                  <View style={styles.innerContainer}>
-                    <Text style={styles.status}>{itemStatus(item.status_code)}</Text>
-                  </View>
-                </LinearGradient>
-                <View style={styles.contentsWrapper}>
-                  <View style={styles.itemheader}>
-                    <Text style={styles.itemheaderText}>{item.company_name}</Text>
-                    <Text style={styles.itemheaderText}>{moment(item.created_at).utc().add(9, "h").format("YY/MM/DD HH:mm:ss")}</Text>
-                  </View>
-                  <Text style={{ fontSize: 18 }}>{item.contents}</Text>
-                </View>
-              </TouchableOpacity>
-            )}
-          />
-          <View style={{ flexDirection: "row", gap: 10, justifyContent: "center", marginVertical: 10 }}>
-            {totalPage > 1 && <Pagination totalPage={totalPage} currentPage={currentPage} setCurrentPage={setCurrentPage} />}
-          </View>
+          {data.DATA.data.length ? (
+            <>
+              <FlatList
+                style={styles.main}
+                data={data.DATA.data}
+                ref={flatRef}
+                showsVerticalScrollIndicator={false}
+                keyExtractor={(item, index) => index}
+                renderItem={({ item, index }) => (
+                  <TouchableOpacity key={item.id} style={styles.itemWrapper} onPress={() => navigation.navigate("QnaDetail", { qna: item })}>
+                    <LinearGradient colors={["#4c56fa", "#bb21a8"]} start={{ x: 1, y: 0 }} style={styles.gradient} end={{ x: 0, y: 0 }}>
+                      <View style={styles.innerContainer}>
+                        <Text style={styles.status}>{itemStatus(item.status_code)}</Text>
+                      </View>
+                    </LinearGradient>
+                    <View style={styles.contentsWrapper}>
+                      <View style={styles.itemheader}>
+                        <Text style={styles.itemheaderText}>{item.company_name}</Text>
+                        <Text style={styles.itemheaderText}>{moment(item.created_at).utc().add(9, "h").format("YY/MM/DD HH:mm:ss")}</Text>
+                      </View>
+                      <Text style={{ fontSize: 18 }}>{item.contents}</Text>
+                    </View>
+                  </TouchableOpacity>
+                )}
+              />
+            </>
+          ) : (
+            <NoItem text="문의 내역이 존재하지 않습니다." />
+          )}
+          {totalPage > 1 && (
+            <View style={{ flexDirection: "row", gap: 10, justifyContent: "center", marginVertical: 10 }}>
+              <Pagination totalPage={totalPage} currentPage={currentPage} setCurrentPage={setCurrentPage} />
+            </View>
+          )}
         </>
       )}
     </View>
@@ -99,7 +108,7 @@ const styles = StyleSheet.create({
     borderRadius: 15, // <-- Inner Border Radius
     flex: 1,
     margin: 2, // <-- Border Width
-    backgroundColor: "#fff",
+    backgroundColor: "#e8f0ee",
     justifyContent: "center",
   },
   itemWrapper: {

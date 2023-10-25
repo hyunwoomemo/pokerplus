@@ -21,7 +21,7 @@ const Pub = ({ navigation }) => {
   };
   return (
     // <Layout>
-    <View style={{ flex: 1, backgroundColor: "#fff" }}>
+    <View style={{ flex: 1, backgroundColor: "#e8f0ee" }}>
       <AppBar title="Pub" />
       {/* <Button onPress={showDialog}>Show Dialog</Button> */}
       <Portal>

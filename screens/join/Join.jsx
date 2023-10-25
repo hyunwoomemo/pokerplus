@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Text, Image, LayoutAnimation, Alert, View, TouchableOpacity, ScrollView, StyleSheet } from "react-native";
 import styled from "styled-components/native";
 import { Icon } from "../../source";
@@ -11,6 +11,7 @@ import Button from "../../components/Button";
 import { useValidate } from "./hooks/useValidate";
 import AppBar from "../../components/AppBar";
 import { useToast } from "react-native-toast-notifications";
+import { useFocusEffect } from "@react-navigation/native";
 
 const Profile = styled.Image`
   padding: 20px 0;
@@ -25,36 +26,36 @@ const styles = StyleSheet.create({
   main: {
     paddingVertical: 20,
     paddingHorizontal: 20,
-    backgroundColor: "#fff",
+    backgroundColor: "#e8f0ee",
     flex: 1,
   },
 });
 
 const Join = ({ navigation: { navigate }, route }) => {
-  // const [authkey, setAuthkey]
-  console.log(route.params);
   const { authkey, check, user_id } = route.params;
   const [authInfo, setAuthInfo] = useState();
 
   const toast = useToast();
 
-  useEffect(() => {
-    // if (!authInfo) {
-    //   authApi.authInfo(authkey).then((res) => {
-    //     if (res.CODE === "AAI000") {
-    //       if (res.DATA?.user_id?.length > 0) {
-    //         toast.show("이미 가입되어 있는 핸드폰 번호입니다.");
-    //         navigate("OutNav", { screen: "Login" });
-    //       } else {
-    //         setAuthInfo(res.DATA);
-    //       }
-    //     } else if (res.CODE === "AAI001") {
-    //       toast.show("탈퇴 회원입니다.");
-    //       navigate("OutNav", { screen: "Login" });
-    //     }
-    //   });
-    // }
-  }, []);
+  useFocusEffect(
+    useCallback(() => {
+      if (!authInfo) {
+        authApi.authInfo(authkey).then((res) => {
+          if (res.CODE === "AAI000") {
+            if (res.DATA?.user_id?.length > 0) {
+              toast.show("이미 가입되어 있는 핸드폰 번호입니다.");
+              navigate("OutNav", { screen: "Login" });
+            } else {
+              setAuthInfo(res.DATA);
+            }
+          } else if (res.CODE === "AAI001") {
+            toast.show("탈퇴 회원입니다.");
+            navigate("OutNav", { screen: "Login" });
+          }
+        });
+      }
+    }, [])
+  );
 
   const [values, setValues] = useState({});
   const [error, setError] = useState({});
@@ -65,8 +66,6 @@ const Join = ({ navigation: { navigate }, route }) => {
   const [selected, setSelected] = useState("");
   const [measure, setMeasure] = useState([]);
   const [area, setArea] = useState([]);
-
-  const data = [];
 
   const scrollViewRef = useRef();
   const idRef = useRef();
@@ -183,7 +182,8 @@ const Join = ({ navigation: { navigate }, route }) => {
       console.log(bodyData);
 
       if (res.CODE === "AR000") {
-        Alert.alert("회원가입이 완료되었습니다.");
+        // Alert.alert("회원가입이 완료되었습니다.");
+        navigate("Login");
       } else {
         switch (res.CODE) {
           case "AR100":
@@ -241,7 +241,7 @@ const Join = ({ navigation: { navigate }, route }) => {
             handleCheck("id");
           }}
         >
-          <Text>이메일</Text>
+          <Text style={{ fontSize: 16 }}>이메일</Text>
           <Text style={{ color: "#ff3183" }}> (필수)</Text>
         </WithLabelCheckErrorInput>
         <WithLabelErrorInput
@@ -254,7 +254,7 @@ const Join = ({ navigation: { navigate }, route }) => {
             scrollToPosition(0, measure[1]);
           }}
         >
-          <Text>비밀번호</Text>
+          <Text style={{ fontSize: 16 }}>비밀번호</Text>
           <Text style={{ color: "#ff3183" }}> (필수)</Text>
         </WithLabelErrorInput>
         <WithLabelErrorInput
@@ -267,11 +267,11 @@ const Join = ({ navigation: { navigate }, route }) => {
             scrollToPosition(0, measure[2]);
           }}
         >
-          <Text>비밀번호 확인</Text>
+          <Text style={{ fontSize: 16 }}>비밀번호 확인</Text>
           <Text style={{ color: "#ff3183" }}> (필수)</Text>
         </WithLabelErrorInput>
         <WithLabelInput value={authInfo?.name} editable={false} selectTextOnFocus={false} disableStyle>
-          <Text>이름</Text>
+          <Text style={{ fontSize: 16 }}>이름</Text>
         </WithLabelInput>
         <WithEngInput
           onChangeFirst={(text) => handleChangeText("engFirst", text)}
@@ -287,7 +287,7 @@ const Join = ({ navigation: { navigate }, route }) => {
             scrollToPosition(0, measure[4]);
           }}
         >
-          <Text>영문</Text>
+          <Text style={{ fontSize: 16 }}>영문 이름 (GPI 등재할 영문 이름)</Text>
         </WithEngInput>
         <WithLabelCheckErrorInput
           onChangeText={(text) => handleChangeText("nick", text)}
@@ -300,14 +300,14 @@ const Join = ({ navigation: { navigate }, route }) => {
             handleCheck("nick");
           }}
         >
-          <Text>닉네임</Text>
+          <Text style={{ fontSize: 16 }}>닉네임</Text>
           <Text style={{ color: "#ff3183" }}> (필수)</Text>
         </WithLabelCheckErrorInput>
         <WithLabelInput value={authInfo?.hp} editable={false} selectTextOnFocus={false} disableStyle>
-          <Text>휴대폰번호</Text>
+          <Text style={{ fontSize: 16 }}>휴대폰번호</Text>
         </WithLabelInput>
         <WithLabelInput value={authInfo?.socialno} editable={false} selectTextOnFocus={false} disableStyle>
-          <Text>생년월일</Text>
+          <Text style={{ fontSize: 16 }}>생년월일</Text>
         </WithLabelInput>
         <Text style={{ marginTop: 30 }}>지역(시/도)</Text>
         {area.length > 0 && (

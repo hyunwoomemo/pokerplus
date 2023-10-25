@@ -12,7 +12,6 @@ const Container = styled.View`
 `;
 
 const ItemTitleWrapper = styled(Animated.createAnimatedComponent(View))`
-  /* padding-bottom: 10px; */
   align-items: center;
 `;
 const ItemTitle = styled.Text`
@@ -24,7 +23,6 @@ const ItemTitle = styled.Text`
 
 const Carousel = ({ data, pageWidth, gap, offset }) => {
   const [load, setLoad] = useState([]);
-  console.log(load);
   useEffect(() => {
     const hidleSplash = async () => {
       await SplashScreen.hideAsync();
@@ -57,7 +55,7 @@ const Carousel = ({ data, pageWidth, gap, offset }) => {
       <Animated.View style={[{ opacity, transform: [{ scale }] }]}>
         <ItemTitleWrapper style={{ opacity: titleOpacity }}>
           <LinearGradient colors={["#bc20a7", "#4c56fa"]} start={{ x: 0.3, y: 0.1 }} style={{ borderRadius: 30, width: "80%" }} end={{ x: 0.9, y: 0.1 }}>
-            <View style={{ borderRadius: 30, backgroundColor: "#fff", marginVertical: 2, marginHorizontal: 2, paddingVertical: 5 }}>
+            <View style={{ borderRadius: 30, backgroundColor: "#e8f0ee", marginVertical: 2, marginHorizontal: 2, paddingVertical: 5 }}>
               <ItemTitle>{item.title}</ItemTitle>
             </View>
           </LinearGradient>

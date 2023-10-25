@@ -10,6 +10,7 @@ import { TouchableOpacity } from "react-native";
 import { ActivityIndicator } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import { useQuery } from "@tanstack/react-query";
+import NoItem from "../../components/NoItem";
 
 const TicketList = () => {
   const [tickets, setTickets] = useState();
@@ -17,7 +18,7 @@ const TicketList = () => {
   const { data, isLoading, isError } = useQuery(["myticket"], ticketApi.list);
 
   useEffect(() => {
-    setTickets(data?.DATA.filter((v) => v.ticket_count !== 0));
+    setTickets(data?.DATA?.filter((v) => v.ticket_count !== 0));
   }, [data]);
 
   return (
@@ -27,10 +28,7 @@ const TicketList = () => {
       ) : tickets?.length > 0 ? (
         <FlatList data={tickets} keyExtractor={(item, index) => `${index}-${item.ticket_info_id}`} renderItem={({ item }) => <TicketItem item={item} />} />
       ) : (
-        <View style={{ justifyContent: "center", alignItems: "center", gap: 40, marginTop: 100 }}>
-          <AntDesign name="warning" size={36} color="tomato" />
-          <Text style={{ fontSize: 20, color: "gray" }}>참가권이 존재하지 않습니다.</Text>
-        </View>
+        <NoItem text={"참가권이 존재하지 않습니다."} />
       )}
     </View>
   );

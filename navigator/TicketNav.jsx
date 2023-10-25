@@ -1,4 +1,4 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useCallback, useState } from "react";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import TicketList from "../screens/ticket/TicketList";
 import Send from "../screens/ticket/Send";
@@ -9,6 +9,8 @@ import { Text } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Appbar } from "react-native-paper";
 import { TicketContext } from "../context";
+import { useQueryClient } from "@tanstack/react-query";
+import { useFocusEffect } from "@react-navigation/native";
 
 const Tab = createMaterialTopTabNavigator();
 
@@ -16,6 +18,7 @@ export default function TicketNav({ navigation }) {
   const [myTicket, setMyTicket] = useState();
   const [receiveList, setReceiveList] = useState();
   const [sendList, setSendList] = useState();
+  const queryClient = useQueryClient();
   const values = {
     myTicket,
     setMyTicket,
@@ -25,11 +28,19 @@ export default function TicketNav({ navigation }) {
     setSendList,
   };
 
+  useFocusEffect(
+    useCallback(() => {
+      queryClient.invalidateQueries(["myticket"]);
+      queryClient.invalidateQueries(["user"]);
+      queryClient.invalidateQueries(["receive"]);
+    }, [])
+  );
+
   return (
     <TicketContext.Provider value={values}>
       {/* <Layout> */}
       {/* <SafeAreaView></SafeAreaView> */}
-      <Appbar.Header style={{ backgroundColor: "#fff" }}>
+      <Appbar.Header style={{ backgroundColor: "#e8f0ee" }}>
         <Appbar.BackAction
           onPress={() => {
             navigation.goBack();
@@ -40,12 +51,13 @@ export default function TicketNav({ navigation }) {
         <Appbar.Action icon="magnify" onPress={() => {}} /> */}
       </Appbar.Header>
       <Tab.Navigator
-        sceneContainerStyle={{ backgroundColor: "#fff" }}
+        sceneContainerStyle={{ backgroundColor: "#e8f0ee" }}
         screenOptions={{
           tabBarIndicatorStyle: { backgroundColor: "#ff3183" },
           tabBarActiveTintColor: "#ff3183",
           tabBarInactiveTintColor: "#000",
           tabBarLabelStyle: { fontSize: 15 },
+          tabBarStyle: { backgroundColor: "#e8f0ee" },
         }}
       >
         <Tab.Screen name="TicketList" component={TicketList} options={{ tabBarLabel: "내 참가권" }} />

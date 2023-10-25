@@ -62,7 +62,7 @@ const QrCreate = ({ navigation }) => {
     <ScreenLayout back={() => navigation.navigate("Home")}>
       <View style={{ justifyContent: "center", alignItems: "center" }}>
         <LinearGradient colors={["#bc20a7", "#4c56fa"]} start={{ x: 0.3, y: 0.1 }} style={{ borderRadius: 30, width: "80%" }} end={{ x: 0.9, y: 0.1 }}>
-          <View style={{ borderRadius: 30, backgroundColor: "#fff", marginVertical: 2, marginHorizontal: 2, paddingVertical: 5, justifyContent: "center", alignItems: "center" }}>
+          <View style={{ borderRadius: 30, backgroundColor: "#e8f0ee", marginVertical: 2, marginHorizontal: 2, paddingVertical: 5, justifyContent: "center", alignItems: "center" }}>
             <Text style={{ fontSize: 18, fontWeight: "bold" }}>PCT QR CODE</Text>
           </View>
         </LinearGradient>
@@ -82,7 +82,7 @@ const QrCreate = ({ navigation }) => {
 
           <View
             style={{
-              backgroundColor: "#fff",
+              backgroundColor: "#e8f0ee",
               padding: 40,
               borderRadius: 30,
               shadowColor: "#000",

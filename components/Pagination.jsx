@@ -28,11 +28,11 @@ const Pagination = ({ totalPage, currentPage, setCurrentPage }) => {
             }}
           >
             {currentPage === i + 1 ? (
-              <LinearGradient colors={["#ff3183", "#fe806a"]} style={{ borderRadius: 20, width: 40, height: 40, justifyContent: "center", alignItems: "center" }}>
+              <LinearGradient colors={["#ff3183", "#fe806a"]} style={{ borderRadius: 20, width: 35, height: 35, justifyContent: "center", alignItems: "center" }}>
                 <Text style={currentPage === i + 1 ? { color: "#fff", fontWeight: "bold" } : {}}>{i + 1}</Text>
               </LinearGradient>
             ) : (
-              <View style={{ backgroundColor: "#fff", width: 35, height: 35, borderRadius: 18, justifyContent: "center", alignItems: "center", borderWidth: 1, borderColor: "rgba(0,0,0,0.2)" }}>
+              <View style={{ backgroundColor: "#e8f0ee", width: 35, height: 35, borderRadius: 18, justifyContent: "center", alignItems: "center", borderWidth: 1, borderColor: "rgba(0,0,0,0.2)" }}>
                 <Text>{i + 1}</Text>
               </View>
             )}
@@ -63,11 +63,11 @@ const styles = StyleSheet.create({
   arrowBtn: {
     width: 35,
     height: 35,
-    borderRadius: 18,
+    // borderRadius: 18,
     justifyContent: "center",
     alignItems: "center",
-    borderWidth: 1,
-    borderColor: "rgba(0,0,0,0.1)",
+    // borderWidth: 1,
+    // borderColor: "rgba(0,0,0,0.1)",
   },
 });
 

@@ -36,7 +36,7 @@ const Tabs = ({ route }) => {
         headerShown: false,
         tabBarShowLabel: false,
         headerStyle: {
-          backgroundColor: "#fff",
+          backgroundColor: "#e8f0ee",
         },
       }}
       tabBar={(props) => {

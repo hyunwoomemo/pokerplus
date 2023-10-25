@@ -3,6 +3,7 @@ import { Text, TouchableOpacity, View, Image } from "react-native";
 import styled from "styled-components/native";
 import { MaterialCommunityIcons, Octicons } from "@expo/vector-icons";
 import { useNavigation, useRoute } from "@react-navigation/native";
+import { useQueryClient } from "@tanstack/react-query";
 
 const Container = styled.View`
   flex-direction: row;
@@ -35,11 +36,15 @@ const QRWrapper = styled.View`
 const Header = () => {
   const navigation = useNavigation();
   const router = useRoute();
+  const queryClient = useQueryClient();
   return (
     <Container>
       <Hambuger
         onPress={() => {
           navigation.toggleDrawer();
+          queryClient.invalidateQueries(["myticket"]);
+          queryClient.invalidateQueries(["send"]);
+          queryClient.invalidateQueries(["user"]);
           // navigation.setParams({ route: router.name });
         }}
       >

@@ -1,7 +1,7 @@
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import Tabs from "./Tab";
 import { useContext, useEffect, useRef, useState } from "react";
-import { ActivityIndicator, Animated, Image, LayoutAnimation, Platform, Text, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, Animated, Dimensions, Image, LayoutAnimation, Platform, Text, TouchableOpacity, View } from "react-native";
 import { getFocusedRouteNameFromRoute, useNavigation, useRoute } from "@react-navigation/native";
 import styled from "styled-components/native";
 import { toggleAnimation } from "../animations/toggleAnimation";
@@ -20,15 +20,22 @@ import { OneSignal } from "react-native-onesignal";
 import { useQuery } from "@tanstack/react-query";
 import { authState } from "../recoil/auth/atom";
 import FastImage from "react-native-fast-image";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 const Drawer = createDrawerNavigator();
+
+const { width } = Dimensions.get("window");
+
+console.log(width);
 
 const DrawerContainer = styled.View`
   margin: ${(props) => (props.ios ? "40px 0 10px 0" : "0")};
   padding: 20px;
   gap: 15px;
   flex: 1;
+  background-color: #e8f0ee;
 `;
+``;
 
 const WrapperTitle = styled.Text`
   font-size: 24px;
@@ -60,7 +67,8 @@ const NickText = styled.Text`
 `;
 const MyTicketText = styled.Text`
   color: hotpink;
-  font-size: 16px;
+  font-size: 15px;
+  font-weight: bold;
 `;
 
 const AccordionWrapper = ({ title, children, data, active }) => {
@@ -178,10 +186,10 @@ const DrawerContent = (active) => {
           onPress={() => navigation.navigate("ProfileNav", { screen: "Profile" })}
           style={{ width: 70, height: 70, borderRadius: 70 / 2, backgroundColor: "rgba(0,0,0,0.2)", opacity: opacity }}
         >
-          {userData?.DATA.user_profile_url && (
+          {userData?.DATA?.user_profile_url && (
             <FastImage
               source={{
-                uri: userData?.DATA.user_profile_url,
+                uri: userData?.DATA?.user_profile_url,
               }}
               onLoadStart={() => opacityAnimation(opacity, "start")}
               onLoadEnd={() => {
@@ -192,16 +200,24 @@ const DrawerContent = (active) => {
                 height: 70,
                 borderRadius: 35,
               }}
-              // width={70}
-              // height={70}
-              // borderRadius={35}
               resizeMode={FastImage.resizeMode.cover}
             />
           )}
         </ProfileWrapper>
         <InfoTextWrapper>
-          <NickText>{userData?.DATA?.nick}</NickText>
-          <MyTicketText>{userData?.DATA?.ticket_info ? `${userData?.DATA?.ticket_info?.reduce((acc, cur) => acc + cur.ticket_count, 0)}장` : "0장"}</MyTicketText>
+          <TouchableOpacity onPress={() => navigation.navigate("ProfileNav", { screen: "Profile" })}>
+            <NickText>{userData?.DATA?.nick}</NickText>
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => navigation.navigate("TicketNav")} style={{ flexDirection: "row", gap: 10, alignItems: "center" }}>
+            {/* <MaterialCommunityIcons /> */}
+            <FastImage
+              source={{ uri: "https://newgenerationdatadev.blob.core.windows.net/data/template/t08/common/footer_icon_ticket.png" }}
+              style={{ width: 15, height: 15 }}
+              resizeMode="contain"
+              tintColor="black"
+            />
+            <MyTicketText>나의 참가권: {userData?.DATA?.ticket_info ? `${userData?.DATA?.ticket_info?.reduce((acc, cur) => acc + cur.ticket_count, 0)}장` : "0장"}</MyTicketText>
+          </TouchableOpacity>
         </InfoTextWrapper>
       </InfoSection>
       <AccordionWrapper title="고객센터" data={customer} active={active}></AccordionWrapper>
@@ -228,6 +244,9 @@ export function MyDrawer() {
         drawerContent={() => DrawerContent(active)}
         screenOptions={{
           headerShown: false,
+          drawerStyle: {
+            width: width * 0.8,
+          },
         }}
       >
         <Drawer.Screen name="Tabs" component={Tabs} options={{}} />

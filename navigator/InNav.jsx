@@ -14,11 +14,6 @@ const InNav = () => {
     setMyTicketCount,
   };
 
-  const queryClient = useQueryClient();
-
-  useEffect(() => {
-    queryClient.prefetchQuery(["poster"], resourceApi.posters);
-  }, [queryClient]);
 
   return (
     <InNavContext.Provider value={values}>

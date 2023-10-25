@@ -9,6 +9,7 @@ import { useToast } from "react-native-toast-notifications";
 import { OneSignal } from "react-native-onesignal";
 import { useRecoilState } from "recoil";
 import { authState } from "../../recoil/auth/atom";
+import { useQueryClient } from "@tanstack/react-query";
 
 const QrSend = ({ navigation, route }) => {
   const { data } = route.params;
@@ -21,6 +22,7 @@ const QrSend = ({ navigation, route }) => {
   });
   const [user, setUser] = useRecoilState(authState);
 
+  const queryClient = useQueryClient();
   const toast = useToast();
 
   useEffect(() => {
@@ -93,10 +95,7 @@ const QrSend = ({ navigation, route }) => {
         target_user_id: data.targetUser,
         memo: values.memo ? values.memo : null,
       });
-      console.log("TH004", values.id, values.count, data.hp, data.name, data.targetUser, values.memo);
-      console.log(res);
       if (res.CODE === "TKS000") {
-        console.log("성공");
         fetch("https://onesignal.com/api/v1/notifications", {
           method: "POST",
           body: JSON.stringify({
@@ -110,7 +109,9 @@ const QrSend = ({ navigation, route }) => {
         })
           .then((res) => res.json())
           .then((result) => console.log("pushpush", result));
-        // console.log('sdf')
+        queryClient.invalidateQueries(["myticket"]);
+        queryClient.invalidateQueries(["send"]);
+        queryClient.invalidateQueries(["user"]);
         navigation.goBack();
         navigation.navigate("Tabs", { screen: "Home" });
         console.log("123");
@@ -141,7 +142,7 @@ const QrSend = ({ navigation, route }) => {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: "#fff", padding: 20 }}>
+    <View style={{ flex: 1, backgroundColor: "#e8f0ee", padding: 20 }}>
       <Text style={{ fontSize: 20, alignItems: "center", marginTop: 10, textAlign: "center" }}>참가권 QR 전송</Text>
       <View style={{ padding: 20, borderWidth: StyleSheet.hairlineWidth, marginTop: 40, borderRadius: 10, gap: 20 }}>
         <View style={styles.item}>
@@ -158,8 +159,8 @@ const QrSend = ({ navigation, route }) => {
         </View>
       </View>
       <SelectList
-        boxStyles={{ marginTop: 10, backgroundColor: "#fff", borderRadius: 15, paddingVertical: 18, paddingHorizontal: 20, borderColor: "transparent" }}
-        dropdownStyles={{ backgroundColor: "#fff", borderWidth: 0 }}
+        boxStyles={{ marginTop: 10, backgroundColor: "#e8f0ee", borderRadius: 15, paddingVertical: 18, paddingHorizontal: 20, borderColor: "transparent" }}
+        dropdownStyles={{ backgroundColor: "#e8f0ee", borderWidth: 0 }}
         dropdownItemStyles={{ paddingVertical: 10 }}
         setSelected={(val) => handleChange("id", val)}
         data={selectData}
@@ -170,7 +171,7 @@ const QrSend = ({ navigation, route }) => {
         notFoundText="보유하신 참가권이 없습니다."
       />
       <View
-        style={{ marginTop: 10, backgroundColor: "#fff", borderRadius: 15, paddingVertical: 18, paddingHorizontal: 20, flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}
+        style={{ marginTop: 10, backgroundColor: "#e8f0ee", borderRadius: 15, paddingVertical: 18, paddingHorizontal: 20, flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}
       >
         <TouchableOpacity onPress={() => handleCount("minus")} disabled={values.count < 1 || !values.id}>
           <Entypo name="circle-with-minus" size={28} color={values.count < 1 || !values.id ? "gray" : "#5a50ef"} />
@@ -189,7 +190,7 @@ const QrSend = ({ navigation, route }) => {
           <Entypo name="circle-with-plus" size={28} color={values.count >= tickets.find((v) => v.ticket_info_id === values.id)?.ticket_count || !values.id ? "gray" : "#ff2d84"} />
         </TouchableOpacity>
       </View>
-      <Button loading={loading.send} onPress={handleSend} primary label="전송" style={{ marginTop: "auto" }} disabled={!selectData} />
+      <Button loading={loading.send} onPress={handleSend} primary label="전송" style={{ marginTop: "auto" }} disabled={!selectData.length} />
     </View>
   );
 };

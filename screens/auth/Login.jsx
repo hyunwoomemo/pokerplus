@@ -95,7 +95,7 @@ const Login = ({ navigation: { navigate } }) => {
     getStorage("user").then((data) => {
       if (data) {
         setUser(JSON.parse(data));
-      } 
+      }
     });
   }, []);
 

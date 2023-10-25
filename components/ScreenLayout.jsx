@@ -7,7 +7,7 @@ import AppBar from "./AppBar";
 import { useNavigation } from "@react-navigation/native";
 
 const Container = styled.View`
-  background-color: #fff;
+  background-color: #e8f0ee;
   flex: 1;
 `;
 const ScreenLayout = ({ back, children, title, appbar }) => {

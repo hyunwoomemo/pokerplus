@@ -29,8 +29,7 @@ export default function Page({ item, index, style, setLoad }) {
     <PageItem color={item.color} style={{ ...style, backgroundColor: "#ececec" }} onPress={() => Linking.openURL(item.link)}>
       <PosterImg
         source={{ uri: item.poster_url }}
-        // defaultSource={require("../assets/splash.jpg")}
-        resizeMode={"contain"}
+        resizeMode={"stretch"}
         style={{ borderRadius: 15 }}
         onLoadStart={() => opacityAnimation(opacity, "start")}
         onLoadEnd={() => {

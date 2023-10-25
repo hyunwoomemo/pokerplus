@@ -101,7 +101,7 @@ const Faq = () => {
   }, [total]);
 
   return (
-    <View style={{ flex: 1, backgroundColor: "#fff" }}>
+    <View style={{ flex: 1, backgroundColor: "#e8f0ee" }}>
       <AppBar title="FAQ" />
       <FlatList data={data?.DATA.data} keyExtractor={(item) => item.contents} renderItem={({ item, index }) => <AccordionWrapper title={item.subject} data={item.contents} index={index} />} />
 
@@ -119,7 +119,7 @@ const styles = StyleSheet.create({
     paddingVertical: 20,
   },
   wrapper: {
-    paddingHorizontal: 32,
+    paddingHorizontal: 20,
   },
   accordionItemTitle: {
     fontSize: 16,
@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
     borderBottomColor: "rgba(0,0,0, 0.2)",
   },
   accordionItemContents: {
-    marginHorizontal: 32,
+    marginHorizontal: 20,
     padding: 20,
     borderBottomWidth: 1,
     borderBottomColor: "rgba(0,0,0, 0.2)",

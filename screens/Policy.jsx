@@ -30,7 +30,7 @@ const Policy = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     paddingVertical: 20,
-    paddingHorizontal: 32,
+    paddingHorizontal: 20,
   },
   item: {
     flexDirection: "row",

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { ActivityIndicator, Dimensions, LayoutAnimation, Text, TextInput, View } from "react-native";
 import { ticketApi } from "../../api";
 import { SelectList } from "react-native-dropdown-select-list";
@@ -10,12 +10,36 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 import { useRecoilState } from "recoil";
 import { authState } from "../../recoil/auth/atom";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useFocusEffect } from "@react-navigation/native";
+import { Modal, Portal } from "react-native-paper";
+import ModalComponent from "../../components/Modal";
 
 const Send = ({ navigation }) => {
   const [tickets, setTickets] = useState([]);
   const [selectData, setSelectData] = useState([]);
   const [loading, setLoading] = useState({});
   const [user, setUser] = useRecoilState(authState);
+  const [visible, setVisible] = React.useState(false);
+  const { height } = Dimensions.get("window");
+
+  const showModal = () => setVisible(true);
+  const hideModal = (type) => {
+    if (type !== "ok") {
+      setValues({
+        ...values,
+        userId: "",
+        name: "",
+      });
+    }
+    setVisible(false);
+  };
+  const containerStyle = {
+    backgroundColor: "white",
+    padding: 20,
+    margin: 20,
+    borderRadius: 20,
+    // height: height * 0.5,
+  };
 
   const queryClient = useQueryClient();
 
@@ -31,11 +55,19 @@ const Send = ({ navigation }) => {
 
   const { data, isLoading, isError } = useQuery(["myticket"], ticketApi.list);
 
-  console.log("sdfsdf", data);
-
   useEffect(() => {
     setTickets(data?.DATA?.filter((v) => v.ticket_count !== 0));
   }, [data]);
+
+  useFocusEffect(
+    useCallback(() => {
+      return () => {
+        setValues({
+          count: 1,
+        });
+      };
+    }, [])
+  );
 
   useEffect(() => {
     tickets?.forEach((v, i) => {
@@ -75,10 +107,10 @@ const Send = ({ navigation }) => {
   const handleFindUser = async () => {
     setLoading({ ...loading, find: true });
     try {
-      const res = await ticketApi.findUser(values.hp);
+      const res = await ticketApi.findUser(values.hp.replaceAll("-", ""));
       console.log(res);
       if (res.CODE === "TSR000") {
-        LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
+        setVisible(true);
         setValues({ ...values, name: res.DATA.name, userId: res.DATA.targetUser });
       } else {
         switch (res.CODE) {
@@ -131,6 +163,7 @@ const Send = ({ navigation }) => {
         queryClient.invalidateQueries(["myticket"]);
         queryClient.invalidateQueries(["send"]);
         queryClient.invalidateQueries(["user"]);
+        setValues({});
         navigation.navigate("SendList");
       } else {
         switch (res.CODE) {
@@ -158,14 +191,12 @@ const Send = ({ navigation }) => {
     }
   };
 
-  const { height } = Dimensions.get("window");
-
   return (
     <KeyboardAwareScrollView>
       <View style={{ padding: 20, flex: 1 }}>
         <SelectList
-          boxStyles={{ marginTop: 10, backgroundColor: "#edf0f7", borderRadius: 15, paddingVertical: 18, paddingHorizontal: 20, borderColor: "transparent" }}
-          dropdownStyles={{ backgroundColor: "#edf0f7", borderWidth: 0 }}
+          boxStyles={{ marginTop: 10, backgroundColor: "#fff", borderRadius: 15, paddingVertical: 18, paddingHorizontal: 20, borderColor: "transparent" }}
+          dropdownStyles={{ backgroundColor: "#fff", borderWidth: 0 }}
           dropdownItemStyles={{ paddingVertical: 10 }}
           setSelected={(val) => handleChange("id", val)}
           data={selectData}
@@ -176,7 +207,7 @@ const Send = ({ navigation }) => {
         <View
           style={{
             marginTop: 10,
-            backgroundColor: "#edf0f7",
+            backgroundColor: "#fff",
             borderRadius: 15,
             paddingVertical: 18,
             paddingHorizontal: 20,
@@ -204,17 +235,20 @@ const Send = ({ navigation }) => {
         </View>
         <View style={{ flexDirection: "row", gap: 10 }}>
           <TextInput
+            placeholder="상대방 핸드폰 번호"
             value={values.hp}
             onChangeText={(text) => {
               // LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
+              text = text.replace(/[^0-9]/g, "").replace(/^(\d{2,3})(\d{3,4})(\d{4})$/, `$1-$2-$3`);
+              console.log(text);
               setValues({ ...values, name: "", hp: text });
             }}
-            style={{ marginTop: 10, backgroundColor: "#edf0f7", borderRadius: 15, paddingVertical: 18, paddingHorizontal: 20, flex: 3 }}
+            style={{ fontSize: 16, marginTop: 10, backgroundColor: "#fff", borderRadius: 15, paddingVertical: 18, paddingHorizontal: 20, flex: 3 }}
             onSubmitEditing={(text) => handleFindUser(text)}
             inputMode="tel"
             keyboardType="number-pad"
           ></TextInput>
-          {values.name && (
+          {values.name && !visible && (
             <View style={{ marginTop: 10, backgroundColor: "#dbdbdb", borderRadius: 15, paddingVertical: 18, paddingHorizontal: 20, flex: 1, justifyContent: "center", alignItems: "center" }}>
               <Text>{values.name}</Text>
             </View>
@@ -230,12 +264,24 @@ const Send = ({ navigation }) => {
             <Text style={{ color: "#fff", fontWeight: "bold" }}>{loading.find ? <ActivityIndicator color="#fff" size={15} /> : "조회"}</Text>
           </TouchableOpacity>
         </View>
+        <ModalComponent visible={visible} hideModal={hideModal}>
+          <View style={{ flex: 1, justifyContent: "center", paddingHorizontal: 20, alignItems: "center", gap: 30 }}>
+            <Text style={{ fontSize: 18 }}>사용자 정보</Text>
+            <Text style={{ fontSize: 18, color: "#ff3183", fontWeight: "bold" }}>{values.hp}</Text>
+            <Text style={{ fontSize: 18 }}>이름: {values.name}</Text>
+            <View style={{ flexDirection: "row", gap: 10, marginTop: 30 }}>
+              <Button style={{ flex: 1 }} label="취소" onPress={() => hideModal("cancel")} />
+              <Button style={{ flex: 1 }} label="확인" dark onPress={() => hideModal("ok")} />
+            </View>
+          </View>
+        </ModalComponent>
         <TextInput
           placeholder="메모를 입력하세요."
           multiline={true}
+          value={values.memo}
           style={{
             marginTop: 10,
-            backgroundColor: "#edf0f7",
+            backgroundColor: "#fff",
             borderRadius: 15,
             paddingVertical: 18,
             paddingHorizontal: 20,

@@ -5,6 +5,7 @@ import { WithTitleBackBtn } from "../components/BackBtn";
 import moment from "moment";
 import { customerApi } from "../api";
 import ScreenLayout from "../components/ScreenLayout";
+import { useQuery } from "@tanstack/react-query";
 
 const QnaDetail = ({ route }) => {
   const { qna } = route.params;
@@ -13,6 +14,10 @@ const QnaDetail = ({ route }) => {
   const [qnaItem, setQnaItem] = useState([]);
   const [answer, setAnswer] = useState([]);
   const [prevItem, setPrevItem] = useState([]);
+
+  const { data, isLoading, isError } = useQuery(["qnaDetail"], () => customerApi.customerItem(qna.id));
+
+  console.log(data);
 
   useEffect(() => {
     customerApi

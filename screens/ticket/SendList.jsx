@@ -11,6 +11,7 @@ import { TicketContext } from "../../context";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import Pagination from "../../components/Pagination";
 import { offsetValue } from "../../config";
+import NoItem from "../../components/NoItem";
 
 const SendList = () => {
   const [totalPage, setTotalPage] = useState(1);
@@ -41,17 +42,23 @@ const SendList = () => {
   }, []);
 
   return (
-    <View style={{ flex: 1, backgroundColor: "#fff" }}>
+    <View style={{ flex: 1, backgroundColor: "#e8f0ee" }}>
       {isLoading ? (
         <ActivityIndicator style={StyleSheet.absoluteFillObject} color="#ff3183" size="large" />
       ) : (
         <>
-          <View style={styles.container}>
-            <FlatList ref={flatRef} data={data?.DATA} keyExtractor={(item, index) => `${index}-${item.ticket_info_id}`} renderItem={({ item }) => <ReceiveItem item={item} />} />
-          </View>
-          <View style={{ flexDirection: "row", gap: 10, justifyContent: "center", marginVertical: 10 }}>
-            {totalPage > 1 && <Pagination totalPage={totalPage} currentPage={currentPage} setCurrentPage={setCurrentPage} />}
-          </View>
+          {data.DATA.length ? (
+            <>
+              <View style={styles.container}>
+                <FlatList ref={flatRef} data={data?.DATA} keyExtractor={(item, index) => `${index}-${item.ticket_info_id}`} renderItem={({ item }) => <SendItem item={item} />} />
+              </View>
+              <View style={{ flexDirection: "row", gap: 10, justifyContent: "center", marginVertical: 10 }}>
+                {totalPage > 1 && <Pagination totalPage={totalPage} currentPage={currentPage} setCurrentPage={setCurrentPage} />}
+              </View>
+            </>
+          ) : (
+            <NoItem text="전송 내역이 존재하지 않습니다." />
+          )}
         </>
       )}
     </View>

@@ -5,7 +5,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import "react-native-gesture-handler";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { RecoilRoot } from "recoil";
-import { Linking } from "react-native";
+import { Linking, Text, TextInput } from "react-native";
 import { deepLinkConfig } from "./source";
 import { ToastProvider } from "react-native-toast-notifications";
 import "react-native-reanimated";
@@ -15,8 +15,17 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { preventAutoHideAsync } from "expo-splash-screen";
 import { authApi, customerApi, resourceApi, ticketApi } from "./api";
 import { offset, offsetValue } from "./config";
+import { StatusBar } from "expo-status-bar";
 
 SplashScreen.preventAutoHideAsync();
+
+// 텍스트 적용
+Text.defaultProps = Text.defaultProps || {};
+Text.defaultProps.allowFontScaling = false;
+
+// Text Input 적용
+TextInput.defaultProps = TextInput.defaultProps || {};
+TextInput.defaultProps.allowFontScaling = false;
 
 const queryClient = new QueryClient();
 const Nav = createNativeStackNavigator();
@@ -59,13 +68,16 @@ export default function App() {
 
   useEffect(() => {
     const prefetch = async () => {
-      await queryClient.prefetchQuery(["poster"], resourceApi.posters);
-      await queryClient.prefetchQuery(["notice", 1], () => customerApi.noticeList({ board_id: "notice", offset: offsetValue, page: 1 }));
-      await queryClient.prefetchQuery(["myticket"], ticketApi.list);
-      await queryClient.prefetchQuery(["qna", 1], () => customerApi.customerList(0, offsetValue, 1));
-      await queryClient.prefetchQuery(["user"], authApi.info);
+      setTimeout(() => {
+        console.log("dsfsdf");
+        SplashScreen.hideAsync();
+      }, 2000);
 
-      await SplashScreen.hideAsync();
+      queryClient.prefetchQuery(["poster"], resourceApi.posters);
+      queryClient.prefetchQuery(["notice", 1], () => customerApi.noticeList({ board_id: "notice", offset: offsetValue, page: 1 }));
+      queryClient.prefetchQuery(["myticket"], ticketApi.list);
+      queryClient.prefetchQuery(["qna", 1], () => customerApi.customerList(0, offsetValue, 1));
+      queryClient.prefetchQuery(["user"], authApi.info);
     };
 
     prefetch();
@@ -76,6 +88,7 @@ export default function App() {
       <PaperProvider>
         <RecoilRoot>
           <ToastProvider duration={2000} offset={30} swipeEnabled={true}>
+            {/* <StatusBar backgroundColor="#e8f0ee" /> */}
             <NavigationContainer linking={linking}>
               <Nav.Navigator>
                 <Nav.Screen name="Root" component={Root} options={{ headerShown: false }} />

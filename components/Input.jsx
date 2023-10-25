@@ -4,6 +4,7 @@ import styled from "styled-components/native";
 import Button from "./Button";
 import { Feather } from "@expo/vector-icons";
 import { SelectList } from "react-native-dropdown-select-list";
+import { IconButton, Tooltip } from "react-native-paper";
 
 const Label = styled.View`
   flex-direction: row;
@@ -26,7 +27,7 @@ const Input = forwardRef(({ style, disableStyle, backgroundColor, ...rest }, ref
         style={
           disableStyle
             ? { backgroundColor: "#c1c4cb", borderRadius: 15, paddingVertical: 18, paddingHorizontal: 20, fontSize: 16 }
-            : { backgroundColor: `${backgroundColor || "#edf0f7"}`, borderRadius: 15, paddingVertical: 18, paddingHorizontal: 20, fontSize: 16 }
+            : { backgroundColor: `${backgroundColor || "#fff"}`, borderRadius: 15, paddingVertical: 18, paddingHorizontal: 20, fontSize: 16 }
         }
         ref={ref}
       />
@@ -72,7 +73,7 @@ const withLabel = (Component) => {
 const withCheckBtn = (Component) => {
   return forwardRef(({ onCheck, loading, success, error, disabled, ...rest }, ref) => {
     return (
-      <View style={{ flexDirection: "row", gap: 10 }}>
+      <View style={{ flexDirection: "row", gap: 10, alignItems: "center" }}>
         <Component {...rest} ref={ref} style={{ flex: 2 }} />
         <Button
           onPress={!success && !error ? onCheck : null}
@@ -112,15 +113,15 @@ const withEng = (Component) => {
     <View style={{ flexDirection: "row", gap: 10 }}>
       <View style={{ flex: 3 }}>
         <Label style={{ paddingVertical: 10 }}>
-          <Text>First name</Text>
+          <Text style={{ fontSize: 16 }}>First name</Text>
         </Label>
-        <Component onChangeText={onChangeFirst} ref={refFirst} onSubmitEditing={submitFirst} />
+        <Component onChangeText={onChangeFirst} placeholder="GilDong" ref={refFirst} onSubmitEditing={submitFirst} />
       </View>
       <View style={{ flex: 2 }}>
         <Label style={{ paddingVertical: 10 }}>
-          <Text>Last name</Text>
+          <Text style={{ fontSize: 16 }}>Last name</Text>
         </Label>
-        <Component onChangeText={onChangeLast} ref={refLast} onSubmitEditing={submitLast} />
+        <Component onChangeText={onChangeLast} placeholder="Hong" ref={refLast} onSubmitEditing={submitLast} />
       </View>
     </View>
   );
