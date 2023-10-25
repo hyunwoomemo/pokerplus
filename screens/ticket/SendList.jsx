@@ -47,7 +47,7 @@ const SendList = () => {
         <ActivityIndicator style={StyleSheet.absoluteFillObject} color="#ff3183" size="large" />
       ) : (
         <>
-          {data.DATA.length ? (
+          {data?.DATA.length ? (
             <>
               <View style={styles.container}>
                 <FlatList ref={flatRef} data={data?.DATA} keyExtractor={(item, index) => `${index}-${item.ticket_info_id}`} renderItem={({ item }) => <SendItem item={item} />} />

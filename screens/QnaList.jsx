@@ -55,11 +55,11 @@ const QnaList = ({ route, navigation }) => {
         <ActivityIndicator style={StyleSheet.absoluteFillObject} color="#ff3183" size="large" />
       ) : (
         <>
-          {data.DATA.data.length ? (
+          {data?.DATA.data.length ? (
             <>
               <FlatList
                 style={styles.main}
-                data={data.DATA.data}
+                data={data?.DATA.data}
                 ref={flatRef}
                 showsVerticalScrollIndicator={false}
                 keyExtractor={(item, index) => index}

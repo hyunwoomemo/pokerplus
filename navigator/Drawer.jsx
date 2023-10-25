@@ -246,6 +246,7 @@ export function MyDrawer() {
           headerShown: false,
           drawerStyle: {
             width: width * 0.8,
+            backgroundColor: "#e8f0ee",
           },
         }}
       >

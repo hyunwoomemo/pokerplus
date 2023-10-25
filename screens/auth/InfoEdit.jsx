@@ -33,9 +33,9 @@ const InfoEdit = ({ route, navigation }) => {
   const [selected, setSelected] = useState("");
   const [area, setArea] = useState([]);
   const [defaultValue, setDefaultValue] = useState({
-    id: data.DATA.email,
-    nick: data.DATA.nick,
-    location_code: data.DATA.location_code,
+    id: data?.DATA.email,
+    nick: data?.DATA.nick,
+    location_code: data?.DATA.location_code,
   });
   const [imageUrl, setImageUrl] = useState("");
 
