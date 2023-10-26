@@ -2,9 +2,6 @@ import React, { forwardRef } from "react";
 import { ActivityIndicator, StyleSheet, Text, TextInput, View } from "react-native";
 import styled from "styled-components/native";
 import Button from "./Button";
-import { Feather } from "@expo/vector-icons";
-import { SelectList } from "react-native-dropdown-select-list";
-import { IconButton, Tooltip } from "react-native-paper";
 
 const Label = styled.View`
   flex-direction: row;
@@ -26,8 +23,8 @@ const Input = forwardRef(({ style, disableStyle, backgroundColor, ...rest }, ref
         {...rest}
         style={
           disableStyle
-            ? { backgroundColor: "#c1c4cb", borderRadius: 15, paddingVertical: 18, paddingHorizontal: 20, fontSize: 16 }
-            : { backgroundColor: `${backgroundColor || "#fff"}`, borderRadius: 15, paddingVertical: 18, paddingHorizontal: 20, fontSize: 16 }
+            ? { backgroundColor: "#c1c4cb", borderRadius: 50, paddingVertical: 18, paddingHorizontal: 20, fontSize: 16 }
+            : { backgroundColor: `${backgroundColor || "#fff"}`, borderRadius: 50, paddingVertical: 18, paddingHorizontal: 20, fontSize: 16 }
         }
         ref={ref}
       />
@@ -38,13 +35,24 @@ const Input = forwardRef(({ style, disableStyle, backgroundColor, ...rest }, ref
 const DisabledInput = ({ style, value, backgroundColor, ...rest }) => {
   return (
     <View style={style}>
-      {value ? (
-        <View autoCapitalize="none" autoCorrect={false} {...rest} style={{ backgroundColor: backgroundColor || "#dedfe377", borderRadius: 15, paddingVertical: 18, paddingHorizontal: 20 }}>
-          <Text>{value}</Text>
+      {/* {value ? (
+        <View autoCapitalize="none" autoCorrect={false} {...rest} style={{ backgroundColor: backgroundColor || "#dedfe377", borderRadius: 50, paddingVertical: 18, paddingHorizontal: 20 }}>
+          <Text style={{ fontSize: 16 }}>{value}</Text>
         </View>
       ) : (
-        <View autoCapitalize="none" autoCorrect={false} {...rest} style={{ backgroundColor: "#dedfe377", borderRadius: 15, paddingVertical: 18, paddingHorizontal: 20 }} />
-      )}
+        <View autoCapitalize="none" autoCorrect={false} {...rest} style={{ backgroundColor: "#dedfe377", borderRadius: 50, paddingVertical: 18, paddingHorizontal: 20 }} />
+      )} */}
+      <TextInput
+        value={value || null}
+        style={{
+          backgroundColor: "#dedfe377",
+          borderRadius: 50,
+          paddingVertical: 18,
+          paddingHorizontal: 20,
+          fontSize: 16,
+        }}
+        editable={false}
+      />
     </View>
   );
 };

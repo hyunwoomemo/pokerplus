@@ -33,12 +33,12 @@ const DrawerContainer = styled.View`
   padding: 20px;
   gap: 15px;
   flex: 1;
-  background-color: #e8f0ee;
+  background-color: #ecf2f0;
 `;
 ``;
 
 const WrapperTitle = styled.Text`
-  font-size: 24px;
+  font-size: 20px;
   margin-bottom: 10px;
 `;
 
@@ -67,7 +67,7 @@ const NickText = styled.Text`
 `;
 const MyTicketText = styled.Text`
   color: hotpink;
-  font-size: 15px;
+  font-size: 12px;
   font-weight: bold;
 `;
 
@@ -102,7 +102,7 @@ const AccordionWrapper = ({ title, children, data, active }) => {
         </View>
       </TouchableOpacity>
       {isOpen && (
-        <View style={{ paddingVertical: 10 }}>
+        <View style={{ paddingVertical: 10, gap: 10 }}>
           {data.map((_, i) => (
             <AccordionItem key={i} active={active} content={_.content} name={_.name}>
               {_.content}
@@ -124,7 +124,7 @@ const AccordionItem = ({ content, name, active }) => {
           navigation.navigate(name);
         }}
       >
-        <Text style={active === name ? { fontSize: 18, color: "#ff3183" } : { fontSize: 18, color: "#000" }}>{content}</Text>
+        <Text style={active === name ? { fontSize: 16, color: "#ff3163" } : { fontSize: 16, color: "#000" }}>{content}</Text>
       </TouchableOpacity>
     </ItemWrapper>
   );
@@ -137,7 +137,10 @@ const customer = [
   { content: "1:1 문의내역", name: "QnaNav" },
 ];
 
-const policy = [{ content: "약관 및 정책", name: "PolicyNav" }];
+const policy = [
+  { content: "약관 및 정책", name: "PolicyNav" },
+  { content: "푸시 알림 설정", name: "PushSetting" },
+];
 
 const DrawerFooter = styled.View`
   flex-direction: row;
@@ -221,7 +224,7 @@ const DrawerContent = (active) => {
         </InfoTextWrapper>
       </InfoSection>
       <AccordionWrapper title="고객센터" data={customer} active={active}></AccordionWrapper>
-      <AccordionWrapper title="운영 정책" data={policy} active={active}></AccordionWrapper>
+      <AccordionWrapper title="앱 설정" data={policy} active={active}></AccordionWrapper>
       {/* 추가 아이템 */}
       <DrawerFooter>
         <SignOut onPress={handleSignout}>
@@ -246,7 +249,7 @@ export function MyDrawer() {
           headerShown: false,
           drawerStyle: {
             width: width * 0.8,
-            backgroundColor: "#e8f0ee",
+            backgroundColor: "#ecf2f0",
           },
         }}
       >

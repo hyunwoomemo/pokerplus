@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Text, View } from "react-native";
+import { Alert, Text, View } from "react-native";
 import Layout from "../../components/Layout";
 import { AntDesign } from "@expo/vector-icons";
 import { ticketApi } from "../../api";
@@ -28,7 +28,7 @@ const TicketList = () => {
       ) : tickets?.length > 0 ? (
         <FlatList data={tickets} keyExtractor={(item, index) => `${index}-${item.ticket_info_id}`} renderItem={({ item }) => <TicketItem item={item} />} />
       ) : (
-        <NoItem text={"참가권이 존재하지 않습니다."} />
+        <NoItem text={"보유하신 참가권이 없습니다."} />
       )}
     </View>
   );

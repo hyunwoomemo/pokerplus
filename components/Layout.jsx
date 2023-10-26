@@ -5,13 +5,13 @@ import styled from "styled-components/native";
 
 const Container = styled.View`
   flex: 1;
-  background-color: #e8f0ee;
+  background-color: #ecf2f0;
 `;
 
 const Layout = ({ children, toggleDrawer }) => {
   return (
-    <SafeAreaView style={Platform.OS === "android" ? { flex: 1, paddingTop: 15, backgroundColor: "#e8f0ee" } : { flex: 1, paddingTop: 0, backgroundColor: "#e8f0ee" }}>
-      <StatusBar barStyle={"dark-content"} backgroundColor="#e8f0ee" />
+    <SafeAreaView style={Platform.OS === "android" ? { flex: 1, paddingTop: 15, backgroundColor: "#ecf2f0" } : { flex: 1, paddingTop: 0, backgroundColor: "#ecf2f0" }}>
+      <StatusBar barStyle={"dark-content"} backgroundColor="#ecf2f0" />
       <Container>
         <Header toggleDrawer={toggleDrawer} />
         {children}

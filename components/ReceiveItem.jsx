@@ -6,6 +6,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { StyleSheet } from "react-native";
 import { Text } from "react-native";
 import moment from "moment";
+import FastImage from "react-native-fast-image";
 
 const codeText = [
   { code: "TH001", text: "상금지급" },
@@ -48,6 +49,7 @@ const ReceiveItem = ({ item }) => {
     description,
     created_at,
   } = item;
+  console.log(ticket_logo_url);
   return (
     <TouchableOpacity style={styles.container}>
       <View style={styles.contentWrapper}>
@@ -56,7 +58,11 @@ const ReceiveItem = ({ item }) => {
           <Text style={styles.text}>{moment(created_at).utc().format("YY/MM/DD")}</Text>
         </View>
         <View style={styles.secondline}>
-          <Image source={{ uri: ticket_logo_url }} width={70} height={30} style={{ borderRadius: 5 }} resizeMode="cover" />
+          <FastImage
+            source={{ uri: ticket_logo_url || "https://newgenerationdatadev.blob.core.windows.net/data/template/t08/common/footer_icon_ticket.png" }}
+            style={ticket_logo_url ? { width: 70, height: 30 } : { width: 40, height: 20 }}
+            resizeMode="contain"
+          />
           <Text style={styles.ticketname}>{ticket_name}</Text>
           <View style={styles.countitem}>
             <MaterialCommunityIcons name="ticket-confirmation" size={20} color="rgba(0,0,0,0.8)" />

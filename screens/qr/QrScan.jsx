@@ -72,7 +72,7 @@ export default function QrScan({ navigation }) {
 
   return (
     <ScreenLayout title="참가권 QR스캔" back={() => navigation.navigate("Home")}>
-      <View style={{ justifyContent: "center", alignItems: "center", flex: 1, backgroundColor: "#e8f0ee" }}>
+      <View style={{ justifyContent: "center", alignItems: "center", flex: 1, backgroundColor: "#ecf2f0" }}>
         {renderCamera()}
         <View style={{ gap: 10, alignItems: "center", marginTop: 20 }}>
           <Text style={{ fontSize: 18 }}>참가권 전송 ∙ 대회 바이인</Text>

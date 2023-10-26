@@ -54,11 +54,11 @@ const Qna = ({ navigation }) => {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: "#e8f0ee" }}>
+    <View style={{ flex: 1, backgroundColor: "#ecf2f0" }}>
       <AppBar title="1:1 문의하기" />
       <ScrollView style={{ paddingHorizontal: 20, marginTop: 20 }}>
         <SelectList
-          boxStyles={{ marginTop: 10, backgroundColor: "#fff", borderRadius: 15, paddingVertical: 18, paddingHorizontal: 20, borderColor: "transparent" }}
+          boxStyles={{ marginTop: 10, backgroundColor: "#fff", borderRadius: 50, paddingVertical: 18, paddingHorizontal: 20, borderColor: "transparent" }}
           dropdownStyles={{ backgroundColor: "#fff", borderWidth: 0 }}
           dropdownItemStyles={{ paddingVertical: 10 }}
           setSelected={(val) => handleChange("host_id", val)}
@@ -68,19 +68,18 @@ const Qna = ({ navigation }) => {
           placeholder="문의 대상을 선택하세요."
           defaultOption={{ key: "", value: "" }}
         />
-        <WithLabelInput onChangeText={(text) => handleChange("subject", text)} backgroundColor="#fff" placeholder="문의 제목을 입력하세요." placeholderTextColor="gray" value={values.subject}>
+        <WithLabelInput onChangeText={(text) => handleChange("subject", text)} backgroundColor="#fff" value={values.subject}>
           <Text style={{ fontSize: 16 }}>제목</Text>
         </WithLabelInput>
         <View style={styles.textAreaWrapper}>
-          <Text style={{ fontSize: 16 }}>문의 내용</Text>
+          <Text style={{ fontSize: 16 }}>문의 내용 입력 (200자 내외)</Text>
           <TextInput
             value={values.contents}
             onChangeText={(text) => handleChange("contents", text)}
             multiline={true}
             maxLength={200}
-            style={styles.textArea}
+            style={{ ...styles.textArea }}
             numberOfLines={10}
-            placeholder="200자 내외로 입력하세요."
             placeholderTextColor={"gray"}
           />
         </View>

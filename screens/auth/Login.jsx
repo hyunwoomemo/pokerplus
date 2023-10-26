@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Text, Image, LayoutAnimation, Alert, StatusBar } from "react-native";
+import { Text, Image, LayoutAnimation, Alert, StatusBar, View } from "react-native";
 import styled from "styled-components/native";
 import { Icon } from "../../source";
 import InputField from "../../components/InputField";
@@ -11,6 +11,8 @@ import { useToast } from "react-native-toast-notifications";
 import Button from "../../components/Button";
 import { getStorage, setStorage } from "../../utils/asyncStorage";
 import { LogLevel, OneSignal } from "react-native-onesignal";
+import ModalComponent from "../../components/Modal";
+import moment from "moment";
 
 const Container = styled.View`
   flex: 1;
@@ -62,6 +64,11 @@ const ButtonWrapper = styled.View`
 const Login = ({ navigation: { navigate } }) => {
   const passwordRef = useRef(null);
   const toast = useToast();
+  const [visible, setVisible] = useState(false);
+
+  const hideModal = () => {
+    setVisible(false);
+  };
 
   const onJoin = () => {
     navigate("TermsNav");
@@ -112,7 +119,17 @@ const Login = ({ navigation: { navigate } }) => {
 
     // Method for listening for notification clicks
     OneSignal?.Notifications.addEventListener("click", (event) => {
-      console.log("OneSignal: notification clicked:", event);
+      console.log("OneSignal: notification clicked:", event.result);
+    });
+
+    OneSignal.Notifications.addEventListener("permissionChange", async (granted) => {
+      // console.log("OneSignal: permission changed:", granted);
+      if (granted) {
+        await setStorage("isPushEnabled", true);
+        setVisible(true);
+      } else {
+        await setStorage("isPushEnabled", false);
+      }
     });
   };
 
@@ -129,8 +146,8 @@ const Login = ({ navigation: { navigate } }) => {
         setStorage("token", res.DATA.TOKEN);
         const accountInfo = await authApi.info();
         setStorage("user", JSON.stringify(accountInfo?.DATA));
-        setUser(accountInfo?.DATA);
         onesignalSetting();
+        setUser(accountInfo?.DATA);
       } else {
         switch (res.CODE) {
           case "AL001":
@@ -214,6 +231,14 @@ const Login = ({ navigation: { navigate } }) => {
         <Button primary onPress={onLogin} loading={loading} label="로그인" />
         <Button onPress={onJoin} dark label="회원가입" />
       </ButtonWrapper>
+      <ModalComponent visible={visible} hideModal={hideModal}>
+        <View style={{ padding: 10, gap: 20, alignItems: "center" }}>
+          <Text style={{ fontWeight: "bold", fontSize: 16 }}>광고성 정보 푸시 동의</Text>
+          <Text style={{ textAlign: "center", fontSize: 16, lineHeight: 24 }}>서비스와 관련된 소식, 이벤트 안내, 고객 혜택 등 다양한 정보를 제공합니다.</Text>
+          <Text style={{ color: "gray" }}>{moment(new Date()).utc().format("YYYY년 MM월 DD일")}</Text>
+          <Button label="닫기" onPress={() => setVisible(false)} style={{ width: "100%" }} />
+        </View>
+      </ModalComponent>
     </Container>
   );
 };

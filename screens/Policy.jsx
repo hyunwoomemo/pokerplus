@@ -11,7 +11,7 @@ const Policy = ({ navigation }) => {
     { text: "위치 정보 이용 약관 (필수)", name: "Location", type: "Position" },
   ];
   return (
-    <View style={{ flex: 1, backgroundColor: "#fff" }}>
+    <View style={{ flex: 1, backgroundColor: "#ecf2f0" }}>
       <AppBar title="약관 및 정책" />
       <View style={styles.container}>
         {policy.map((item) => (

@@ -4,12 +4,18 @@ import { StyleSheet } from "react-native";
 import { Image } from "react-native";
 import { View } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import FastImage from "react-native-fast-image";
 
 const TicketItem = ({ item }) => {
   const { ticket_logo_url, ticket_name, ticket_count } = item;
   return (
     <TouchableOpacity style={styles.container}>
-      <Image source={{ uri: ticket_logo_url }} width={80} height={40} resizeMode="contain" />
+      <FastImage
+        source={{ uri: ticket_logo_url || "https://newgenerationdatadev.blob.core.windows.net/data/template/t08/common/footer_icon_ticket.png" }}
+        style={ticket_logo_url ? { width: 80, height: 40 } : { width: 40, height: 20 }}
+        resizeMode="contain"
+      />
+
       <Text style={styles.name}>{ticket_name}</Text>
       <View style={styles.count}>
         <MaterialCommunityIcons name="ticket-confirmation" size={24} color="rgba(0,0,0,0.8)" />

@@ -10,13 +10,14 @@ const Container = styled.View`
   height: 50px;
   justify-content: space-between;
   align-items: center;
-  padding: 10px;
+  /* padding: 10px; */
   margin: 10px;
 `;
 
 const Hambuger = styled.TouchableOpacity`
   width: 20%;
   flex-direction: row;
+  padding: 20px 20px 20px 10px;
 `;
 
 const Main = styled.TouchableOpacity`
@@ -31,6 +32,7 @@ const QRWrapper = styled.View`
   justify-content: flex-end;
   gap: 10px;
   align-items: center;
+  padding-right: 10px;
 `;
 
 const Header = () => {

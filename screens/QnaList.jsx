@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { ActivityIndicator, FlatList, LayoutAnimation, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Layout from "../components/Layout";
 import { customerApi } from "../api";
@@ -10,6 +10,7 @@ import AppBar from "../components/AppBar";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { offsetValue } from "../config";
 import NoItem from "../components/NoItem";
+import { useFocusEffect } from "@react-navigation/native";
 
 const QnaList = ({ route, navigation }) => {
   const { currentPage, setCurrentPage } = useContext(QnaContext);
@@ -48,8 +49,14 @@ const QnaList = ({ route, navigation }) => {
     setStatus(data?.DATA.stat);
   }, [data?.DATA]);
 
+  useFocusEffect(
+    useCallback(() => {
+      queryClient.invalidateQueries(["qna"]);
+    }, [])
+  );
+
   return (
-    <View style={{ flex: 1, backgroundColor: "#e8f0ee" }}>
+    <View style={{ flex: 1, backgroundColor: "#ecf2f0" }}>
       <AppBar title="1:1 문의 내역" />
       {isLoading ? (
         <ActivityIndicator style={StyleSheet.absoluteFillObject} color="#ff3183" size="large" />
@@ -82,7 +89,7 @@ const QnaList = ({ route, navigation }) => {
               />
             </>
           ) : (
-            <NoItem text="문의 내역이 존재하지 않습니다." />
+            <NoItem text="문의 내역이 없습니다." />
           )}
           {totalPage > 1 && (
             <View style={{ flexDirection: "row", gap: 10, justifyContent: "center", marginVertical: 10 }}>
@@ -108,7 +115,7 @@ const styles = StyleSheet.create({
     borderRadius: 15, // <-- Inner Border Radius
     flex: 1,
     margin: 2, // <-- Border Width
-    backgroundColor: "#e8f0ee",
+    backgroundColor: "#ecf2f0",
     justifyContent: "center",
   },
   itemWrapper: {

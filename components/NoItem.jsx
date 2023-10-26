@@ -1,12 +1,12 @@
 import React from "react";
-import { Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 
 const NoItem = ({ text }) => {
   return (
-    <View style={{ justifyContent: "center", alignItems: "center", gap: 40, marginTop: 100 }}>
-      <AntDesign name="warning" size={36} color="tomato" />
-      <Text style={{ fontSize: 20, color: "gray" }}>{text}</Text>
+    <View style={{ flex: 1, gap: 20, alignItems: "center", justifyContent: "center" }}>
+      <AntDesign name="warning" size={150} color="gray" />
+      <Text style={{ fontSize: 20, color: "#000" }}>{text}</Text>
     </View>
   );
 };

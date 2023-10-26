@@ -19,6 +19,7 @@ import QrCreate from "../screens/qr/QrCreate";
 import QrScan from "../screens/qr/QrScan";
 import { Button, Text } from "react-native";
 import QrNav from "./QrNav";
+import PushSetting from "../screens/PushSetting";
 
 const Tab = createBottomTabNavigator();
 
@@ -36,7 +37,7 @@ const Tabs = ({ route }) => {
         headerShown: false,
         tabBarShowLabel: false,
         headerStyle: {
-          backgroundColor: "#e8f0ee",
+          backgroundColor: "#ecf2f0",
         },
       }}
       tabBar={(props) => {
@@ -56,6 +57,7 @@ const Tabs = ({ route }) => {
       <Tab.Screen name="Qna" component={Qna} />
       <Tab.Screen name="PolicyNav" component={PolicyNav} />
       <Tab.Screen name="QrNav" component={QrNav} />
+      <Tab.Screen name="PushSetting" component={PushSetting} />
     </Tab.Navigator>
   );
 };

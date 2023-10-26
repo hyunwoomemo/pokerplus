@@ -38,9 +38,7 @@ export default function TicketNav({ navigation }) {
 
   return (
     <TicketContext.Provider value={values}>
-      {/* <Layout> */}
-      {/* <SafeAreaView></SafeAreaView> */}
-      <Appbar.Header style={{ backgroundColor: "#e8f0ee" }}>
+      <Appbar.Header style={{ backgroundColor: "#ecf2f0" }}>
         <Appbar.BackAction
           onPress={() => {
             navigation.goBack();
@@ -51,13 +49,13 @@ export default function TicketNav({ navigation }) {
         <Appbar.Action icon="magnify" onPress={() => {}} /> */}
       </Appbar.Header>
       <Tab.Navigator
-        sceneContainerStyle={{ backgroundColor: "#e8f0ee" }}
+        sceneContainerStyle={{ backgroundColor: "#ecf2f0" }}
         screenOptions={{
           tabBarIndicatorStyle: { backgroundColor: "#ff3183" },
           tabBarActiveTintColor: "#ff3183",
           tabBarInactiveTintColor: "#000",
           tabBarLabelStyle: { fontSize: 15 },
-          tabBarStyle: { backgroundColor: "#e8f0ee" },
+          tabBarStyle: { backgroundColor: "#ecf2f0" },
         }}
       >
         <Tab.Screen name="TicketList" component={TicketList} options={{ tabBarLabel: "내 참가권" }} />

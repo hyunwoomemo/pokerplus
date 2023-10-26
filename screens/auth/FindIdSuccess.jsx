@@ -34,7 +34,7 @@ const FindIdSuccess = ({ navigation: { navigate }, route }) => {
           padding: 32,
           marginVertical: 20,
           alignItems: "center",
-          backgroundColor: "#e8f0ee",
+          backgroundColor: "#ecf2f0",
           borderRadius: 20,
           shadowColor: "gray",
           shadowOpacity: 0.5,

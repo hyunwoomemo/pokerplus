@@ -7,7 +7,7 @@ import AppBar from "./AppBar";
 import { useNavigation } from "@react-navigation/native";
 
 const Container = styled.View`
-  background-color: #e8f0ee;
+  background-color: #ecf2f0;
   flex: 1;
 `;
 const ScreenLayout = ({ back, children, title, appbar }) => {
@@ -24,7 +24,7 @@ const ScreenLayout = ({ back, children, title, appbar }) => {
       ) : (
         <AppBar title={title} back={back ? back : () => navigation.goBack()} />
       )}
-      <View style={{ padding: 20, flex: 1 }}>{children}</View>
+      <View style={{ paddingHorizontal: 20, flex: 1 }}>{children}</View>
       <SafeAreaView></SafeAreaView>
     </Container>
   );

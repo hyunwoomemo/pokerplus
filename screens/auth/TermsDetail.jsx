@@ -31,7 +31,7 @@ const TermsDetail = ({ route }) => {
 const styles = StyleSheet.create({
   container: {
     padding: 20,
-    backgroundColor: "#e8f0ee",
+    backgroundColor: "#ecf2f0",
     flex: 1,
   },
   result: {

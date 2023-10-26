@@ -15,10 +15,13 @@ const Alliance = ({ navigation: { navigate }, route }) => {
   const [filename, setFilename] = useState("");
 
   const [status, requestPermission] = ImagePicker.useMediaLibraryPermissions();
+
+  const handleChangeText = (type, text) => {};
+
   return (
     <ScreenLayout title="제휴 매장 신청">
       <ScrollView showsVerticalScrollIndicator={false}>
-        <WithLabelInput require>
+        <WithLabelInput require onChangeText={(text) => handleChangeText("shop_name", text)}>
           <StyledText>매장명</StyledText>
         </WithLabelInput>
         <WithLabelInput require placeholder="- 제외하고 입력하세요." placeholderTextColor="gray">

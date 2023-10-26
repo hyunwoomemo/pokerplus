@@ -1,11 +1,12 @@
 import React from "react";
 import { LinearGradient } from "expo-linear-gradient";
-import { ActivityIndicator, Text } from "react-native";
+import { ActivityIndicator, StyleSheet, Text } from "react-native";
 import { TouchableOpacity } from "react-native";
 import styled from "styled-components/native";
 
 const Wrapper = styled.View`
   padding: 18px 20px;
+  min-height: 52px;
   border-radius: 50px;
   align-items: center;
   justify-content: center;

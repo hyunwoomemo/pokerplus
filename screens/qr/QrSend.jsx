@@ -83,10 +83,10 @@ const QrSend = ({ navigation, route }) => {
 
   const handleSend = async () => {
     setLoading({ ...loading, send: true });
-    const headers = {
-      "Content-Type": "application/json",
-      Authorization: "Bearer YzFmMTg5NWUtOTI1MC00NjZlLWFjYjMtMGZjNmUwODgzNWYx",
-    };
+    // const headers = {
+    //   "Content-Type": "application/json",
+    //   Authorization: "Bearer YzFmMTg5NWUtOTI1MC00NjZlLWFjYjMtMGZjNmUwODgzNWYx",
+    // };
     try {
       const res = await ticketApi.send({
         send_type: "TH004",
@@ -96,19 +96,19 @@ const QrSend = ({ navigation, route }) => {
         memo: values.memo ? values.memo : null,
       });
       if (res.CODE === "TKS000") {
-        fetch("https://onesignal.com/api/v1/notifications", {
-          method: "POST",
-          body: JSON.stringify({
-            app_id: "ae232b11-fde8-419d-8069-9ec35bf73f62",
-            include_aliases: { external_id: [data.targetUser] },
-            target_channel: "push",
-            data: { foo: "bar" },
-            contents: { en: `${user.name}님이 티켓 ${values.count}장을 전송했습니다.` },
-          }),
-          headers: headers,
-        })
-          .then((res) => res.json())
-          .then((result) => console.log("pushpush", result));
+        // fetch("https://onesignal.com/api/v1/notifications", {
+        //   method: "POST",
+        //   body: JSON.stringify({
+        //     app_id: "ae232b11-fde8-419d-8069-9ec35bf73f62",
+        //     include_aliases: { external_id: [data.targetUser] },
+        //     target_channel: "push",
+        //     data: { foo: "bar" },
+        //     contents: { en: `${user.name}님이 티켓 ${values.count}장을 전송했습니다.` },
+        //   }),
+        //   headers: headers,
+        // })
+        //   .then((res) => res.json())
+        //   .then((result) => console.log("pushpush", result));
         queryClient.invalidateQueries(["myticket"]);
         queryClient.invalidateQueries(["send"]);
         queryClient.invalidateQueries(["user"]);
@@ -142,7 +142,7 @@ const QrSend = ({ navigation, route }) => {
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: "#e8f0ee", padding: 20 }}>
+    <View style={{ flex: 1, backgroundColor: "#ecf2f0", padding: 20 }}>
       <Text style={{ fontSize: 20, alignItems: "center", marginTop: 10, textAlign: "center" }}>참가권 QR 전송</Text>
       <View style={{ padding: 20, borderWidth: StyleSheet.hairlineWidth, marginTop: 40, borderRadius: 10, gap: 20 }}>
         <View style={styles.item}>
@@ -159,8 +159,8 @@ const QrSend = ({ navigation, route }) => {
         </View>
       </View>
       <SelectList
-        boxStyles={{ marginTop: 10, backgroundColor: "#e8f0ee", borderRadius: 15, paddingVertical: 18, paddingHorizontal: 20, borderColor: "transparent" }}
-        dropdownStyles={{ backgroundColor: "#e8f0ee", borderWidth: 0 }}
+        boxStyles={{ marginTop: 10, backgroundColor: "#ecf2f0", borderRadius: 15, paddingVertical: 18, paddingHorizontal: 20, borderColor: "transparent" }}
+        dropdownStyles={{ backgroundColor: "#ecf2f0", borderWidth: 0 }}
         dropdownItemStyles={{ paddingVertical: 10 }}
         setSelected={(val) => handleChange("id", val)}
         data={selectData}
@@ -171,7 +171,7 @@ const QrSend = ({ navigation, route }) => {
         notFoundText="보유하신 참가권이 없습니다."
       />
       <View
-        style={{ marginTop: 10, backgroundColor: "#e8f0ee", borderRadius: 15, paddingVertical: 18, paddingHorizontal: 20, flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}
+        style={{ marginTop: 10, backgroundColor: "#ecf2f0", borderRadius: 15, paddingVertical: 18, paddingHorizontal: 20, flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}
       >
         <TouchableOpacity onPress={() => handleCount("minus")} disabled={values.count < 1 || !values.id}>
           <Entypo name="circle-with-minus" size={28} color={values.count < 1 || !values.id ? "gray" : "#5a50ef"} />

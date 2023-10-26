@@ -27,7 +27,7 @@ const Profile = ({ navigation }) => {
   useEffect(() => {
     const count = data.DATA.ticket_info?.reduce((acc, cur) => acc + cur.ticket_count, 0);
     setTicketCount(count);
-  }, [data.DATA.ticket_info]);
+  }, [data?.DATA.ticket_info]);
 
   const scrollViewRef = useRef();
 
@@ -43,7 +43,7 @@ const Profile = ({ navigation }) => {
         <View style={{ alignItems: "center", paddingVertical: 30 }}>
           <Animated.View style={{ width: 120, height: 120, borderRadius: 60, backgroundColor: "rgba(0,0,0,0.2)", opacity: opacity }}>
             <FastImage
-              source={{ uri: data.DATA.user_profile_url }}
+              source={{ uri: data?.DATA.user_profile_url }}
               style={{
                 width: 120,
                 height: 120,

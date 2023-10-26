@@ -9,6 +9,8 @@ import { authState } from "../recoil/auth/atom";
 import { useRecoilState } from "recoil";
 import { useQuery } from "@tanstack/react-query";
 import { resourceApi } from "../api";
+import { pushState } from "../recoil/push/atom";
+import { setStorage } from "../utils/asyncStorage";
 
 const Container = styled.View`
   flex: 1;
@@ -24,6 +26,17 @@ const Home = () => {
 
   useEffect(() => {
     OneSignal.login(user.email);
+    if (OneSignal.User.pushSubscription.getOptedIn()) {
+      const setPush = async () => {
+        if (OneSignal.User.pushSubscription.getOptedIn()) {
+          await setStorage("isPushEnabled", true);
+        } else {
+          await setStorage("isPushEnabled", false);
+        }
+
+        setPush();
+      };
+    }
   }, []);
 
   return (

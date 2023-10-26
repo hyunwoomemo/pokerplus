@@ -42,7 +42,7 @@ const SendList = () => {
   }, []);
 
   return (
-    <View style={{ flex: 1, backgroundColor: "#e8f0ee" }}>
+    <View style={{ flex: 1, backgroundColor: "#ecf2f0" }}>
       {isLoading ? (
         <ActivityIndicator style={StyleSheet.absoluteFillObject} color="#ff3183" size="large" />
       ) : (

@@ -101,7 +101,7 @@ const Faq = () => {
   }, [total]);
 
   return (
-    <View style={{ flex: 1, backgroundColor: "#e8f0ee" }}>
+    <View style={{ flex: 1, backgroundColor: "#ecf2f0" }}>
       <AppBar title="FAQ" />
       <FlatList data={data?.DATA.data} keyExtractor={(item) => item.contents} renderItem={({ item, index }) => <AccordionWrapper title={item.subject} data={item.contents} index={index} />} />
 

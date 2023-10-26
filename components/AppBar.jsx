@@ -3,7 +3,7 @@ import React from "react";
 import { View } from "react-native";
 import { Appbar } from "react-native-paper";
 
-const AppBar = ({ bgc = "#e8f0ee", title, back, mode }) => {
+const AppBar = ({ bgc = "#ecf2f0", title, back, mode }) => {
   const navigation = useNavigation();
   return (
     <Appbar.Header style={{ backgroundColor: bgc }} mode={mode}>

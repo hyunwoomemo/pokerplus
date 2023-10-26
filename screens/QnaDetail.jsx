@@ -6,6 +6,7 @@ import moment from "moment";
 import { customerApi } from "../api";
 import ScreenLayout from "../components/ScreenLayout";
 import { useQuery } from "@tanstack/react-query";
+import { LinearGradient } from "expo-linear-gradient";
 
 const QnaDetail = ({ route }) => {
   const { qna } = route.params;
@@ -17,54 +18,28 @@ const QnaDetail = ({ route }) => {
 
   const { data, isLoading, isError } = useQuery(["qnaDetail"], () => customerApi.customerItem(qna.id));
 
-  console.log(data);
-
-  useEffect(() => {
-    customerApi
-      .customerItem(qna.id)
-      .then((res) => {
-        if (res.CODE === "DCR000") {
-          LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
-          setQnaItem(res.DATA.data);
-          setAnswer(res.DATA.answer);
-          setPrevItem(res.DATA.prev);
-        }
-      })
-      .then(() => setLoading(false));
-  }, [route.params.qna]);
-
-  useEffect(() => {
-    if (qnaItem.length === 0) {
-      customerApi
-        .customerItem(qna.id)
-        .then((res) => {
-          if (res.CODE === "DCR000") {
-            LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
-            setQnaItem(res.DATA.data);
-            setAnswer(res.DATA.answer);
-            setPrevItem(res.DATA.prev);
-          }
-        })
-        .then(() => setLoading(false));
-    }
-  }, []);
-
   return (
     <ScreenLayout title={qna.subject}>
       <Text style={{ marginLeft: "auto", color: "gray", marginBottom: 20 }}>{moment(qna.created_at).utc().format("YY/MM/DD")}</Text>
       <View style={styles.container}>
         <Text style={styles.contentsTitle}>문의 내용</Text>
-        <View style={styles.contentsWrapper}>
+        <View style={{ ...styles.contentsWrapper, marginTop: 15 }}>
           <Text>{qna.contents}</Text>
         </View>
       </View>
-      {answer?.length > 0 && (
-        <View style={styles.container}>
-          <Text style={styles.contentsTitle}>답변 내용</Text>
-          <View style={styles.contentsWrapper}>
-            <Text>{answer?.contents}</Text>
+      {isLoading ? (
+        <ActivityIndicator size={"large"} color={"#ff3183"} style={StyleSheet.absoluteFillObject} />
+      ) : (
+        data?.DATA.answer && (
+          <View style={{ ...styles.container, marginTop: 20 }}>
+            <Text style={{ ...styles.contentsTitle, color: "#ff3183" }}>스포패스 관리자</Text>
+            <LinearGradient colors={["#fe806a", "#ff3183"]} start={{ x: 0.3, y: 0.1 }} style={{ borderRadius: 10, marginTop: 15 }} end={{ x: 0.9, y: 0.1 }}>
+              <View style={{ ...styles.contentsWrapper, backgroundColor: "#fff" }}>
+                <Text>{data.DATA.answer?.contents}</Text>
+              </View>
+            </LinearGradient>
           </View>
-        </View>
+        )
       )}
     </ScreenLayout>
   );
@@ -80,7 +55,7 @@ const styles = StyleSheet.create({
   contentsWrapper: {
     backgroundColor: "rgba(0,0,0,0.1)",
     padding: 20,
-    marginVertical: 10,
+    margin: 2,
     borderRadius: 10,
   },
 });

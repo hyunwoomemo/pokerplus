@@ -16,6 +16,7 @@ import { preventAutoHideAsync } from "expo-splash-screen";
 import { authApi, customerApi, resourceApi, ticketApi } from "./api";
 import { offset, offsetValue } from "./config";
 import { StatusBar } from "expo-status-bar";
+import { OneSignal } from "react-native-onesignal";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -69,7 +70,6 @@ export default function App() {
   useEffect(() => {
     const prefetch = async () => {
       setTimeout(() => {
-        console.log("dsfsdf");
         SplashScreen.hideAsync();
       }, 2000);
 
@@ -88,7 +88,7 @@ export default function App() {
       <PaperProvider>
         <RecoilRoot>
           <ToastProvider duration={2000} offset={30} swipeEnabled={true}>
-            {/* <StatusBar backgroundColor="#e8f0ee" /> */}
+            {/* <StatusBar backgroundColor="#ecf2f0" /> */}
             <NavigationContainer linking={linking}>
               <Nav.Navigator>
                 <Nav.Screen name="Root" component={Root} options={{ headerShown: false }} />
