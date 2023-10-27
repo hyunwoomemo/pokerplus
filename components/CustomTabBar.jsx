@@ -1,9 +1,5 @@
-import React from "react";
-import { View, Text, TouchableOpacity, Image } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { Octicons } from "@expo/vector-icons";
-import { AntDesign } from "@expo/vector-icons";
+import React, { useState } from "react";
+import { View, Text, TouchableOpacity, Image, Alert } from "react-native";
 import { footerIcon } from "../source";
 
 const CustomTabBar = ({ state, descriptors, navigation, options }) => {
@@ -13,7 +9,7 @@ const CustomTabBar = ({ state, descriptors, navigation, options }) => {
         style={
           options?.active
             ? {
-                backgroundColor: "#ecf2f0",
+                backgroundColor: "#e8f0ee",
                 padding: 12,
                 borderRadius: 20,
                 shadowOffset: {
@@ -35,7 +31,7 @@ const CustomTabBar = ({ state, descriptors, navigation, options }) => {
     );
   };
   return (
-    <View style={{ flexDirection: "row", backgroundColor: "#ecf2f0", paddingVertical: 5, paddingBottom: 20 }}>
+    <View style={{ flexDirection: "row", backgroundColor: "#e8f0ee", paddingVertical: 5, paddingBottom: 20 }}>
       {state.routes.map((route, index) => {
         if (index < 5) {
           // Display only the first 4 items
@@ -51,14 +47,17 @@ const CustomTabBar = ({ state, descriptors, navigation, options }) => {
             });
 
             if (!isFocused && !event.defaultPrevented) {
-              navigation.navigate(route.name);
+              if (route.name === "Pub" || route.name === "Championship") {
+                Alert.alert("준비 중입니다.");
+              } else {
+                navigation.navigate(route.name);
+              }
             }
           };
 
           return (
             <TouchableOpacity key={route.key} onPress={onPress} style={{ flex: 1, justifyContent: "center", alignItems: "center", paddingVertical: 10 }}>
               {isFocused ? icons(footerIcon.active[route.name], { active: true }) : icons(footerIcon.basic[route.name])}
-              {/* <Text style={{ color: isFocused ? 'tomato' : 'black', paddingTop: 5}}>{label}</Text> */}
             </TouchableOpacity>
           );
         } else {

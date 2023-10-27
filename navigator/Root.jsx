@@ -7,17 +7,17 @@ import InNav from "./InNav";
 import OutNav from "./OutNav";
 import { useRecoilState } from "recoil";
 import { authState } from "../recoil/auth/atom";
-import { getStorage } from "../utils/asyncStorage";
+import { getStorage, removeStorage } from "../utils/asyncStorage";
 // import SplashScreen from "react-native-splash-screen";
 import { authApi, customerApi, resourceApi, ticketApi } from "../api";
 import { PosterContext } from "../context";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import * as SplashScreen from "expo-splash-screen";
-import { offsetValue } from "../config";
+import { useToast } from "react-native-toast-notifications";
+import { AntDesign } from "@expo/vector-icons";
 
 const Nav = createNativeStackNavigator();
 
-const Root = () => {
+const Root = ({ navigation, route }) => {
   const [user, setUser] = useRecoilState(authState);
   const [poster, setPoster] = useState([]);
   const queryClient = useQueryClient();
@@ -26,6 +26,32 @@ const Root = () => {
     poster,
     setPoster,
   };
+
+  const toast = useToast();
+
+  const { data: userData, isLoading: userLoading, isError: userError, status } = useQuery(["user"], authApi.info);
+
+  console.log("sdf", Object.keys(user).length);
+
+  console.log(route);
+  useEffect(() => {
+    let count = 0;
+    if (Object.keys(user).length && userError && route.name !== "Login") {
+      count++;
+      if (count === 1) {
+        // setVisible(true);
+        toast.show("로그인이 만료되었습니다.", {
+          type: "normal",
+          normalColor: "gray",
+          icon: <AntDesign name="warning" size={20} color="white" />,
+          style: { gap: 5 },
+        });
+        removeStorage("user");
+        removeStorage("token");
+        setUser({});
+      }
+    }
+  }, [userError]);
 
   return (
     <PosterContext.Provider value={values}>
@@ -36,6 +62,12 @@ const Root = () => {
       >
         {Object.keys(user).length > 0 ? <Nav.Screen name="InNav" component={InNav} /> : <Nav.Screen name="OutNav" component={OutNav} />}
       </Nav.Navigator>
+      {/* <ModalComponent visible={visible} hideModal={hideModal} size="large">
+        <View style={{ alignItems: "center", gap: 20 }}>
+          <Text style={{ fontSize: 16 }}>로그인이 만료되었습니다</Text>
+          <Text style={{ fontSize: 16 }}>다시 로그인 부탁드립니다 !</Text>
+        </View>
+      </ModalComponent> */}
     </PosterContext.Provider>
   );
 };

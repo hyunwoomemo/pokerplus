@@ -59,7 +59,7 @@ const AccordionWrapper = ({ title, children, data, index }) => {
       <TouchableOpacity onPress={toggleListItem} style={styles.wrapper}>
         <View style={styles.accordionItem}>
           <Text style={styles.accordionItemTitle}>{title}</Text>
-          <Animated.View style={{ transform: [{ rotate }] }}>
+          <Animated.View style={{ transform: [{ rotate }], alignSelf: "flex-start" }}>
             <MaterialIcons name="keyboard-arrow-down" size={24} color={isOpen ? "#ff3183" : "black"} />
           </Animated.View>
         </View>
@@ -123,6 +123,8 @@ const styles = StyleSheet.create({
   },
   accordionItemTitle: {
     fontSize: 16,
+    width: "90%",
+    lineHeight: 24,
   },
   accordionItem: {
     paddingVertical: 20,

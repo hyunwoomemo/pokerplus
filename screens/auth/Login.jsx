@@ -13,12 +13,10 @@ import { getStorage, setStorage } from "../../utils/asyncStorage";
 import { LogLevel, OneSignal } from "react-native-onesignal";
 import ModalComponent from "../../components/Modal";
 import moment from "moment";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 const Container = styled.View`
   flex: 1;
-  align-items: center;
-  justify-content: center;
-  background-color: #fff;
 `;
 
 const LogoWrapper = styled.View`
@@ -64,11 +62,6 @@ const ButtonWrapper = styled.View`
 const Login = ({ navigation: { navigate } }) => {
   const passwordRef = useRef(null);
   const toast = useToast();
-  const [visible, setVisible] = useState(false);
-
-  const hideModal = () => {
-    setVisible(false);
-  };
 
   const onJoin = () => {
     navigate("TermsNav");
@@ -121,16 +114,6 @@ const Login = ({ navigation: { navigate } }) => {
     OneSignal?.Notifications.addEventListener("click", (event) => {
       console.log("OneSignal: notification clicked:", event.result);
     });
-
-    OneSignal.Notifications.addEventListener("permissionChange", async (granted) => {
-      // console.log("OneSignal: permission changed:", granted);
-      if (granted) {
-        await setStorage("isPushEnabled", true);
-        setVisible(true);
-      } else {
-        await setStorage("isPushEnabled", false);
-      }
-    });
   };
 
   const onLogin = async () => {
@@ -182,63 +165,57 @@ const Login = ({ navigation: { navigate } }) => {
 
   return (
     <Container>
-      <LogoWrapper>
-        <Image source={{ uri: Icon.logo }} width={100} height={100} resizeMode="contain"></Image>
-      </LogoWrapper>
-      <FormWrapper>
-        <FormItemWrapper>
-          <Image source={{ uri: Icon.user }} width={18} height={18} resizeMode="contain" />
-          <InputField
-            placeholder="이메일 입력"
-            placeholderTextColor="gray"
-            value={values.email}
-            onChangeText={(text) => handleChangeText("email", text)}
-            error={error.email}
-            touched={touched.email}
-            inputMode="email"
-            returnKeyType="next"
-            onSubmitEditing={() => passwordRef.current?.focus()}
-            blurOnSubmit={false}
-          />
-        </FormItemWrapper>
-        <FormItemWrapper>
-          <Image source={{ uri: Icon.password }} width={18} height={18} resizeMode="contain" />
-          <InputField
-            placeholder="비밀번호 입력"
-            placeholderTextColor="gray"
-            value={values.password}
-            onBlur={() => handleBlur("password")}
-            // error={error.password}
-            onChangeText={(text) => handleChangeText("password", text)}
-            touched={touched.password}
-            secureTextEntry
-            ref={passwordRef}
-            returnKeyType="send"
-            onSubmitEditing={onLogin}
-          />
-        </FormItemWrapper>
-      </FormWrapper>
-      <FindWrapper>
-        <FindItem onPress={() => navigate("FindId")}>
-          <FindItemText>이메일 찾기</FindItemText>
-        </FindItem>
-        <Text>|</Text>
-        <FindItem onPress={() => navigate("FindPw")}>
-          <FindItemText>비밀번호 찾기</FindItemText>
-        </FindItem>
-      </FindWrapper>
-      <ButtonWrapper>
-        <Button primary onPress={onLogin} loading={loading} label="로그인" />
-        <Button onPress={onJoin} dark label="회원가입" />
-      </ButtonWrapper>
-      <ModalComponent visible={visible} hideModal={hideModal}>
-        <View style={{ padding: 10, gap: 20, alignItems: "center" }}>
-          <Text style={{ fontWeight: "bold", fontSize: 16 }}>광고성 정보 푸시 동의</Text>
-          <Text style={{ textAlign: "center", fontSize: 16, lineHeight: 24 }}>서비스와 관련된 소식, 이벤트 안내, 고객 혜택 등 다양한 정보를 제공합니다.</Text>
-          <Text style={{ color: "gray" }}>{moment(new Date()).utc().format("YYYY년 MM월 DD일")}</Text>
-          <Button label="닫기" onPress={() => setVisible(false)} style={{ width: "100%" }} />
-        </View>
-      </ModalComponent>
+      <KeyboardAwareScrollView contentContainerStyle={{ justifyContent: "center", alignItems: "center", flex: 1, backgroundColor: "#fff" }}>
+        <LogoWrapper>
+          <Image source={{ uri: Icon.logo }} width={100} height={100} resizeMode="contain"></Image>
+        </LogoWrapper>
+        <FormWrapper>
+          <FormItemWrapper>
+            <Image source={{ uri: Icon.user }} width={18} height={18} resizeMode="contain" />
+            <InputField
+              placeholder="이메일 입력"
+              placeholderTextColor="gray"
+              value={values.email}
+              onChangeText={(text) => handleChangeText("email", text)}
+              error={error.email}
+              touched={touched.email}
+              inputMode="email"
+              returnKeyType="next"
+              onSubmitEditing={() => passwordRef.current?.focus()}
+              blurOnSubmit={false}
+            />
+          </FormItemWrapper>
+          <FormItemWrapper>
+            <Image source={{ uri: Icon.password }} width={18} height={18} resizeMode="contain" />
+            <InputField
+              placeholder="비밀번호 입력"
+              placeholderTextColor="gray"
+              value={values.password}
+              onBlur={() => handleBlur("password")}
+              // error={error.password}
+              onChangeText={(text) => handleChangeText("password", text)}
+              touched={touched.password}
+              secureTextEntry
+              ref={passwordRef}
+              returnKeyType="send"
+              onSubmitEditing={onLogin}
+            />
+          </FormItemWrapper>
+        </FormWrapper>
+        <FindWrapper>
+          <FindItem onPress={() => navigate("FindId")}>
+            <FindItemText>이메일 찾기</FindItemText>
+          </FindItem>
+          <Text>|</Text>
+          <FindItem onPress={() => navigate("FindPw")}>
+            <FindItemText>비밀번호 찾기</FindItemText>
+          </FindItem>
+        </FindWrapper>
+        <ButtonWrapper>
+          <Button primary onPress={onLogin} loading={loading} label="로그인" />
+          <Button onPress={onJoin} dark label="회원가입" />
+        </ButtonWrapper>
+      </KeyboardAwareScrollView>
     </Container>
   );
 };

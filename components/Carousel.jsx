@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Animated, FlatList, Text, View, TouchableOpacity } from "react-native";
+import { Animated, FlatList, Text, View, TouchableOpacity, Dimensions } from "react-native";
 import styled from "styled-components/native";
 import CarouselItem from "./CarouselItem";
 import { LinearGradient } from "expo-linear-gradient";
@@ -19,10 +19,13 @@ const ItemTitle = styled.Text`
   text-align: center;
   font-size: 14px;
   font-weight: bold;
+  max-width: ${(props) => (props.maxWidth ? `${props.maxWidth}px` : undefined)};
 `;
 
 const Carousel = ({ data, pageWidth, gap, offset }) => {
   const [load, setLoad] = useState([]);
+  const { width } = Dimensions.get("window");
+  console.log(width);
   useEffect(() => {
     const hidleSplash = async () => {
       await SplashScreen.hideAsync();
@@ -56,7 +59,7 @@ const Carousel = ({ data, pageWidth, gap, offset }) => {
         <ItemTitleWrapper style={{ opacity: titleOpacity }}>
           <LinearGradient colors={["#bc20a7", "#4c56fa"]} start={{ x: 0.3, y: 0.1 }} style={{ borderRadius: 30, width: "80%" }} end={{ x: 0.9, y: 0.1 }}>
             <View style={{ borderRadius: 30, backgroundColor: "#ecf2f0", marginVertical: 2, marginHorizontal: 2, paddingVertical: 5 }}>
-              <ItemTitle>{item.title}</ItemTitle>
+              <ItemTitle maxWidth={width - 100}>{item.title}</ItemTitle>
             </View>
           </LinearGradient>
         </ItemTitleWrapper>

@@ -2,13 +2,13 @@ import React from "react";
 import { Dimensions, Text } from "react-native";
 import { Modal, Portal } from "react-native-paper";
 
-const ModalComponent = ({ children, visible, hideModal, half }) => {
+const ModalComponent = ({ children, visible, hideModal, size }) => {
   const { height } = Dimensions.get("window");
   const containerStyle = {
     backgroundColor: "white",
     padding: 20,
     margin: 20,
-    minHeight: half ? height * 0.5 : height * 0.3,
+    minHeight: size === "large" ? height * 0.5 : "auto",
     borderRadius: 30,
   };
   return (

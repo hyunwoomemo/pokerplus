@@ -17,6 +17,7 @@ import { authApi, customerApi, resourceApi, ticketApi } from "./api";
 import { offset, offsetValue } from "./config";
 import { StatusBar } from "expo-status-bar";
 import { OneSignal } from "react-native-onesignal";
+import { removeStorage } from "./utils/asyncStorage";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -67,28 +68,11 @@ export default function App() {
     config: deepLinkConfig,
   };
 
-  useEffect(() => {
-    const prefetch = async () => {
-      setTimeout(() => {
-        SplashScreen.hideAsync();
-      }, 2000);
-
-      queryClient.prefetchQuery(["poster"], resourceApi.posters);
-      queryClient.prefetchQuery(["notice", 1], () => customerApi.noticeList({ board_id: "notice", offset: offsetValue, page: 1 }));
-      queryClient.prefetchQuery(["myticket"], ticketApi.list);
-      queryClient.prefetchQuery(["qna", 1], () => customerApi.customerList(0, offsetValue, 1));
-      queryClient.prefetchQuery(["user"], authApi.info);
-    };
-
-    prefetch();
-  }, []);
-
   return (
     <QueryClientProvider client={queryClient}>
       <PaperProvider>
         <RecoilRoot>
-          <ToastProvider duration={2000} offset={30} swipeEnabled={true}>
-            {/* <StatusBar backgroundColor="#ecf2f0" /> */}
+          <ToastProvider duration={3000} offset={30} swipeEnabled={true}>
             <NavigationContainer linking={linking}>
               <Nav.Navigator>
                 <Nav.Screen name="Root" component={Root} options={{ headerShown: false }} />
