@@ -13,8 +13,8 @@ const CustomTabBar = ({ state, descriptors, navigation, options }) => {
                 padding: 12,
                 borderRadius: 20,
                 shadowOffset: {
-                  width: 3,
-                  height: 2,
+                  width: 1,
+                  height: 1,
                 },
                 shadowOpacity: 0.25,
                 shadowRadius: 3,

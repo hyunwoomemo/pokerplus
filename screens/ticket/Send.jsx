@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { ActivityIndicator, Dimensions, Keyboard, LayoutAnimation, Text, TextInput, View } from "react-native";
+import { ActivityIndicator, Dimensions, FlatList, Keyboard, LayoutAnimation, Text, TextInput, View } from "react-native";
 import { ticketApi } from "../../api";
 import { SelectList } from "react-native-dropdown-select-list";
 import { Entypo } from "@expo/vector-icons";
@@ -17,19 +17,16 @@ import FastImage from "react-native-fast-image";
 
 const Send = ({ navigation }) => {
   const [tickets, setTickets] = useState([]);
-  const [selectData, setSelectData] = useState([]);
   const [loading, setLoading] = useState({});
-  const [user, setUser] = useRecoilState(authState);
   const [visible, setVisible] = React.useState(false);
   const { height } = Dimensions.get("window");
   const [sendVisible, setSendVisible] = useState(false);
+  const [ticketVisible, setTicketVisible] = useState(false);
+  const [selectTicket, setSelectTicket] = useState([]);
   const sendHideModal = () => {
     setSendVisible(false);
   };
 
-  console.log(selectData);
-
-  const showModal = () => setVisible(true);
   const hideModal = (type) => {
     if (type !== "ok") {
       setValues({
@@ -40,12 +37,9 @@ const Send = ({ navigation }) => {
     }
     setVisible(false);
   };
-  const containerStyle = {
-    backgroundColor: "white",
-    padding: 20,
-    margin: 20,
-    borderRadius: 20,
-    // height: height * 0.5,
+
+  const hideTicketModal = () => {
+    setTicketVisible(false);
   };
 
   const queryClient = useQueryClient();
@@ -55,6 +49,8 @@ const Send = ({ navigation }) => {
   });
 
   const { data, isLoading, isError } = useQuery(["myticket"], ticketApi.list);
+
+  console.log(data);
 
   useEffect(() => {
     setTickets(data?.DATA?.filter((v) => v.ticket_count != 0));
@@ -66,20 +62,10 @@ const Send = ({ navigation }) => {
         setValues({
           count: "1",
         });
+        setSelectTicket();
       };
     }, [])
   );
-
-  useEffect(() => {
-    tickets?.forEach((v, i) => {
-      setSelectData([
-        {
-          key: v.ticket_info_id,
-          value: v.ticket_name + ` (${v.ticket_count})`,
-        },
-      ]);
-    });
-  }, [tickets]);
 
   const handleChange = (type, val) => {
     setValues({
@@ -105,12 +91,13 @@ const Send = ({ navigation }) => {
 
   const toast = useToast();
 
+  console.log(tickets);
+
   const handleFindUser = async () => {
     Keyboard.dismiss();
     setLoading({ ...loading, find: true });
     try {
       const res = await ticketApi.findUser(values?.hp?.replaceAll("-", ""));
-      console.log(res);
       if (res.CODE === "TSR000") {
         setVisible(true);
         setValues({ ...values, name: res.DATA.name, userId: res.DATA.targetUser });
@@ -125,7 +112,6 @@ const Send = ({ navigation }) => {
         }
       }
     } catch (err) {
-      console.error(err);
     } finally {
       setLoading({ ...loading, find: false });
     }
@@ -158,7 +144,6 @@ const Send = ({ navigation }) => {
         //   headers: headers,
         // })
         //   .then((res) => res.json())
-        //   .then((result) => console.log(result));
         queryClient.invalidateQueries(["myticket"]);
         queryClient.invalidateQueries(["send"]);
         queryClient.invalidateQueries(["user"]);
@@ -184,7 +169,6 @@ const Send = ({ navigation }) => {
         }
       }
     } catch (err) {
-      console.error(err);
     } finally {
       setLoading({ ...loading, send: false });
       sendHideModal();
@@ -192,23 +176,75 @@ const Send = ({ navigation }) => {
     }
   };
 
-  for (const a in values) {
-    console.log(a, typeof values[a]);
-  }
+  const Separator = () => {
+    return <View style={{ borderBottomWidth: 1, borderColor: "gray" }}></View>;
+  };
+
+  const Header = () => {
+    return (
+      <View style={{ paddingBottom: 20, backgroundColor: "#fff" }}>
+        <Text style={{ fontSize: 18, color: "gray" }}>전송하실 참가권을 선택해주세요</Text>
+      </View>
+    );
+  };
+
+  const handleSelectTicket = (item) => {
+    setTicketVisible(false);
+    setSelectTicket(item);
+    setValues({
+      ...values,
+      count: "1",
+      id: item.ticket_info_id,
+    });
+  };
 
   return (
     <KeyboardAwareScrollView>
       <View style={{ padding: 20, flex: 1 }}>
-        <SelectList
-          boxStyles={{ marginTop: 10, backgroundColor: "#fff", borderRadius: 50, paddingVertical: 18, paddingHorizontal: 20, borderColor: "transparent" }}
-          dropdownStyles={{ backgroundColor: "#fff", borderWidth: 0 }}
-          dropdownItemStyles={{ paddingVertical: 10 }}
-          setSelected={(val) => handleChange("id", val)}
-          data={selectData}
-          save="key"
-          placeholder="전송하실 참가권을 선택해주세요."
-          defaultOption={{ key: "", value: "" }}
-        />
+        <TouchableOpacity
+          onPress={() => setTicketVisible(true)}
+          style={{
+            marginTop: 10,
+            backgroundColor: "#fff",
+            borderRadius: 50,
+            paddingVertical: 18,
+            paddingHorizontal: 20,
+            flexDirection: "row",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Text style={{ fontSize: 16 }}>{selectTicket ? `${selectTicket?.ticket_name} (${selectTicket?.ticket_count})` : "참가권 선택"}</Text>
+        </TouchableOpacity>
+        <ModalComponent visible={ticketVisible} hideModal={hideTicketModal}>
+          <FlatList
+            data={tickets}
+            keyExtractor={(item, index) => `${index}-${item.ticket_info_id}`}
+            ItemSeparatorComponent={<Separator />}
+            ListHeaderComponent={<Header />}
+            stickyHeaderIndices={[0]}
+            // StickyHeaderComponent={<Header />}
+            renderItem={({ item }) => (
+              <TouchableOpacity onPress={() => handleSelectTicket(item)} style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", padding: 20 }}>
+                <FastImage
+                  source={{ uri: item.ticket_logo_url || "https://newgenerationdatadev.blob.core.windows.net/data/template/t08/common/footer_icon_ticket.png" }}
+                  style={item.ticket_logo_url ? { width: 80, height: 40 } : { width: 40, height: 20 }}
+                  resizeMode="contain"
+                />
+                <Text style={{ fontSize: 16 }}>{item.ticket_name}</Text>
+                <View style={{ flexDirection: "row", gap: 10 }}>
+                  <FastImage
+                    source={{ uri: "https://newgenerationdatadev.blob.core.windows.net/data/template/t08/common/footer_icon_ticket.png" }}
+                    style={{ width: 20, height: 20 }}
+                    resizeMode="contain"
+                    tintColor="gray"
+                  />
+                  <Text style={{ fontSize: 16 }}>{item.ticket_count}장</Text>
+                </View>
+              </TouchableOpacity>
+            )}
+          />
+        </ModalComponent>
         <View
           style={{
             marginTop: 10,
@@ -246,7 +282,6 @@ const Send = ({ navigation }) => {
             onChangeText={(text) => {
               // LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
               text = text.replace(/[^0-9]/g, "").replace(/^(\d{2,3})(\d{3,4})(\d{4})$/, `$1-$2-$3`);
-              console.log(text);
               setValues({ ...values, name: "", hp: text });
             }}
             style={{ fontSize: 16, marginTop: 10, backgroundColor: "#fff", borderRadius: 50, paddingVertical: 18, paddingHorizontal: 20, flex: 3 }}
@@ -261,6 +296,7 @@ const Send = ({ navigation }) => {
           )}
           <TouchableOpacity
             onPress={handleFindUser}
+            disabled={!values.hp}
             style={
               values.hp
                 ? { marginTop: 10, backgroundColor: "#383838", borderRadius: 50, paddingVertical: 18, paddingHorizontal: 20, flex: 1, alignItems: "center", justifyContent: "center" }
@@ -270,7 +306,7 @@ const Send = ({ navigation }) => {
             <Text style={{ color: "#fff", fontWeight: "bold" }}>{loading.find ? <ActivityIndicator color="#fff" size={15} /> : "조회"}</Text>
           </TouchableOpacity>
         </View>
-        <ModalComponent visible={visible} hideModal={hideModal} half>
+        <ModalComponent visible={visible} hideModal={hideModal} size="large">
           <View style={{ flex: 1, justifyContent: "center", paddingHorizontal: 20, alignItems: "center", gap: 30 }}>
             <Text style={{ fontSize: 18 }}>사용자 정보</Text>
             <Text style={{ fontSize: 18, color: "#ff3183", fontWeight: "bold" }}>{values.hp}</Text>
@@ -299,7 +335,7 @@ const Send = ({ navigation }) => {
           }}
           onChangeText={(text) => setValues({ ...values, memo: text })}
         ></TextInput>
-        <Button onPress={() => setSendVisible(true)} primary label="전송" style={{ marginTop: "auto" }} disabled={!(values.hp?.length > 0 && values.name?.length > 0 && selectData)} />
+        <Button onPress={() => setSendVisible(true)} primary label="전송" style={{ marginTop: "auto" }} disabled={!(values.hp?.length > 0 && values.name?.length > 0 && selectTicket)} />
         <ModalComponent visible={sendVisible} hideModal={sendHideModal} half>
           <View style={{ alignItems: "center", gap: 10 }}>
             <Text style={{ fontSize: 16 }}>이름: {values.name}</Text>
@@ -318,8 +354,8 @@ const Send = ({ navigation }) => {
                 gap: 30,
               }}
             >
-              <FastImage source={{ uri: data?.DATA.find((v) => v.ticket_info_id === selectData[0]?.key)?.ticket_logo_url }} style={{ width: 70, height: 30 }} />
-              <Text style={{ fontSize: 16 }}>{data?.DATA.find((v) => v.ticket_info_id === selectData[0]?.key)?.ticket_name}</Text>
+              <FastImage source={{ uri: selectTicket?.ticket_logo_url }} style={{ width: 70, height: 30 }} />
+              <Text style={{ fontSize: 16 }}>{selectTicket?.ticket_name}</Text>
               <View style={{ flexDirection: "row", gap: 5 }}>
                 <FastImage
                   source={{ uri: "https://newgenerationdatadev.blob.core.windows.net/data/template/t08/common/footer_icon_ticket.png" }}

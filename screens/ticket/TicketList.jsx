@@ -12,7 +12,7 @@ import { useFocusEffect } from "@react-navigation/native";
 import { useQuery } from "@tanstack/react-query";
 import NoItem from "../../components/NoItem";
 
-const TicketList = () => {
+const TicketList = ({ navigation }) => {
   const [tickets, setTickets] = useState();
 
   const { data, isLoading, isError } = useQuery(["myticket"], ticketApi.list);

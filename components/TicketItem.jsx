@@ -33,7 +33,8 @@ const styles = StyleSheet.create({
     borderRadius: 25,
     alignItems: "center",
     backgroundColor: "#fff",
-    margin: 15,
+    marginHorizontal: 15,
+    marginVertical: 10,
   },
   name: {
     fontSize: 18,
