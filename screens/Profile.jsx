@@ -12,6 +12,7 @@ import { opacityAnimation } from "../animations/opacityAnimation";
 import { useQuery } from "@tanstack/react-query";
 import { authApi } from "../api";
 import FastImage from "react-native-fast-image";
+import { imageCache } from "../recoil/imageCache/atom";
 
 const Title = styled.Text`
   text-align: center;
@@ -22,7 +23,9 @@ const Title = styled.Text`
 
 const Profile = ({ navigation }) => {
   const [ticketCount, setTicketCount] = useState(0);
+  const [cache, setCache] = useRecoilState(imageCache);
   const { data, isLoading, isError } = useQuery(["user"], authApi.info);
+  console.log(data);
 
   useEffect(() => {
     const count = data.DATA.ticket_info?.reduce((acc, cur) => acc + cur.ticket_count, 0);
@@ -43,15 +46,12 @@ const Profile = ({ navigation }) => {
         <View style={{ alignItems: "center", paddingVertical: 30 }}>
           <Animated.View style={{ width: 120, height: 120, borderRadius: 60, backgroundColor: "rgba(0,0,0,0.2)", opacity: opacity }}>
             <FastImage
-              source={{ uri: data?.DATA.user_profile_url }}
+              source={{ uri: `${data?.DATA?.user_profile_url}?cache=${cache}` }}
               style={{
                 width: 120,
                 height: 120,
                 borderRadius: 60,
               }}
-              // width={120}
-              // height={120}
-              // borderRadius={60}
               resizeMode="cover"
               onLoadStart={() => opacityAnimation(opacity, "start")}
               onLoadEnd={() => opacityAnimation(opacity, "reset")}

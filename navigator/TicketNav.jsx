@@ -30,9 +30,11 @@ export default function TicketNav({ navigation }) {
 
   useFocusEffect(
     useCallback(() => {
+      navigation.navigate("TicketList");
       queryClient.invalidateQueries(["myticket"]);
       queryClient.invalidateQueries(["user"]);
       queryClient.invalidateQueries(["receive"]);
+      return () => {};
     }, [])
   );
 
@@ -57,13 +59,13 @@ export default function TicketNav({ navigation }) {
           tabBarLabelStyle: { fontSize: 15 },
           tabBarStyle: { backgroundColor: "#ecf2f0" },
         }}
+        initialRouteName="TicketList"
       >
         <Tab.Screen name="TicketList" component={TicketList} options={{ tabBarLabel: "내 참가권" }} />
         <Tab.Screen name="Send" component={Send} options={{ tabBarLabel: "전송하기" }} />
         <Tab.Screen name="ReceiveList" component={ReceiveList} options={{ tabBarLabel: "수령내역" }} />
         <Tab.Screen name="SendList" component={SendList} options={{ tabBarLabel: "전송내역" }} />
       </Tab.Navigator>
-      {/* </Layout> */}
     </TicketContext.Provider>
   );
 }

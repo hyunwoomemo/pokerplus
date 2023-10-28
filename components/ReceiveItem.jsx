@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Image } from "react-native";
 import { View } from "react-native";
 import { TouchableOpacity } from "react-native";
@@ -7,12 +7,15 @@ import { StyleSheet } from "react-native";
 import { Text } from "react-native";
 import moment from "moment";
 import FastImage from "react-native-fast-image";
+import ModalComponent from "./Modal";
+import Button from "./Button";
+import styled from "styled-components/native";
 
 const codeText = [
   { code: "TH001", text: "상금지급" },
   { code: "TH002", text: "대회사지급" },
   { code: "TH003", text: "일반수령" },
-  { code: "TH004", text: "QR전송" },
+  { code: "TH004", text: "QR수령" },
   { code: "TH005", text: "회수" },
 ];
 
@@ -34,6 +37,7 @@ const styleCodeText = (text) => {
 };
 
 const ReceiveItem = ({ item }) => {
+  console.log(item);
   const {
     ticket_info_id,
     ticket_history_code,
@@ -49,21 +53,34 @@ const ReceiveItem = ({ item }) => {
     description,
     created_at,
   } = item;
-  console.log(ticket_logo_url);
+
+  const [detailVisible, setDetailVisible] = useState(false);
+  const hideModal = () => {
+    setDetailVisible(false);
+  };
+
+  const handleDetailModal = () => {
+    setDetailVisible(true);
+  };
+
   return (
-    <TouchableOpacity style={styles.container}>
+    <TouchableOpacity style={styles.container} onPress={handleDetailModal}>
       <View style={styles.contentWrapper}>
         <View style={styles.firstline}>
           <Text style={styles.text}>{prev_owner_name}</Text>
-          <Text style={styles.text}>{moment(created_at).utc().format("YY/MM/DD")}</Text>
+          <Text style={styles.text}>{moment(created_at).utc().add(9, "h").format("YY/MM/DD")}</Text>
         </View>
         <View style={styles.secondline}>
-          <FastImage
-            source={{ uri: ticket_logo_url || "https://newgenerationdatadev.blob.core.windows.net/data/template/t08/common/footer_icon_ticket.png" }}
-            style={ticket_logo_url ? { width: 70, height: 30 } : { width: 40, height: 20 }}
-            resizeMode="contain"
-          />
-          <Text style={styles.ticketname}>{ticket_name}</Text>
+          <View style={{ flexDirection: "row", gap: 5, alignItems: "center" }}>
+            <FastImage
+              source={{ uri: ticket_logo_url || "https://data.spolive.com/data/template/t08/common/footer_icon_ticket.png" }}
+              style={ticket_logo_url ? { width: 60, height: 30 } : { width: 60, height: 30 }}
+              resizeMode="contain"
+            />
+            <Text numberOfLines={2} style={styles.ticketname}>
+              {ticket_name}
+            </Text>
+          </View>
           <View style={styles.countitem}>
             <MaterialCommunityIcons name="ticket-confirmation" size={20} color="rgba(0,0,0,0.8)" />
             <Text style={styles.text}>{count}장</Text>
@@ -73,18 +90,64 @@ const ReceiveItem = ({ item }) => {
       <View style={styles.codebutton}>
         <Text style={styles.codetext}>{styleCodeText(codeText.find((v) => v.code === ticket_history_code).text)}</Text>
       </View>
+      <ModalComponent visible={detailVisible} hideModal={hideModal}>
+        <View style={{ gap: 20 }}>
+          <View style={{ borderBottomWidth: StyleSheet.hairlineWidth }}>
+            <Text style={{ textAlign: "center", fontSize: 18, marginBottom: 20 }}>{codeText.find((v) => v.code === ticket_history_code).text}</Text>
+          </View>
+          <View style={styles.detailItemWrapper}>
+            <DetailText>날짜</DetailText>
+            <DetailText>{moment(item.created_at).utc().add(9, "h").format("YYYY/MM/DD HH:mm:ss")}</DetailText>
+          </View>
+          <View style={styles.detailItemWrapper}>
+            <DetailText>발신자</DetailText>
+            <DetailText>{prev_owner_name}</DetailText>
+          </View>
+          <View style={styles.detailItemWrapper}>
+            <DetailText>참가권 명</DetailText>
+            <View style={{ gap: 5, flexDirection: "row" }}>
+              <FastImage
+                source={{ uri: ticket_logo_url || "https://data.spolive.com/data/template/t08/common/footer_icon_ticket.png" }}
+                style={ticket_logo_url ? { width: 60, height: 30 } : { width: 60, height: 30 }}
+                resizeMode="contain"
+              />
+              <DetailText>{ticket_name}</DetailText>
+            </View>
+          </View>
+          <View style={styles.detailItemWrapper}>
+            <DetailText>수량</DetailText>
+            <DetailText>{count}</DetailText>
+          </View>
+          {description && (
+            <View style={{ gap: 20 }}>
+              <DetailText>메모</DetailText>
+              <View style={{ borderRadius: 15, padding: 15, minHeight: 100, borderWidth: StyleSheet.hairlineWidth }}>
+                <DetailText>{description}</DetailText>
+              </View>
+            </View>
+          )}
+          <View style={{ flexDirection: "row", justifyContent: "center" }}>
+            <View style={{ flex: 1 }}></View>
+            <Button label={"닫기"} dark style={{ flex: 2, marginTop: 15 }} onPress={hideModal} />
+            <View style={{ flex: 1 }}></View>
+          </View>
+        </View>
+      </ModalComponent>
     </TouchableOpacity>
   );
 };
 
+const DetailText = styled.Text`
+  font-size: 16px;
+`;
+
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
-    gap: 20,
+    gap: 30,
     alignItems: "center",
     flex: 1,
     padding: 15,
-    borderTopWidth: 1,
     borderBottomWidth: 1,
     borderColor: "rgba(0,0,0,0.1)",
     marginHorizontal: 10,
@@ -105,6 +168,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   codebutton: {
+    width: 70,
     paddingVertical: 10,
     paddingHorizontal: 15,
     borderRadius: 15,
@@ -127,6 +191,7 @@ const styles = StyleSheet.create({
   },
   ticketname: {
     fontSize: 18,
+    width: "50%",
   },
   text: {
     fontSize: 15,
@@ -134,6 +199,11 @@ const styles = StyleSheet.create({
   codetext: {
     color: "gray",
     textAlign: "center",
+    lineHeight: 18,
+  },
+  detailItemWrapper: {
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
 });
 

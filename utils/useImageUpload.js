@@ -17,7 +17,6 @@ export const useImageUpload = async (status, requestPermission, setImageUrl) => 
     });
 
     if (result.canceled) {
-      console.log("cancel");
       return null;
     }
 

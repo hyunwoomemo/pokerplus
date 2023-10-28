@@ -14,7 +14,6 @@ const PushSetting = () => {
   useEffect(() => {
     const getPush = async () => {
       const res = await getStorage("isPushEnabled");
-      console.log("push", res);
       setIsEnabled(res);
     };
 

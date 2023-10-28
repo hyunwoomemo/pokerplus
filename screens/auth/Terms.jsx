@@ -128,7 +128,6 @@ const Terms = () => {
     }
   };
 
-  console.log(check.length, check, check.includes(2));
   const handleCheckAuth = async () => {
     try {
       Linking.openURL(`https://www.pokerplus.co.kr/auth/create?next=pokerplusapp://join?check=${check.sort((a, b) => a - b).join(",")}`);

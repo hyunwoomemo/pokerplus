@@ -39,11 +39,9 @@ const QrCreate = ({ navigation }) => {
   const getQrInfoUrl = async () => {
     try {
       const { CODE, URL } = await qrApi.getUrl();
-      // console.log('api.qr.getUrl() res DATA: ', CODE, URL)
       const success = CODE === "QU000";
       if (success) {
         setQrInfoUrl(URL);
-        console.log(CODE, URL);
         setTimer(180);
       }
     } catch (err) {

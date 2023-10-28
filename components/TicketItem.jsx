@@ -11,8 +11,8 @@ const TicketItem = ({ item }) => {
   return (
     <TouchableOpacity style={styles.container}>
       <FastImage
-        source={{ uri: ticket_logo_url || "https://newgenerationdatadev.blob.core.windows.net/data/template/t08/common/footer_icon_ticket.png" }}
-        style={ticket_logo_url ? { width: 80, height: 40 } : { width: 40, height: 20 }}
+        source={{ uri: ticket_logo_url || "https://data.spolive.com/data/template/t08/common/footer_icon_ticket.png" }}
+        style={ticket_logo_url ? { width: 80, height: 40 } : { width: 80, height: 40 }}
         resizeMode="contain"
       />
 

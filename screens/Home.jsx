@@ -38,7 +38,6 @@ const Home = () => {
   OneSignal.Notifications.addEventListener("permissionChange", async (granted) => {
     if (granted) {
       await setStorage("isPushEnabled", true);
-      console.log("동의동의");
       setVisible(true);
     } else {
       await setStorage("isPushEnabled", false);

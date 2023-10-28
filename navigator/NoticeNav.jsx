@@ -13,7 +13,6 @@ const NoticeNav = () => {
 
   useFocusEffect(
     useCallback(() => {
-      console.log("Focus");
       return () => {
         setCurrentPage(1);
       };

@@ -1,26 +1,45 @@
 import React, { useState, useEffect } from "react";
-import { ActivityIndicator, Dimensions, LayoutAnimation, Text, TextInput, View, TouchableOpacity, StyleSheet } from "react-native";
-import AppBar from "../../components/AppBar";
-import { SelectList } from "react-native-dropdown-select-list";
+import { Text, TextInput, View, TouchableOpacity, StyleSheet, FlatList } from "react-native";
 import Button from "../../components/Button";
 import { Entypo } from "@expo/vector-icons";
 import { ticketApi } from "../../api";
 import { useToast } from "react-native-toast-notifications";
-import { OneSignal } from "react-native-onesignal";
-import { useRecoilState } from "recoil";
-import { authState } from "../../recoil/auth/atom";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import ModalComponent from "../../components/Modal";
+import FastImage from "react-native-fast-image";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import ScreenLayout from "../../components/ScreenLayout";
+import { LayoutAnimation } from "react-native";
 
 const QrSend = ({ navigation, route }) => {
   const { data } = route.params;
   const [info, setInfo] = useState([]);
   const [tickets, setTickets] = useState([]);
-  const [selectData, setSelectData] = useState([]);
+  const [selectTicket, setSelectTicket] = useState([]);
   const [loading, setLoading] = useState({});
   const [values, setValues] = useState({
     count: "1",
   });
-  const [user, setUser] = useRecoilState(authState);
+  const [ticketVisible, setTicketVisible] = useState(false);
+
+  const handleSelectTicket = (item) => {
+    setTicketVisible(false);
+    setSelectTicket(item);
+    setValues({
+      ...values,
+      count: "1",
+      id: item.ticket_info_id,
+    });
+  };
+
+  if (selectTicket) {
+    console.log("sdmflmsdkfms");
+  }
+
+  const hideTicketModal = () => {
+    setTicketVisible(false);
+    setSelectTicket();
+  };
 
   const queryClient = useQueryClient();
   const toast = useToast();
@@ -31,33 +50,19 @@ const QrSend = ({ navigation, route }) => {
     }
   }, []);
 
-  const getTickets = async () => {
-    const res = await ticketApi.list();
-    console.log("getTickets", res);
-
-    console.log(res);
-    setTickets(res.DATA.filter((v) => v.ticket_count !== 0));
-  };
+  const { data: ticketData, isLoading, isError } = useQuery(["myticket"], ticketApi.list);
 
   useEffect(() => {
-    if (tickets?.length === 0) {
-      getTickets();
-    }
-  }, []);
+    setTickets(ticketData?.DATA.filter((v) => v.ticket_count !== 0));
+  }, [ticketData]);
 
-  useEffect(() => {
-    if (selectData?.length === 0) {
-      tickets.forEach((v) => {
-        setSelectData((prev) => [
-          ...prev,
-          {
-            key: v.ticket_info_id,
-            value: v.ticket_name + ` (${v.ticket_count})`,
-          },
-        ]);
-      });
-    }
-  }, [tickets]);
+  // useEffect(() => {
+  //   if (selectTicket && Object.keys(selectTicket).length) {
+  //     LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
+  //   } else {
+  //     LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
+  //   }
+  // }, [selectTicket]);
 
   const handleChange = (type, val) => {
     setValues({
@@ -96,25 +101,12 @@ const QrSend = ({ navigation, route }) => {
         memo: values.memo ? values.memo : null,
       });
       if (res.CODE === "TKS000") {
-        // fetch("https://onesignal.com/api/v1/notifications", {
-        //   method: "POST",
-        //   body: JSON.stringify({
-        //     app_id: "ae232b11-fde8-419d-8069-9ec35bf73f62",
-        //     include_aliases: { external_id: [data.targetUser] },
-        //     target_channel: "push",
-        //     data: { foo: "bar" },
-        //     contents: { en: `${user.name}님이 티켓 ${values.count}장을 전송했습니다.` },
-        //   }),
-        //   headers: headers,
-        // })
-        //   .then((res) => res.json())
-        //   .then((result) => console.log("pushpush", result));
+        navigation.goBack();
+        navigation.navigate("Tabs", { screen: "Home" });
+        toast.show("티켓을 전송했습니다.");
         queryClient.invalidateQueries(["myticket"]);
         queryClient.invalidateQueries(["send"]);
         queryClient.invalidateQueries(["user"]);
-        navigation.goBack();
-        navigation.navigate("Tabs", { screen: "Home" });
-        console.log("123");
       } else {
         switch (res.CODE) {
           case "TKS001":
@@ -141,57 +133,106 @@ const QrSend = ({ navigation, route }) => {
     }
   };
 
-  return (
-    <View style={{ flex: 1, backgroundColor: "#ecf2f0", padding: 20 }}>
-      <Text style={{ fontSize: 20, alignItems: "center", marginTop: 10, textAlign: "center" }}>참가권 QR 전송</Text>
-      <View style={{ padding: 20, borderWidth: StyleSheet.hairlineWidth, marginTop: 40, borderRadius: 10, gap: 20 }}>
-        <View style={styles.item}>
-          <Text style={styles.text}>이름</Text>
-          <Text style={styles.text}>{info.name}</Text>
-        </View>
-        <View style={styles.item}>
-          <Text style={styles.text}>닉네임</Text>
-          <Text style={styles.text}>{info.nick}</Text>
-        </View>
-        <View style={styles.item}>
-          <Text style={styles.text}>연락처</Text>
-          <Text style={styles.text}>{info.hp}</Text>
-        </View>
-      </View>
-      <SelectList
-        boxStyles={{ marginTop: 10, backgroundColor: "#ecf2f0", borderRadius: 15, paddingVertical: 18, paddingHorizontal: 20, borderColor: "transparent" }}
-        dropdownStyles={{ backgroundColor: "#ecf2f0", borderWidth: 0 }}
-        dropdownItemStyles={{ paddingVertical: 10 }}
-        setSelected={(val) => handleChange("id", val)}
-        data={selectData}
-        save="key"
-        placeholder="전송하실 참가권을 선택해주세요."
-        defaultOption={{ key: "", value: "" }}
-        dropdownTextStyles={{ fontSize: 18 }}
-        notFoundText="보유하신 참가권이 없습니다."
-      />
-      <View
-        style={{ marginTop: 10, backgroundColor: "#ecf2f0", borderRadius: 15, paddingVertical: 18, paddingHorizontal: 20, flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}
-      >
-        <TouchableOpacity onPress={() => handleCount("minus")} disabled={values.count < 1 || !values.id}>
-          <Entypo name="circle-with-minus" size={28} color={values.count < 1 || !values.id ? "gray" : "#5a50ef"} />
-        </TouchableOpacity>
+  const Separator = () => {
+    return <View style={{ borderBottomWidth: 1, borderColor: "gray" }} />;
+  };
 
-        <TextInput
-          value={values.count}
-          onChangeText={(text) => {
-            if (parseInt(text) < 0 || parseInt(text) > tickets.find((v) => v.ticket_info_id === values.id)?.ticket_count || !values.id) return;
-            setValues({ ...values, count: text });
-          }}
-          inputMode="numeric"
-          keyboardType="numeric"
-        ></TextInput>
-        <TouchableOpacity onPress={() => handleCount("plus")} disabled={parseInt(values.count) >= tickets.find((v) => v.ticket_info_id === values.id)?.ticket_count || !values.id}>
-          <Entypo name="circle-with-plus" size={28} color={values.count >= tickets.find((v) => v.ticket_info_id === values.id)?.ticket_count || !values.id ? "gray" : "#ff2d84"} />
-        </TouchableOpacity>
+  const Header = () => {
+    return (
+      <View style={{ paddingBottom: 20, backgroundColor: "#fff" }}>
+        <Text style={{ fontSize: 18, color: "gray" }}>전송하실 참가권을 선택해주세요</Text>
       </View>
-      <Button loading={loading.send} onPress={handleSend} primary label="전송" style={{ marginTop: "auto" }} disabled={!selectData.length} />
-    </View>
+    );
+  };
+
+  return (
+    <ScreenLayout title={"참가권 QR 전송"} style={{ flex: 1, gap: 10 }}>
+      <KeyboardAwareScrollView style={{ flex: 1, backgroundColor: "#ecf2f0", padding: 20 }}>
+        <View style={{ padding: 20, borderWidth: StyleSheet.hairlineWidth, marginTop: 40, borderRadius: 10, gap: 20 }}>
+          <View style={styles.item}>
+            <Text style={styles.text}>이름</Text>
+            <Text style={styles.text}>{info.name}</Text>
+          </View>
+          <View style={styles.item}>
+            <Text style={styles.text}>닉네임</Text>
+            <Text style={styles.text}>{info.nick}</Text>
+          </View>
+          <View style={styles.item}>
+            <Text style={styles.text}>연락처</Text>
+            <Text style={styles.text}>{info.hp}</Text>
+          </View>
+        </View>
+        <TouchableOpacity
+          onPress={() => setTicketVisible(true)}
+          style={{
+            marginVertical: 20,
+            backgroundColor: "#fff",
+            borderRadius: 50,
+            paddingVertical: 18,
+            paddingHorizontal: 20,
+            flexDirection: "row",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Text style={{ fontSize: 16 }}>{selectTicket && Object.keys(selectTicket).length ? `${selectTicket?.ticket_name} (${selectTicket?.ticket_count})` : "참가권 선택"}</Text>
+        </TouchableOpacity>
+        <ModalComponent visible={ticketVisible} hideModal={hideTicketModal}>
+          <FlatList
+            data={tickets}
+            keyExtractor={(item, index) => `${index}-${item.ticket_info_id}`}
+            ItemSeparatorComponent={<Separator />}
+            ListHeaderComponent={<Header />}
+            stickyHeaderIndices={[0]}
+            renderItem={({ item }) => (
+              <TouchableOpacity onPress={() => handleSelectTicket(item)} style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", padding: 20 }}>
+                <FastImage
+                  source={{ uri: item.ticket_logo_url || "https://data.spolive.com/data/template/t08/common/footer_icon_ticket.png" }}
+                  style={item.ticket_logo_url ? { width: 60, height: 30 } : { width: 60, height: 30 }}
+                  resizeMode="contain"
+                />
+                <Text style={{ fontSize: 16 }}>{item.ticket_name}</Text>
+                <View style={{ flexDirection: "row", gap: 10 }}>
+                  <FastImage source={{ uri: "https://data.spolive.com/data/template/t08/common/footer_icon_ticket.png" }} style={{ width: 20, height: 20 }} resizeMode="contain" tintColor="gray" />
+                  <Text style={{ fontSize: 16 }}>{item.ticket_count}장</Text>
+                </View>
+              </TouchableOpacity>
+            )}
+          />
+        </ModalComponent>
+        <View
+          style={{
+            marginTop: 10,
+            backgroundColor: "#ecf2f0",
+            borderRadius: 15,
+            paddingVertical: 18,
+            paddingHorizontal: 20,
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <TouchableOpacity onPress={() => handleCount("minus")} disabled={values.count < 1 || !values.id}>
+            <Entypo name="circle-with-minus" size={28} color={values.count < 1 || !values.id ? "gray" : "#5a50ef"} />
+          </TouchableOpacity>
+          <TextInput
+            value={values.count}
+            onChangeText={(text) => {
+              if (parseInt(text) < 0 || parseInt(text) > tickets.find((v) => v.ticket_info_id === values.id)?.ticket_count || !values.id) return;
+              setValues({ ...values, count: text });
+            }}
+            inputMode="numeric"
+            keyboardType="numeric"
+            style={{ flex: 1, textAlign: "center" }}
+          ></TextInput>
+          <TouchableOpacity onPress={() => handleCount("plus")} disabled={parseInt(values.count) >= tickets.find((v) => v.ticket_info_id === values.id)?.ticket_count || !values.id}>
+            <Entypo name="circle-with-plus" size={28} color={values.count >= tickets.find((v) => v.ticket_info_id === values.id)?.ticket_count || !values.id ? "gray" : "#ff2d84"} />
+          </TouchableOpacity>
+        </View>
+
+        <Button loading={loading.send} onPress={handleSend} primary label="전송" style={{ marginTop: 50 }} disabled={!selectTicket || !Object.keys(selectTicket).length} />
+      </KeyboardAwareScrollView>
+    </ScreenLayout>
   );
 };
 

@@ -11,7 +11,7 @@ const QrNav = () => {
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="QrCreate" component={QrCreate} />
       <Stack.Screen name="QrScan" component={QrScan} />
-      <Stack.Screen name="QrSend" component={QrSend} options={{ presentation: "modal" }} />
+      <Stack.Screen name="QrSend" component={QrSend} />
     </Stack.Navigator>
   );
 };

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { ActivityIndicator, Text, View } from "react-native";
 import Layout from "../../components/Layout";
 import { ticketApi } from "../../api";
@@ -10,8 +10,9 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import Pagination from "../../components/Pagination";
 import { offsetValue } from "../../config";
 import NoItem from "../../components/NoItem";
+import { useFocusEffect } from "@react-navigation/native";
 
-const ReceiveList = () => {
+const ReceiveList = ({ navigation }) => {
   const [totalPage, setTotalPage] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
 
@@ -42,6 +43,15 @@ const ReceiveList = () => {
     setTotalPage(Math.ceil(data?.TOTAL / offsetValue));
   }, [data?.TOTAL]);
 
+  useFocusEffect(
+    useCallback(() => {
+      queryClient.invalidateQueries(["receive"]);
+      return () => {
+        // navigation.goBack();
+      };
+    }, [])
+  );
+
   return (
     <View style={{ flex: 1, backgroundColor: "#ecf2f0" }}>
       {isLoading ? (
@@ -68,7 +78,7 @@ const ReceiveList = () => {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 20,
+    // marginTop: 20,
     flex: 1,
   },
 });

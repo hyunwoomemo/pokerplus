@@ -50,12 +50,12 @@ const Header = () => {
           // navigation.setParams({ route: router.name });
         }}
       >
-        <Image source={{ uri: "https://newgenerationdatadev.blob.core.windows.net/data/template/t08/common/open-menu.png" }} width={20} height={20} />
+        <Image source={{ uri: "https://data.spolive.com/data/template/t08/common/open-menu.png" }} width={20} height={20} />
 
         {/* <Octicons name="three-bars" size={24} color="black" /> */}
       </Hambuger>
       <Main onPress={() => navigation.navigate("Home")}>
-        <Image source={{ uri: "https://newgenerationdatadev.blob.core.windows.net/data/template/t08/common/logo.png" }} width={40} height={40} resizeMode="cover" />
+        <Image source={{ uri: "https://data.spolive.com/data/template/t08/common/logo.png" }} width={40} height={40} resizeMode="cover" />
       </Main>
       <QRWrapper>
         <TouchableOpacity onPress={() => navigation.navigate("QrNav", { screen: "QrCreate" })}>

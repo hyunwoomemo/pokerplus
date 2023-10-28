@@ -19,14 +19,13 @@ import { opacityAnimation } from "../animations/opacityAnimation";
 import { OneSignal } from "react-native-onesignal";
 import { useQuery } from "@tanstack/react-query";
 import { authState } from "../recoil/auth/atom";
+import { imageCache } from "../recoil/imageCache/atom";
 import FastImage from "react-native-fast-image";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 const Drawer = createDrawerNavigator();
 
 const { width } = Dimensions.get("window");
-
-console.log(width);
 
 const DrawerContainer = styled.View`
   margin: ${(props) => (props.ios ? "40px 0 10px 0" : "0")};
@@ -162,6 +161,7 @@ const SignOutText = styled.Text`
 const DrawerContent = (active) => {
   const [user, setUser] = useRecoilState(authState);
   const { data: userData, isLoading, isError } = useQuery(["user"], authApi.info);
+  const [cache, setCache] = useRecoilState(imageCache);
 
   const { myTicketCount, setMyTicketCount } = useContext(InNavContext);
 
@@ -192,7 +192,8 @@ const DrawerContent = (active) => {
           {userData?.DATA?.user_profile_url && (
             <FastImage
               source={{
-                uri: userData?.DATA?.user_profile_url,
+                uri: `${userData?.DATA?.user_profile_url}?cache=${cache}`,
+                cache: "immutable",
               }}
               onLoadStart={() => opacityAnimation(opacity, "start")}
               onLoadEnd={() => {
@@ -213,12 +214,7 @@ const DrawerContent = (active) => {
           </TouchableOpacity>
           <TouchableOpacity onPress={() => navigation.navigate("TicketNav")} style={{ flexDirection: "row", gap: 10, alignItems: "center" }}>
             {/* <MaterialCommunityIcons /> */}
-            <FastImage
-              source={{ uri: "https://newgenerationdatadev.blob.core.windows.net/data/template/t08/common/footer_icon_ticket.png" }}
-              style={{ width: 15, height: 15 }}
-              resizeMode="contain"
-              tintColor="black"
-            />
+            <FastImage source={{ uri: "https://data.spolive.com/data/template/t08/common/footer_icon_ticket.png" }} style={{ width: 15, height: 15 }} resizeMode="contain" tintColor="black" />
             <MyTicketText>나의 참가권: {userData?.DATA?.ticket_info ? `${userData?.DATA?.ticket_info?.reduce((acc, cur) => acc + cur.ticket_count, 0)}장` : "0장"}</MyTicketText>
           </TouchableOpacity>
         </InfoTextWrapper>

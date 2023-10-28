@@ -40,6 +40,7 @@ const Send = ({ navigation }) => {
 
   const hideTicketModal = () => {
     setTicketVisible(false);
+    setSelectTicket();
   };
 
   const queryClient = useQueryClient();
@@ -49,8 +50,6 @@ const Send = ({ navigation }) => {
   });
 
   const { data, isLoading, isError } = useQuery(["myticket"], ticketApi.list);
-
-  console.log(data);
 
   useEffect(() => {
     setTickets(data?.DATA?.filter((v) => v.ticket_count != 0));
@@ -90,8 +89,6 @@ const Send = ({ navigation }) => {
   };
 
   const toast = useToast();
-
-  console.log(tickets);
 
   const handleFindUser = async () => {
     Keyboard.dismiss();
@@ -161,6 +158,7 @@ const Send = ({ navigation }) => {
             toast.show("데이터베이스 오류입니다.");
             break;
           case "TKS004":
+            f;
             toast.show("전송에 실패했습니다.");
             break;
           case "TKS005":
@@ -214,7 +212,7 @@ const Send = ({ navigation }) => {
             alignItems: "center",
           }}
         >
-          <Text style={{ fontSize: 16 }}>{selectTicket ? `${selectTicket?.ticket_name} (${selectTicket?.ticket_count})` : "참가권 선택"}</Text>
+          <Text style={{ fontSize: 16 }}>{selectTicket && Object.keys(selectTicket).length ? `${selectTicket?.ticket_name} (${selectTicket?.ticket_count})` : "참가권 선택"}</Text>
         </TouchableOpacity>
         <ModalComponent visible={ticketVisible} hideModal={hideTicketModal}>
           <FlatList
@@ -227,18 +225,13 @@ const Send = ({ navigation }) => {
             renderItem={({ item }) => (
               <TouchableOpacity onPress={() => handleSelectTicket(item)} style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", padding: 20 }}>
                 <FastImage
-                  source={{ uri: item.ticket_logo_url || "https://newgenerationdatadev.blob.core.windows.net/data/template/t08/common/footer_icon_ticket.png" }}
-                  style={item.ticket_logo_url ? { width: 80, height: 40 } : { width: 40, height: 20 }}
+                  source={{ uri: item.ticket_logo_url || "https://data.spolive.com/data/template/t08/common/footer_icon_ticket.png" }}
+                  style={item.ticket_logo_url ? { width: 60, height: 30 } : { width: 60, height: 30 }}
                   resizeMode="contain"
                 />
                 <Text style={{ fontSize: 16 }}>{item.ticket_name}</Text>
                 <View style={{ flexDirection: "row", gap: 10 }}>
-                  <FastImage
-                    source={{ uri: "https://newgenerationdatadev.blob.core.windows.net/data/template/t08/common/footer_icon_ticket.png" }}
-                    style={{ width: 20, height: 20 }}
-                    resizeMode="contain"
-                    tintColor="gray"
-                  />
+                  <FastImage source={{ uri: "https://data.spolive.com/data/template/t08/common/footer_icon_ticket.png" }} style={{ width: 20, height: 20 }} resizeMode="contain" tintColor="gray" />
                   <Text style={{ fontSize: 16 }}>{item.ticket_count}장</Text>
                 </View>
               </TouchableOpacity>
@@ -357,12 +350,7 @@ const Send = ({ navigation }) => {
               <FastImage source={{ uri: selectTicket?.ticket_logo_url }} style={{ width: 70, height: 30 }} />
               <Text style={{ fontSize: 16 }}>{selectTicket?.ticket_name}</Text>
               <View style={{ flexDirection: "row", gap: 5 }}>
-                <FastImage
-                  source={{ uri: "https://newgenerationdatadev.blob.core.windows.net/data/template/t08/common/footer_icon_ticket.png" }}
-                  style={{ width: 20, height: 20 }}
-                  resizeMode="contain"
-                  tintColor="gray"
-                />
+                <FastImage source={{ uri: "https://data.spolive.com/data/template/t08/common/footer_icon_ticket.png" }} style={{ width: 20, height: 20 }} resizeMode="contain" tintColor="gray" />
                 <Text style={{ fontSize: 16 }}>{values.count}장</Text>
               </View>
             </View>

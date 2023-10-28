@@ -120,7 +120,6 @@ const Join = ({ navigation: { navigate }, route }) => {
     try {
       const res = await authApi.validate(type, { value: values[type] });
 
-      // console.log(pwRef.current, pwRef.current.measure(y));
       if (res.CODE === "AC000") {
         setSuccess({ ...success, [type]: true });
 
