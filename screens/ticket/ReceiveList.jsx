@@ -1,5 +1,5 @@
 import React, { useCallback, useContext, useEffect, useRef, useState } from "react";
-import { ActivityIndicator, Text, View } from "react-native";
+import { ActivityIndicator, LayoutAnimation, Text, View } from "react-native";
 import Layout from "../../components/Layout";
 import { ticketApi } from "../../api";
 import { StyleSheet } from "react-native";
@@ -40,6 +40,21 @@ const ReceiveList = ({ navigation }) => {
   });
 
   useEffect(() => {
+    if (currentPage === 1) {
+      LayoutAnimation.configureNext({
+        duration: 300,
+        create: {
+          type: LayoutAnimation.Types.easeInEaseOut,
+          property: LayoutAnimation.Properties.opacity,
+        },
+        update: {
+          type: LayoutAnimation.Types.easeInEaseOut,
+        },
+      });
+    }
+  }, [data]);
+
+  useEffect(() => {
     setTotalPage(Math.ceil(data?.TOTAL / offsetValue));
   }, [data?.TOTAL]);
 
@@ -48,6 +63,7 @@ const ReceiveList = ({ navigation }) => {
       queryClient.invalidateQueries(["receive"]);
       return () => {
         // navigation.goBack();
+        setCurrentPage(1);
       };
     }, [])
   );

@@ -41,6 +41,30 @@ const SendList = () => {
     }
   }, []);
 
+  useEffect(() => {
+    if (currentPage === 1) {
+      LayoutAnimation.configureNext({
+        duration: 300,
+        create: {
+          type: LayoutAnimation.Types.easeInEaseOut,
+          property: LayoutAnimation.Properties.opacity,
+        },
+        update: {
+          type: LayoutAnimation.Types.easeInEaseOut,
+        },
+      });
+    }
+  }, [data]);
+
+  useFocusEffect(
+    useCallback(() => {
+      return () => {
+        // navigation.goBack();
+        setCurrentPage(1);
+      };
+    }, [])
+  );
+
   return (
     <View style={{ flex: 1, backgroundColor: "#ecf2f0" }}>
       {isLoading ? (

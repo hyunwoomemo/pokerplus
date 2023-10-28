@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { FlatList, LayoutAnimation, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import Layout from "../components/Layout";
 import { customerApi } from "../api";
@@ -9,6 +9,7 @@ import AppBar from "../components/AppBar";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import ModalComponent from "../components/Modal";
 import { useFocusEffect } from "@react-navigation/native";
+import ScreenLayout from "../components/ScreenLayout";
 
 const Qna = ({ navigation }) => {
   const [config, setConfig] = useState([]);
@@ -22,12 +23,14 @@ const Qna = ({ navigation }) => {
   };
 
   const queryClient = useQueryClient();
+  const scrollRef = useRef();
 
   useFocusEffect(
     useCallback(() => {
       return () => {
         setSelectedConfig();
         setValues({});
+        scrollRef?.current?.scrollTo({ x: 0, y: 0, animated: true });
       };
     }, [])
   );
@@ -37,16 +40,6 @@ const Qna = ({ navigation }) => {
   useEffect(() => {
     setConfig(data?.DATA.hosts);
   }, [data]);
-
-  // useEffect(() => {
-  //   if (config.length === 0) {
-  //     customerApi.customerConfig().then((res) => {
-  //       res.DATA.hosts.forEach((item) => {
-  //         setConfig((prev) => [...prev, { key: item.host_id, value: item.company_name }]);
-  //       });
-  //     });
-  //   }
-  // }, []);
 
   const handleChange = (type, value) => {
     setValues({
@@ -97,9 +90,8 @@ const Qna = ({ navigation }) => {
   const submitDisabled = !(selectedConfig && Object.keys(selectedConfig).length && values.subject && values.contents);
 
   return (
-    <View style={{ flex: 1, backgroundColor: "#ecf2f0" }}>
-      <AppBar title="1:1 문의하기" />
-      <ScrollView style={{ paddingHorizontal: 20, marginTop: 20 }}>
+    <ScreenLayout title={"1:1 문의하기"}>
+      <ScrollView style={{ paddingHorizontal: 20, marginTop: 20 }} ref={scrollRef}>
         <TouchableOpacity
           onPress={() => setVisible(true)}
           style={{
@@ -149,7 +141,7 @@ const Qna = ({ navigation }) => {
           <Button label="전송" disabled={submitDisabled} loading={loading} onPress={handleSubmit} primary style={{ flex: 1 }} />
         </View>
       </ScrollView>
-    </View>
+    </ScreenLayout>
   );
 };
 
@@ -177,6 +169,7 @@ const styles = StyleSheet.create({
   buttonWrapper: {
     flexDirection: "row",
     gap: 10,
+    marginVertical: 20,
   },
 });
 

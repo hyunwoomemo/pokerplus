@@ -54,6 +54,7 @@ const QnaList = ({ route, navigation }) => {
   }, []);
 
   useEffect(() => {
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
     setTotalPage(Math.ceil(data?.DATA.total / offsetValue));
     setStatus(data?.DATA.stat);
   }, [data?.DATA]);
