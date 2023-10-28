@@ -70,6 +70,7 @@ const Home = () => {
       queryClient.prefetchQuery(["myticket"], ticketApi.list);
       queryClient.prefetchQuery(["qna", 1], () => customerApi.customerList(0, offsetValue, 1));
       queryClient.prefetchQuery(["user"], authApi.info);
+      queryClient.prefetchQuery(["faq", 1], () => customerApi.faqList(offsetValue, 1));
     };
 
     prefetch();

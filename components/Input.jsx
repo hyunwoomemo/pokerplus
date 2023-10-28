@@ -97,10 +97,10 @@ const withCheckBtn = (Component) => {
 };
 
 const withButton = (Component) => {
-  return ({ label, onPress, ...rest }) => (
+  return ({ label, onPress, buttonWidth, ...rest }) => (
     <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
       <Component {...rest} style={{ flex: 2 }} />
-      <Button label={label} onPress={onPress} style={{ flex: 1 }} />
+      <Button label={label} onPress={onPress} style={{ flex: buttonWidth || 1 }} />
     </View>
   );
 };

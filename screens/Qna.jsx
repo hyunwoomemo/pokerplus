@@ -1,33 +1,52 @@
-import React, { useEffect, useState } from "react";
-import { ScrollView, StyleSheet, Text, TextInput, View } from "react-native";
+import React, { useCallback, useEffect, useState } from "react";
+import { FlatList, LayoutAnimation, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import Layout from "../components/Layout";
 import { customerApi } from "../api";
 import { SelectList } from "react-native-dropdown-select-list";
 import { WithLabelInput } from "../components/Input";
 import Button from "../components/Button";
 import AppBar from "../components/AppBar";
-import { useQueryClient } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import ModalComponent from "../components/Modal";
+import { useFocusEffect } from "@react-navigation/native";
 
 const Qna = ({ navigation }) => {
   const [config, setConfig] = useState([]);
   const [values, setValues] = useState({});
   const [loading, setLoading] = useState(false);
+  const [visible, setVisible] = useState(false);
+  const [selectedConfig, setSelectedConfig] = useState();
+
+  const hideModal = () => {
+    setVisible(false);
+  };
 
   const queryClient = useQueryClient();
 
-  navigation.addListener("blur", () => {
-    setValues({});
-  });
+  useFocusEffect(
+    useCallback(() => {
+      return () => {
+        setSelectedConfig();
+        setValues({});
+      };
+    }, [])
+  );
+
+  const { data, isLoading } = useQuery(["customerConfig"], customerApi.customerConfig);
 
   useEffect(() => {
-    if (config.length === 0) {
-      customerApi.customerConfig().then((res) => {
-        res.DATA.hosts.forEach((item) => {
-          setConfig((prev) => [...prev, { key: item.host_id, value: item.company_name }]);
-        });
-      });
-    }
-  }, []);
+    setConfig(data?.DATA.hosts);
+  }, [data]);
+
+  // useEffect(() => {
+  //   if (config.length === 0) {
+  //     customerApi.customerConfig().then((res) => {
+  //       res.DATA.hosts.forEach((item) => {
+  //         setConfig((prev) => [...prev, { key: item.host_id, value: item.company_name }]);
+  //       });
+  //     });
+  //   }
+  // }, []);
 
   const handleChange = (type, value) => {
     setValues({
@@ -53,21 +72,63 @@ const Qna = ({ navigation }) => {
     }
   };
 
+  const Separator = () => {
+    return <View style={{ borderBottomWidth: 1, borderColor: "#ececec" }} />;
+  };
+
+  const Header = () => {
+    return (
+      <View style={{ paddingBottom: 20, backgroundColor: "#fff" }}>
+        <Text style={{ fontSize: 18, color: "gray" }}>문의 대상을 선택해주세요</Text>
+      </View>
+    );
+  };
+
+  const handleSelect = (item) => {
+    setVisible(false);
+    setSelectedConfig(item);
+    console.log(item);
+    setValues({
+      ...values,
+      host_id: item.host_id,
+    });
+  };
+
+  const submitDisabled = !(selectedConfig && Object.keys(selectedConfig).length && values.subject && values.contents);
+
   return (
     <View style={{ flex: 1, backgroundColor: "#ecf2f0" }}>
       <AppBar title="1:1 문의하기" />
       <ScrollView style={{ paddingHorizontal: 20, marginTop: 20 }}>
-        <SelectList
-          boxStyles={{ marginTop: 10, backgroundColor: "#fff", borderRadius: 50, paddingVertical: 18, paddingHorizontal: 20, borderColor: "transparent" }}
-          dropdownStyles={{ backgroundColor: "#fff", borderWidth: 0 }}
-          dropdownItemStyles={{ paddingVertical: 10 }}
-          setSelected={(val) => handleChange("host_id", val)}
-          dropdownTextStyles={{ fontSize: 16 }}
-          data={config}
-          save="key"
-          placeholder="문의 대상을 선택하세요."
-          defaultOption={{ key: "", value: "" }}
-        />
+        <TouchableOpacity
+          onPress={() => setVisible(true)}
+          style={{
+            marginVertical: 20,
+            backgroundColor: "#fff",
+            borderRadius: 50,
+            paddingVertical: 18,
+            paddingHorizontal: 20,
+            flexDirection: "row",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <Text style={{ fontSize: 16 }}>{selectedConfig && Object.keys(selectedConfig).length ? `${selectedConfig?.company_name}` : "문의 대상을 선택해주세요"}</Text>
+        </TouchableOpacity>
+        <ModalComponent visible={visible} hideModal={hideModal}>
+          <FlatList
+            data={config}
+            keyExtractor={(item, index) => `${index}-${item.ticket_info_id}`}
+            ItemSeparatorComponent={<Separator />}
+            ListHeaderComponent={<Header />}
+            stickyHeaderIndices={[0]}
+            renderItem={({ item }) => (
+              <TouchableOpacity onPress={() => handleSelect(item)} style={{ alignItems: "center", padding: 20 }}>
+                <Text style={{ fontSize: 16 }}>{item.company_name}</Text>
+              </TouchableOpacity>
+            )}
+          />
+        </ModalComponent>
         <WithLabelInput onChangeText={(text) => handleChange("subject", text)} backgroundColor="#fff" value={values.subject}>
           <Text style={{ fontSize: 16 }}>제목</Text>
         </WithLabelInput>
@@ -85,7 +146,7 @@ const Qna = ({ navigation }) => {
         </View>
         <View style={styles.buttonWrapper}>
           <Button label="취소" dark style={{ flex: 1 }} onPress={() => navigation.goBack()} />
-          <Button label="전송" loading={loading} onPress={handleSubmit} primary style={{ flex: 1 }} />
+          <Button label="전송" disabled={submitDisabled} loading={loading} onPress={handleSubmit} primary style={{ flex: 1 }} />
         </View>
       </ScrollView>
     </View>

@@ -3,8 +3,16 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Layout from "../components/Layout";
 import Title from "../components/Title";
 import AppBar from "../components/AppBar";
+import { useQueryClient } from "@tanstack/react-query";
+import { resourceApi } from "../api";
 
 const Policy = ({ navigation }) => {
+  const queryClient = useQueryClient();
+
+  queryClient.prefetchQuery(["policy", "Provision"], () => resourceApi.policys("Provision"));
+  queryClient.prefetchQuery(["policy", "Privacy"], () => resourceApi.policys("Privacy"));
+  queryClient.prefetchQuery(["policy", "Position"], () => resourceApi.policys("Position"));
+
   const policy = [
     { text: "서비스 이용 약관 (필수)", name: "서비스 이용 약관", type: "Provision" },
     { text: "개인 정보 수집 및 이용 약관 (필수)", name: "PersonalInfo", type: "Privacy" },

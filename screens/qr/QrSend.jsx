@@ -134,7 +134,7 @@ const QrSend = ({ navigation, route }) => {
   };
 
   const Separator = () => {
-    return <View style={{ borderBottomWidth: 1, borderColor: "gray" }} />;
+    return <View style={{ borderBottomWidth: 1, borderColor: "#ececec" }} />;
   };
 
   const Header = () => {

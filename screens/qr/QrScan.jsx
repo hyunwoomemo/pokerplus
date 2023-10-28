@@ -28,6 +28,7 @@ export default function QrScan({ navigation }) {
   });
 
   const { width, height } = Dimensions.get("window");
+  const [cameraLayout, setCameraLayout] = useState({});
   const [x, setX] = useState(0);
   const [y, setY] = useState(0);
   const [qrWidth, setQrWidth] = useState(0);
@@ -58,20 +59,22 @@ export default function QrScan({ navigation }) {
       {permission.isGranted && !scanned && (
         <ScreenLayout>
           <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-            <Text style={{ fontSize: 16 }}>참가권 전송 • 대회 바이인</Text>
+            <Text style={{ fontSize: 18, fontWeight: "bold" }}>참가권 전송 • 대회 바이인</Text>
           </View>
           <Camera
+            onLayout={(event) => setCameraLayout({ width: event.nativeEvent.layout.width, height: event.nativeEvent.layout.height })}
             type={CameraType.back}
             ratio={"16:9"}
             style={styles.camera}
             onBarCodeScanned={async (scannerResult) => {
               if (!scanned) {
-                console.log(scannerResult);
-                const { origin, size } = scannerResult.bounds;
-                setX(origin.x);
-                setY(origin.y);
-                setQrHeight(size.height);
-                setQrWidth(size.width);
+                // console.log(scannerResult);
+                // const { origin, size } = scannerResult.bounds;
+
+                // setX(Number(origin.y) * cameraLayout.width);
+                // setY(Number(origin.x) * cameraLayout.height);
+                // setQrHeight(Number(size.width) * cameraLayout.height);
+                // setQrWidth(Number(size.height) * cameraLayout.width);
                 setScanned(true);
                 const hash = scannerResult.data.slice(scannerResult.data.lastIndexOf("/") + 1);
                 console.log(hash);
@@ -87,6 +90,7 @@ export default function QrScan({ navigation }) {
               }
             }}
           />
+          {/* <View style={{ borderWidth: 2, borderColor: "red", position: "absolute", width: qrWidth, height: qrHeight, top: y, right: x }}></View> */}
           <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
             <Text style={{ fontSize: 16 }}>QR 코드를 스캔해주세요</Text>
           </View>

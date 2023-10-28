@@ -66,6 +66,8 @@ const Send = ({ navigation }) => {
     }, [])
   );
 
+  const a = 5;
+  console.log(a);
   const handleChange = (type, val) => {
     setValues({
       ...values,
@@ -175,7 +177,7 @@ const Send = ({ navigation }) => {
   };
 
   const Separator = () => {
-    return <View style={{ borderBottomWidth: 1, borderColor: "gray" }}></View>;
+    return <View style={{ borderBottomWidth: 1, borderColor: "#ececec" }}></View>;
   };
 
   const Header = () => {

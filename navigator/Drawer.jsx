@@ -160,7 +160,13 @@ const SignOutText = styled.Text`
 
 const DrawerContent = (active) => {
   const [user, setUser] = useRecoilState(authState);
-  const { data: userData, isLoading, isError } = useQuery(["user"], authApi.info);
+  const {
+    data: userData,
+    isLoading,
+    isError,
+  } = useQuery(["user"], authApi.info, {
+    cacheTime: 0,
+  });
   const [cache, setCache] = useRecoilState(imageCache);
 
   const { myTicketCount, setMyTicketCount } = useContext(InNavContext);
@@ -193,7 +199,6 @@ const DrawerContent = (active) => {
             <FastImage
               source={{
                 uri: `${userData?.DATA?.user_profile_url}?cache=${cache}`,
-                cache: "immutable",
               }}
               onLoadStart={() => opacityAnimation(opacity, "start")}
               onLoadEnd={() => {

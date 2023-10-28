@@ -10,6 +10,7 @@ import { useFocusEffect } from "@react-navigation/native";
 import AppBar from "../components/AppBar";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { offsetValue } from "../config";
+import ScreenLayout from "../components/ScreenLayout";
 
 const AccordionWrapper = ({ title, children, data, index }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -89,6 +90,12 @@ const Faq = () => {
 
   const { data, isLoading } = useQuery(["faq", currentPage], () => customerApi.faqList(offsetValue, currentPage));
 
+  useFocusEffect(
+    useCallback(() => {
+      queryClient.invalidateQueries(["faq"]);
+    }, [])
+  );
+
   useEffect(() => {
     if (currentPage < totalPage) {
       const nextPage = currentPage + 1;
@@ -101,14 +108,18 @@ const Faq = () => {
   }, [total]);
 
   return (
-    <View style={{ flex: 1, backgroundColor: "#ecf2f0" }}>
-      <AppBar title="FAQ" />
-      <FlatList data={data?.DATA.data} keyExtractor={(item) => item.contents} renderItem={({ item, index }) => <AccordionWrapper title={item.subject} data={item.contents} index={index} />} />
+    <ScreenLayout title={"FAQ"}>
+      <FlatList
+        showsVerticalScrollIndicator={false}
+        data={data?.DATA.data}
+        keyExtractor={(item) => item.contents}
+        renderItem={({ item, index }) => <AccordionWrapper title={item.subject} data={item.contents} index={index} />}
+      />
 
       <View style={{ flexDirection: "row", gap: 10, justifyContent: "center", marginVertical: 10 }}>
         {totalPage > 1 && <Pagination totalPage={totalPage} currentPage={currentPage} setCurrentPage={setCurrentPage} />}
       </View>
-    </View>
+    </ScreenLayout>
   );
 };
 

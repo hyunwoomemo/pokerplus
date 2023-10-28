@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Image, Platform, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { FlatList, Image, Platform, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import Layout from "../../components/Layout";
 import BackBtn from "../../components/BackBtn";
 import Input, { WithLabelCheckErrorInput, WithLabelDisableInput, WithLabelErrorInput, WithLabelInput } from "../../components/Input";
@@ -19,17 +19,15 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useToast } from "react-native-toast-notifications";
 import FastImage from "react-native-fast-image";
 import { imageCache } from "../../recoil/imageCache/atom";
+import ModalComponent from "../../components/Modal";
 
 const InfoEdit = ({ route, navigation }) => {
-  // const [user, setUser] = useRecoilState(authState);
   const [filename, setFilename] = useState();
   const [cache, setCache] = useRecoilState(imageCache);
 
   const { data, isLoading, isError } = useQuery(["user"]);
 
   const queryClient = useQueryClient();
-
-  // const { name, eng_name, user_profile_url, email, nick, hp, location_code } = user;
 
   const [user, setUser] = useRecoilState(authState);
   const [selected, setSelected] = useState("");
@@ -49,6 +47,9 @@ const InfoEdit = ({ route, navigation }) => {
   const [error, setError] = useState({});
   const [success, setSuccess] = useState({});
   const [loading, setLoading] = useState({});
+
+  const [areaVisible, setAreaVisible] = useState(false);
+  const [selectedArea, setSelectedArea] = useState(false);
 
   const toast = useToast();
 
@@ -87,15 +88,12 @@ const InfoEdit = ({ route, navigation }) => {
   // 체크 여부 확인 로직 필요
 
   // 지역
+  const { data: areaData, isLoading: areaLoading } = useQuery(["area", "LC"], () => authApi.accountCode("LC"));
   useEffect(() => {
-    if (area.length === 0) {
-      authApi.accountCode("LC").then((res) => {
-        res.DATA.forEach((item) => {
-          setArea((prev) => [...prev, { key: item.code, value: item.title }]);
-        });
-      });
-    }
-  }, []);
+    setArea(areaData?.DATA);
+  }, [areaData]);
+
+  console.log(areaLoading, areaData);
 
   useEffect(() => {
     setChangeValues({
@@ -118,6 +116,7 @@ const InfoEdit = ({ route, navigation }) => {
     4. changeValues.location_code가 빈칸이 아니면서 default와 change가 같지 않다.
     5. changeValues.password가 빈칸이 아니면서 change password === password2가 같다.
 */
+  console.log(imageUrl);
   const saveActive =
     imageUrl ||
     (changneValues.id && defaultValue.id !== changneValues.id) ||
@@ -176,6 +175,29 @@ const InfoEdit = ({ route, navigation }) => {
     }
   };
 
+  const Separator = () => {
+    return <View style={{ borderBottomWidth: 1, borderColor: "#ececec" }}></View>;
+  };
+
+  const Header = () => {
+    return (
+      <View style={{ paddingBottom: 20, backgroundColor: "#fff" }}>
+        <Text style={{ fontSize: 18, color: "gray" }}>전송하실 참가권을 선택해주세요</Text>
+      </View>
+    );
+  };
+
+  const handleSelectArea = (item) => {
+    setAreaVisible(false);
+    setSelectedArea(item.title);
+    setChangeValues({
+      ...changneValues,
+      location_code: item.code,
+    });
+  };
+
+  console.log(selectedArea);
+
   return (
     <ScreenLayout title="정보 수정" back={() => navigation.popToTop()}>
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -219,9 +241,9 @@ const InfoEdit = ({ route, navigation }) => {
           </WithLabelDisableInput>
           <View style={{ paddingHorizontal: 10, flexDirection: "row", alignItems: "center", marginTop: 30, justifyContent: "space-between" }}>
             <Text>지역(시/도)</Text>
-            <Text>현재 지역: {area.filter((v) => v.key === data.DATA.location_code)[0]?.value}</Text>
+            {/* <Text>현재 지역: {area.filter((v) => v.key === data.DATA.location_code)[0]?.value}</Text> */}
           </View>
-          {area.length > 0 && (
+          {/* {area.length > 0 && (
             <SelectList
               boxStyles={{ marginTop: 10, backgroundColor: "#fff", borderRadius: 50, paddingVertical: 18, paddingHorizontal: 20, borderColor: "transparent" }}
               dropdownStyles={{ backgroundColor: "#fff", borderWidth: 0 }}
@@ -231,7 +253,36 @@ const InfoEdit = ({ route, navigation }) => {
               save="key"
               // defaultOption={{ key: String(location_code), value: area.filter((v) => v.key === location_code)[0]?.value }}
             />
-          )}
+          )} */}
+          <TouchableOpacity
+            onPress={() => setAreaVisible(true)}
+            style={{
+              marginTop: 10,
+              backgroundColor: "#fff",
+              borderRadius: 50,
+              paddingVertical: 18,
+              paddingHorizontal: 20,
+              flexDirection: "row",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <Text style={{ fontSize: 16 }}>{selectedArea && Object.keys(selectedArea).length ? selectedArea : area?.find((v) => v.code === defaultValue.location_code)?.title}</Text>
+          </TouchableOpacity>
+          <ModalComponent visible={areaVisible} hideModal={() => setAreaVisible(false)}>
+            <FlatList
+              data={area}
+              keyExtractor={(item, index) => `${index}.${item.code}`}
+              ItemSeparatorComponent={<Separator />}
+              ListHeaderComponent={<Header />}
+              stickyHeaderIndices={[0]}
+              renderItem={({ item }) => (
+                <TouchableOpacity onPress={() => handleSelectArea(item)} style={{ alignItems: "center", padding: 20 }}>
+                  <Text style={{ fontSize: 16 }}>{item.title}</Text>
+                </TouchableOpacity>
+              )}
+            />
+          </ModalComponent>
           <WithLabelErrorInput placeholder="새 비밀번호를 입력하세요." placeholderTextColor="gray" onChangeText={(text) => handleChange("password", text)} error={error.password} secureTextEntry>
             <Text>비밀번호</Text>
           </WithLabelErrorInput>

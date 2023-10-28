@@ -6,6 +6,7 @@ import { WithLabelInput } from "../../components/Input";
 import Button from "../../components/Button";
 import { authApi } from "../../api";
 import ScreenLayout from "../../components/ScreenLayout";
+import { useToast } from "react-native-toast-notifications";
 
 const InfoCheck = ({ navigation: { navigate, goBack }, route }) => {
   const [password, setPassword] = useState("");
@@ -13,6 +14,7 @@ const InfoCheck = ({ navigation: { navigate, goBack }, route }) => {
   const handleChange = (text) => {
     setPassword(text);
   };
+  const toast = useToast();
 
   const handleCheck = async () => {
     setLoading(true);
@@ -22,6 +24,7 @@ const InfoCheck = ({ navigation: { navigate, goBack }, route }) => {
         navigate("InfoEdit");
       }
     } catch (err) {
+      toast.show("비밀번호가 일치하지 않습니다.");
       console.error(err);
     } finally {
       setLoading(false);
@@ -37,7 +40,7 @@ const InfoCheck = ({ navigation: { navigate, goBack }, route }) => {
         </WithLabelInput>
         <View style={{ flexDirection: "row", gap: 10, marginTop: 30 }}>
           <Button dark label="취소" style={{ flex: 1 }} onPress={() => goBack()} />
-          <Button label="확인" loading={loading} onPress={handleCheck} primary style={{ flex: 1 }} />
+          <Button label="확인" disabled={!password} loading={loading} onPress={handleCheck} primary style={{ flex: 1 }} />
         </View>
       </View>
     </ScreenLayout>

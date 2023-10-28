@@ -28,10 +28,6 @@ const TicketList = ({ navigation }) => {
     queryClient.invalidateQueries(["myticket"]);
   }, []);
 
-  // setInterval(() => {
-  //   queryClient.invalidateQueries(["myticket"]);
-  // }, 10000);
-
   useEffect(() => {
     setTickets(data?.DATA?.filter((v) => v.ticket_count !== 0));
   }, [data]);

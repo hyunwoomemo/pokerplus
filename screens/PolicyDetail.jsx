@@ -3,21 +3,20 @@ import { LayoutAnimation, Platform, StyleSheet, Text, View } from "react-native"
 import BackBtn from "../components/BackBtn";
 import Title from "../components/Title";
 import { resourceApi } from "../api";
+import { useQuery } from "@tanstack/react-query";
 
 const PolicyDetail = ({ route }) => {
   const { name, type } = route.params;
   const [result, setResult] = useState([]);
 
+  const { data } = useQuery(["policy", type], () => resourceApi.policys(type));
+
+  console.log(data);
+
   useEffect(() => {
-    if (result.length === 0) {
-      resourceApi.policys(type).then((res) => {
-        if (res.CODE === "PL000") {
-          LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
-          setResult(res.DATA[0]);
-        }
-      });
-    }
-  }, []);
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
+    setResult(data?.DATA[0]);
+  }, [data]);
 
   return (
     <View style={styles.container}>

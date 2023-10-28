@@ -1,5 +1,5 @@
 import React, { useCallback, useContext, useEffect, useRef, useState } from "react";
-import { ActivityIndicator, FlatList, LayoutAnimation, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, FlatList, LayoutAnimation, RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Layout from "../components/Layout";
 import { customerApi } from "../api";
 import moment from "moment";
@@ -16,6 +16,15 @@ const QnaList = ({ route, navigation }) => {
   const { currentPage, setCurrentPage } = useContext(QnaContext);
   const [totalPage, setTotalPage] = useState(1);
   const [status, setStatus] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000);
+    queryClient.invalidateQueries(["myticket"]);
+  }, []);
 
   const flatRef = useRef();
 
@@ -65,6 +74,7 @@ const QnaList = ({ route, navigation }) => {
           {data?.DATA.data.length ? (
             <>
               <FlatList
+                refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
                 style={styles.main}
                 data={data?.DATA.data}
                 ref={flatRef}
