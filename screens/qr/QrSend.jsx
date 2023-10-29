@@ -39,6 +39,10 @@ const QrSend = ({ navigation, route }) => {
   const hideTicketModal = () => {
     setTicketVisible(false);
     setSelectTicket();
+    setValues({
+      ...values,
+      count: "1",
+    });
   };
 
   const queryClient = useQueryClient();
@@ -212,21 +216,28 @@ const QrSend = ({ navigation, route }) => {
             alignItems: "center",
           }}
         >
-          <TouchableOpacity onPress={() => handleCount("minus")} disabled={values.count < 1 || !values.id}>
-            <Entypo name="circle-with-minus" size={28} color={values.count < 1 || !values.id ? "gray" : "#5a50ef"} />
+          <TouchableOpacity onPress={() => handleCount("minus")} disabled={values.count < 1 || !selectTicket || !Object.keys(selectTicket).length}>
+            <Entypo name="circle-with-minus" size={28} color={values.count < 1 || !selectTicket || !Object.keys(selectTicket).length ? "gray" : "#5a50ef"} />
           </TouchableOpacity>
           <TextInput
             value={values.count}
             onChangeText={(text) => {
-              if (parseInt(text) < 0 || parseInt(text) > tickets.find((v) => v.ticket_info_id === values.id)?.ticket_count || !values.id) return;
+              if (parseInt(text) < 0 || parseInt(text) > tickets.find((v) => v.ticket_info_id === values.id)?.ticket_count || !selectTicket || !Object.keys(selectTicket).length) return;
               setValues({ ...values, count: text });
             }}
             inputMode="numeric"
             keyboardType="numeric"
             style={{ flex: 1, textAlign: "center" }}
           ></TextInput>
-          <TouchableOpacity onPress={() => handleCount("plus")} disabled={parseInt(values.count) >= tickets.find((v) => v.ticket_info_id === values.id)?.ticket_count || !values.id}>
-            <Entypo name="circle-with-plus" size={28} color={values.count >= tickets.find((v) => v.ticket_info_id === values.id)?.ticket_count || !values.id ? "gray" : "#ff2d84"} />
+          <TouchableOpacity
+            onPress={() => handleCount("plus")}
+            disabled={parseInt(values.count) >= tickets.find((v) => v.ticket_info_id === values.id)?.ticket_count || !selectTicket || !Object.keys(selectTicket).length}
+          >
+            <Entypo
+              name="circle-with-plus"
+              size={28}
+              color={values.count >= tickets.find((v) => v.ticket_info_id === values.id)?.ticket_count || !selectTicket || !Object.keys(selectTicket).length ? "gray" : "#ff2d84"}
+            />
           </TouchableOpacity>
         </View>
 

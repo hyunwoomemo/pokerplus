@@ -6,7 +6,7 @@
 	<string>development</string>
 	<key>com.apple.security.application-groups</key>
 	<array>
-		<string>group.org.name.t08ticketrn.onesignal</string>
+		<string>group.org.beontrack.pokerplus.onesignal</string>
 	</array>
 </dict>
 </plist>

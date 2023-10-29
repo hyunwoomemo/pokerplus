@@ -12,12 +12,6 @@ import "react-native-reanimated";
 import { PaperProvider } from "react-native-paper";
 import * as SplashScreen from "expo-splash-screen";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { preventAutoHideAsync } from "expo-splash-screen";
-import { authApi, customerApi, resourceApi, ticketApi } from "./api";
-import { offset, offsetValue } from "./config";
-import { StatusBar } from "expo-status-bar";
-import { OneSignal } from "react-native-onesignal";
-import { removeStorage } from "./utils/asyncStorage";
 
 SplashScreen.preventAutoHideAsync();
 

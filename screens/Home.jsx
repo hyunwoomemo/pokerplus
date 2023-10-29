@@ -45,6 +45,7 @@ const Home = () => {
   });
 
   useEffect(() => {
+    console.log(user.email);
     OneSignal.login(user.email);
     if (OneSignal.User.pushSubscription.getOptedIn()) {
       const setPush = async () => {

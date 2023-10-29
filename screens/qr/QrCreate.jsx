@@ -97,10 +97,6 @@ const QrCreate = ({ navigation }) => {
               <QRCode value={qrInfoUrl} size={250} />
             </View>
           </View>
-
-          {/* <View style={{ paddingVertical: 10, paddingHorizontal: 15, borderWidth: 1, borderColor: "rgba(0,0,0,0.2)", borderRadius: 10 }}>
-            <Text>Download QR</Text>
-          </View> */}
         </View>
       ) : (
         <ActivityIndicator style={{ ...StyleSheet.absoluteFillObject, flex: 1 }} size={"large"} color="#ff3183" />

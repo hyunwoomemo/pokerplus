@@ -18,6 +18,7 @@ const ButtonText = styled.Text`
   font-weight: bold;
   color: ${(props) => (props.disabled ? "#797979" : props.primary || props.dark ? "#fff" : "#000")};
   font-size: 16px;
+  min-height: 24px;
   /* min-width: 100px;
   text-align: center; */
 `;

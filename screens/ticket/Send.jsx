@@ -277,7 +277,10 @@ const Send = ({ navigation }) => {
               value={values.hp}
               onChangeText={(text) => {
                 // LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
-                text = text.replace(/[^0-9]/g, "").replace(/^(\d{2,3})(\d{3,4})(\d{4})$/, `$1-$2-$3`);
+                text = text
+                  .replace(/[^0-9]/g, "")
+                  .replace(/^(\d{0,3})(\d{0,4})(\d{0,4})$/g, "$1-$2-$3")
+                  .replace(/(\-{1,2})$/g, "");
                 setValues({ ...values, name: "", hp: text });
               }}
               style={{ fontSize: 16, marginTop: 10, backgroundColor: "#fff", borderRadius: 50, paddingVertical: 18, paddingHorizontal: 20, flex: 3 }}
@@ -304,8 +307,8 @@ const Send = ({ navigation }) => {
           </View>
           <ModalComponent visible={visible} hideModal={hideModal} size="large">
             <View style={{ flex: 1, justifyContent: "center", paddingHorizontal: 20, alignItems: "center", gap: 30 }}>
-              <Text style={{ fontSize: 18 }}>사용자 정보</Text>
-              <Text style={{ fontSize: 18, color: "#ff3183", fontWeight: "bold" }}>{values.hp}</Text>
+              <Text style={{ fontSize: 18 }}>사용자 정보 조회 결과</Text>
+              <Text style={{ fontSize: 18, color: "#ff3183", fontWeight: "bold" }}>번호: {values.hp}</Text>
               <Text style={{ fontSize: 18 }}>이름: {values.name}</Text>
               <View style={{ flexDirection: "row", gap: 10, marginTop: 30 }}>
                 <Button style={{ flex: 1 }} label="취소" onPress={() => hideModal("cancel")} />
