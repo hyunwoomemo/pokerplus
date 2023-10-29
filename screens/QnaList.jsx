@@ -11,6 +11,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { offsetValue } from "../config";
 import NoItem from "../components/NoItem";
 import { useFocusEffect } from "@react-navigation/native";
+import ScreenLayout from "../components/ScreenLayout";
 
 const QnaList = ({ route, navigation }) => {
   const { currentPage, setCurrentPage } = useContext(QnaContext);
@@ -66,8 +67,7 @@ const QnaList = ({ route, navigation }) => {
   );
 
   return (
-    <View style={{ flex: 1, backgroundColor: "#ecf2f0" }}>
-      <AppBar title="1:1 문의 내역" />
+    <ScreenLayout title={"1:1 문의 내역"}>
       {isLoading ? (
         <ActivityIndicator style={StyleSheet.absoluteFillObject} color="#ff3183" size="large" />
       ) : (
@@ -109,7 +109,7 @@ const QnaList = ({ route, navigation }) => {
           )}
         </>
       )}
-    </View>
+    </ScreenLayout>
   );
 };
 

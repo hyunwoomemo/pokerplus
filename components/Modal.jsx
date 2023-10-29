@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useRef } from "react";
 import { Dimensions, Text } from "react-native";
 import { Modal, Portal } from "react-native-paper";
 
 const ModalComponent = ({ children, visible, hideModal, size }) => {
   const { height } = Dimensions.get("window");
+
   const containerStyle = {
     backgroundColor: "white",
     padding: 20,

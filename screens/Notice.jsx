@@ -10,6 +10,7 @@ import { Appbar, DataTable } from "react-native-paper";
 import AppBar from "../components/AppBar";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { offsetValue } from "../config";
+import ScreenLayout from "../components/ScreenLayout";
 
 const Notice = ({ navigation }) => {
   const [notice, setNotice] = useState();
@@ -48,8 +49,7 @@ const Notice = ({ navigation }) => {
   }, [data?.DATA.total]);
 
   return (
-    <View style={{ flex: 1, backgroundColor: "#ecf2f0" }}>
-      <AppBar title="Notice" />
+    <ScreenLayout title={"Notice"}>
       <FlatList
         showsVerticalScrollIndicator={false}
         data={data?.DATA.data}
@@ -78,7 +78,7 @@ const Notice = ({ navigation }) => {
           <Pagination totalPage={totalPage} currentPage={currentPage} setCurrentPage={setCurrentPage} />
         </View>
       )}
-    </View>
+    </ScreenLayout>
   );
 };
 

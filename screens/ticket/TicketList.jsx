@@ -16,7 +16,7 @@ const TicketList = ({ navigation }) => {
   const [tickets, setTickets] = useState();
   const queryClient = useQueryClient();
 
-  const { data, isLoading, isError } = useQuery(["myticket"], ticketApi.list);
+  const { data, isLoading, isFetching, isError } = useQuery(["myticket"], ticketApi.list);
 
   const [refreshing, setRefreshing] = React.useState(false);
 
@@ -32,19 +32,23 @@ const TicketList = ({ navigation }) => {
     setTickets(data?.DATA?.filter((v) => v.ticket_count !== 0));
   }, [data]);
 
+  console.log(isFetching);
+
+  if (tickets?.length === 0) {
+    return <NoItem text={"보유하신 참가권이 없습니다."} />;
+  }
+
   return (
     <View style={styles.container}>
       {isLoading ? (
         <ActivityIndicator style={StyleSheet.absoluteFillObject} color="#ff3183" size="large" />
-      ) : tickets?.length > 0 ? (
+      ) : (
         <FlatList
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
           data={tickets}
           keyExtractor={(item, index) => `${index}-${item.ticket_info_id}`}
           renderItem={({ item }) => <TicketItem item={item} />}
         />
-      ) : (
-        <NoItem text={"보유하신 참가권이 없습니다."} />
       )}
     </View>
   );

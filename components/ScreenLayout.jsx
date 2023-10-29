@@ -1,10 +1,10 @@
-import React from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 import styled from "styled-components/native";
 import BackBtn from "./BackBtn";
-import { SafeAreaView, ScrollView, View } from "react-native";
+import { Animated, Easing, SafeAreaView, ScrollView, View } from "react-native";
 import Title from "./Title";
 import AppBar from "./AppBar";
-import { useNavigation } from "@react-navigation/native";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 
 const Container = styled.View`
   background-color: #ecf2f0;
@@ -12,6 +12,58 @@ const Container = styled.View`
 `;
 const ScreenLayout = ({ back, children, title, appbar }) => {
   const navigation = useNavigation();
+
+  const topBottom = useRef(new Animated.Value(-10)).current;
+  const move = useRef(new Animated.Value(10)).current;
+
+  const opacity = useRef(new Animated.Value(0)).current;
+
+  // useEffect(() => {
+  //   Animated.timing(opacity, {
+  //     toValue: 1,
+  //     useNativeDriver: true,
+  //     duration: 300,
+  //   }).start();
+  // }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      // Animated.timing(move, {
+      //   toValue: 0,
+      //   useNativeDriver: true,
+      //   duration: 300,
+      // }).start(),
+      Animated.timing(topBottom, {
+        toValue: 0,
+        useNativeDriver: true,
+        duration: 300,
+      }).start();
+      Animated.timing(opacity, {
+        toValue: 1,
+        useNativeDriver: true,
+        easing: Easing.linear,
+        duration: 800,
+      }).start();
+
+      return () => {
+        // Animated.timing(move, {
+        //   toValue: 0,
+        //   useNativeDriver: true,
+        //   duration: 300,
+        // }).reset(),
+        Animated.timing(topBottom, {
+          toValue: 0,
+          useNativeDriver: true,
+          duration: 300,
+        }).reset();
+        Animated.timing(opacity, {
+          toValue: 1,
+          useNativeDriver: true,
+          duration: 800,
+        }).reset();
+      };
+    }, [])
+  );
 
   return (
     <Container>
@@ -22,9 +74,9 @@ const ScreenLayout = ({ back, children, title, appbar }) => {
           <Title text={title} />
         </View>
       ) : (
-        <AppBar title={title} back={back ? back : () => navigation.goBack()} />
+        <AppBar move={topBottom} title={title} back={back ? back : () => navigation.goBack()} />
       )}
-      <View style={{ paddingHorizontal: 20, flex: 1 }}>{children}</View>
+      <Animated.View style={{ paddingHorizontal: 20, opacity, flex: 1 }}>{children}</Animated.View>
       <SafeAreaView></SafeAreaView>
     </Container>
   );

@@ -91,7 +91,7 @@ const Qna = ({ navigation }) => {
 
   return (
     <ScreenLayout title={"1:1 문의하기"}>
-      <ScrollView style={{ paddingHorizontal: 20, marginTop: 20 }} ref={scrollRef}>
+      <ScrollView style={{ marginTop: 20 }} ref={scrollRef}>
         <TouchableOpacity
           onPress={() => setVisible(true)}
           style={{

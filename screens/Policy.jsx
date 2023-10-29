@@ -5,6 +5,7 @@ import Title from "../components/Title";
 import AppBar from "../components/AppBar";
 import { useQueryClient } from "@tanstack/react-query";
 import { resourceApi } from "../api";
+import ScreenLayout from "../components/ScreenLayout";
 
 const Policy = ({ navigation }) => {
   const queryClient = useQueryClient();
@@ -19,8 +20,7 @@ const Policy = ({ navigation }) => {
     { text: "위치 정보 이용 약관 (필수)", name: "Location", type: "Position" },
   ];
   return (
-    <View style={{ flex: 1, backgroundColor: "#ecf2f0" }}>
-      <AppBar title="약관 및 정책" />
+    <ScreenLayout title="약관 및 정책">
       <View style={styles.container}>
         {policy.map((item) => (
           <View key={item.type} style={styles.item}>
@@ -31,7 +31,7 @@ const Policy = ({ navigation }) => {
           </View>
         ))}
       </View>
-    </View>
+    </ScreenLayout>
   );
 };
 

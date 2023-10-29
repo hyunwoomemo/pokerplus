@@ -1,11 +1,11 @@
-import React, { createContext, useCallback, useState } from "react";
+import React, { createContext, useCallback, useRef, useState } from "react";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import TicketList from "../screens/ticket/TicketList";
 import Send from "../screens/ticket/Send";
 import Layout from "../components/Layout";
 import ReceiveList from "../screens/ticket/ReceiveList";
 import SendList from "../screens/ticket/SendList";
-import { Text } from "react-native";
+import { Animated, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Appbar } from "react-native-paper";
 import { TicketContext } from "../context";
@@ -37,19 +37,40 @@ export default function TicketNav({ navigation }) {
       return () => {};
     }, [])
   );
+  const topBottom = useRef(new Animated.Value(-5)).current;
+
+  useFocusEffect(
+    useCallback(() => {
+      Animated.timing(topBottom, {
+        toValue: 0,
+        useNativeDriver: true,
+        duration: 300,
+      }).start();
+
+      return () => {
+        Animated.timing(topBottom, {
+          toValue: 0,
+          useNativeDriver: true,
+          duration: 300,
+        }).reset();
+      };
+    }, [])
+  );
 
   return (
     <TicketContext.Provider value={values}>
-      <Appbar.Header style={{ backgroundColor: "#ecf2f0" }}>
-        <Appbar.BackAction
-          onPress={() => {
-            navigation.goBack();
-          }}
-        />
-        <Appbar.Content title="Ticket" />
-        {/* <Appbar.Action icon="calendar" onPress={() => {}} />
-        <Appbar.Action icon="magnify" onPress={() => {}} /> */}
-      </Appbar.Header>
+      <View style={{ backgroundColor: "#ecf2f0" }}>
+        <Animated.View style={{ transform: [{ translateY: topBottom }] }}>
+          <Appbar.Header style={{ backgroundColor: "#ecf2f0" }}>
+            <Appbar.BackAction
+              onPress={() => {
+                navigation.goBack();
+              }}
+            />
+            <Appbar.Content title="Ticket" />
+          </Appbar.Header>
+        </Animated.View>
+      </View>
       <Tab.Navigator
         sceneContainerStyle={{ backgroundColor: "#ecf2f0" }}
         screenOptions={{
