@@ -12,6 +12,7 @@ import "react-native-reanimated";
 import { PaperProvider } from "react-native-paper";
 import * as SplashScreen from "expo-splash-screen";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { LogLevel, OneSignal } from "react-native-onesignal";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -26,6 +27,23 @@ TextInput.defaultProps.allowFontScaling = false;
 const queryClient = new QueryClient();
 const Nav = createNativeStackNavigator();
 export default function App() {
+  useEffect(() => {
+    // Remove this method to stop OneSignal Debugging
+    OneSignal?.Debug.setLogLevel(LogLevel.Verbose);
+
+    // OneSignal Initialization
+    OneSignal?.initialize("ae232b11-fde8-419d-8069-9ec35bf73f62");
+
+    // requestPermission will show the native iOS or Android notification permission prompt.
+    // We recommend removing the following code and instead using an In-App Message to prompt for notification permission
+    OneSignal?.Notifications.requestPermission(true);
+
+    // Method for listening for notification clicks
+    OneSignal?.Notifications.addEventListener("click", (event) => {
+      console.log("OneSignal: notification clicked:", event.result);
+    });
+  }, []);
+
   const linking = {
     prefixes: ["https://...", "http://localhost:3000", "pokerplusapp://"],
 
