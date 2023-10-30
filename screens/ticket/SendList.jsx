@@ -81,7 +81,12 @@ const SendList = () => {
           {data?.DATA?.length ? (
             <>
               <View style={{ flex: 1 }}>
-                <FlatList ref={flatRef} data={data?.DATA} keyExtractor={(item, index) => `${index}-${item.ticket_info_id}`} renderItem={({ item }) => <SendItem item={item} />} />
+                <FlatList
+                  ref={flatRef}
+                  data={data?.DATA}
+                  keyExtractor={(item, index) => `${index}-${item.ticket_info_id}`}
+                  renderItem={({ item, index }) => <SendItem page={currentPage} index={index} item={item} />}
+                />
               </View>
               <View style={{ flexDirection: "row", gap: 10, justifyContent: "center", marginVertical: 10 }}>
                 {totalPage > 1 && <Pagination totalPage={totalPage} currentPage={currentPage} setCurrentPage={setCurrentPage} />}

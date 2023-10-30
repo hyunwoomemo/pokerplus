@@ -52,7 +52,7 @@ const TicketList = ({ navigation }) => {
           refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
           data={tickets}
           keyExtractor={(item, index) => `${index}-${item.ticket_info_id}`}
-          renderItem={({ item }) => <TicketItem item={item} />}
+          renderItem={({ item, index }) => <TicketItem item={item} index={index} />}
         />
       )}
     </View>

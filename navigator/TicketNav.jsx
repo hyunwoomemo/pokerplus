@@ -29,13 +29,13 @@ export default function TicketNav({ navigation }) {
 
   useFocusEffect(
     useCallback(() => {
-      // navigation.navigate("TicketList");
+      navigation.navigate("TicketList");
       queryClient.invalidateQueries(["myticket"]);
       queryClient.invalidateQueries(["user"]);
       queryClient.invalidateQueries(["receive"]);
       return () => {
-        navigation.navigate("TicketList");
-        navigation.goBack();
+        // navigation.navigate("TicketList");
+        // navigation.goBack();
       };
     }, [])
   );

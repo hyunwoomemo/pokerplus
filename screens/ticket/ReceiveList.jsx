@@ -82,7 +82,12 @@ const ReceiveList = ({ navigation }) => {
           {data?.DATA?.length ? (
             <>
               <View style={styles.container}>
-                <FlatList ref={flatRef} data={data?.DATA} keyExtractor={(item, index) => `${index}-${item.ticket_info_id}`} renderItem={({ item }) => <ReceiveItem item={item} />} />
+                <FlatList
+                  ref={flatRef}
+                  data={data?.DATA}
+                  keyExtractor={(item, index) => `${index}-${item.ticket_info_id}`}
+                  renderItem={({ item, index }) => <ReceiveItem page={currentPage} item={item} index={index} />}
+                />
               </View>
               <View style={{ flexDirection: "row", gap: 10, justifyContent: "center", marginVertical: 10 }}>
                 {totalPage > 1 && <Pagination totalPage={totalPage} currentPage={currentPage} setCurrentPage={setCurrentPage} />}

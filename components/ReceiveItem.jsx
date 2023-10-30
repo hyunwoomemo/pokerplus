@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Image } from "react-native";
+import React, { useCallback, useRef, useState } from "react";
+import { Animated, Image } from "react-native";
 import { View } from "react-native";
 import { TouchableOpacity } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
@@ -10,6 +10,7 @@ import FastImage from "react-native-fast-image";
 import ModalComponent from "./Modal";
 import Button from "./Button";
 import styled from "styled-components/native";
+import { useFocusEffect } from "@react-navigation/native";
 
 const codeText = [
   { code: "TH001", text: "상금지급" },
@@ -36,8 +37,31 @@ const styleCodeText = (text) => {
   return text;
 };
 
-const ReceiveItem = ({ item }) => {
-  console.log(item);
+const ReceiveItem = ({ item, index, page }) => {
+  console.log(page);
+  const opacity = useRef(new Animated.Value(0)).current;
+  const scale = opacity.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0.8, 1],
+  });
+
+  useFocusEffect(
+    useCallback(() => {
+      Animated.spring(opacity, {
+        toValue: 1,
+        useNativeDriver: true,
+        delay: index * 50,
+      }).start();
+      return () => {
+        Animated.spring(opacity, {
+          toValue: 1,
+          useNativeDriver: true,
+          delay: index * 50,
+        }).reset();
+      };
+    }, [])
+  );
+
   const {
     ticket_info_id,
     ticket_history_code,
@@ -64,8 +88,8 @@ const ReceiveItem = ({ item }) => {
   };
 
   return (
-    <TouchableOpacity style={styles.container} onPress={handleDetailModal}>
-      <View style={styles.contentWrapper}>
+    <Animated.View style={page === 1 ? { ...styles.container, opacity, transform: [{ scale }] } : styles.container}>
+      <TouchableOpacity style={styles.contentWrapper} onPress={handleDetailModal}>
         <View style={styles.firstline}>
           <Text style={styles.text}>{prev_owner_name}</Text>
           <Text style={styles.text}>{moment(created_at).utc().add(9, "h").format("YY/MM/DD")}</Text>
@@ -86,7 +110,7 @@ const ReceiveItem = ({ item }) => {
             <Text style={styles.text}>{count}장</Text>
           </View>
         </View>
-      </View>
+      </TouchableOpacity>
       <View style={styles.codebutton}>
         <Text style={styles.codetext}>{styleCodeText(codeText.find((v) => v.code === ticket_history_code).text)}</Text>
       </View>
@@ -133,7 +157,7 @@ const ReceiveItem = ({ item }) => {
           </View>
         </View>
       </ModalComponent>
-    </TouchableOpacity>
+    </Animated.View>
   );
 };
 

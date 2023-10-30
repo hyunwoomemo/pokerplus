@@ -46,7 +46,6 @@ const QrSend = ({ navigation, route }) => {
 
   useEffect(() => {
     if (route.params.data) {
-      console.log(route.params.data);
       if (info?.length === 0) {
         setInfo(route.params.data);
       }
@@ -58,10 +57,8 @@ const QrSend = ({ navigation, route }) => {
             url: true,
           });
           const URL = route.params.url;
-          console.log("123123123123", URL);
           const hash = URL.slice(URL.lastIndexOf("/") + 1);
           const res = await qrApi.getInfo(hash);
-          console.log("sdf", res);
           setInfo(res?.DATA);
         } catch (err) {
           console.error(err);
@@ -76,8 +73,6 @@ const QrSend = ({ navigation, route }) => {
       getData();
     }
   }, []);
-
-  console.log(info);
 
   const { data: ticketData, isLoading, isError } = useQuery(["myticket"], ticketApi.list);
 

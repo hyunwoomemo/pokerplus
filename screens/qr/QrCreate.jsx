@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from "react";
-import { ActivityIndicator, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, Linking, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { Fontisto } from "@expo/vector-icons";
 import { qrApi } from "../../api";
@@ -36,7 +36,11 @@ const QrCreate = ({ navigation }) => {
   const getQrInfoUrl = async () => {
     try {
       const { CODE, URL } = await qrApi.getUrl();
+      // const supported = await Linking.canOpenURL("pokerplusapp://qrsend");
       const url = `pokerplusapp://qrsend?url=${URL}`;
+      // const alterUrl = Platform.OS === "ios" ? "https://itunes.apple.com/app/id304608425?mt=8" : "market://details?id=net.daum.android.map";
+
+      // console.log("sp", supported);
       // console.log(`pokerplusapp://qrsend?url=${URL}`);
       const success = CODE === "QU000";
       if (success) {
