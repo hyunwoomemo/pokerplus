@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { Text, TextInput, View, TouchableOpacity, StyleSheet, FlatList } from "react-native";
+import { Text, TextInput, View, TouchableOpacity, StyleSheet, FlatList, ActivityIndicator } from "react-native";
 import Button from "../../components/Button";
 import { Entypo } from "@expo/vector-icons";
-import { ticketApi } from "../../api";
+import { qrApi, ticketApi } from "../../api";
 import { useToast } from "react-native-toast-notifications";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import ModalComponent from "../../components/Modal";
@@ -13,8 +13,6 @@ import { LayoutAnimation } from "react-native";
 import Error from "../../components/Error";
 
 const QrSend = ({ navigation, route }) => {
-  console.log(route);
-  const { data } = route.params;
   const [info, setInfo] = useState([]);
   const [tickets, setTickets] = useState([]);
   const [selectTicket, setSelectTicket] = useState([]);
@@ -34,10 +32,6 @@ const QrSend = ({ navigation, route }) => {
     });
   };
 
-  if (selectTicket) {
-    console.log("sdmflmsdkfms");
-  }
-
   const hideTicketModal = () => {
     setTicketVisible(false);
     setSelectTicket();
@@ -51,10 +45,39 @@ const QrSend = ({ navigation, route }) => {
   const toast = useToast();
 
   useEffect(() => {
-    if (info.length === 0) {
-      setInfo(data);
+    if (route.params.data) {
+      console.log(route.params.data);
+      if (info?.length === 0) {
+        setInfo(route.params.data);
+      }
+    } else if (route.params.url) {
+      const getData = async () => {
+        try {
+          setLoading({
+            ...loading,
+            url: true,
+          });
+          const URL = route.params.url;
+          console.log("123123123123", URL);
+          const hash = URL.slice(URL.lastIndexOf("/") + 1);
+          const res = await qrApi.getInfo(hash);
+          console.log("sdf", res);
+          setInfo(res?.DATA);
+        } catch (err) {
+          console.error(err);
+        } finally {
+          setLoading({
+            ...loading,
+            url: false,
+          });
+        }
+      };
+
+      getData();
     }
   }, []);
+
+  console.log(info);
 
   const { data: ticketData, isLoading, isError } = useQuery(["myticket"], ticketApi.list);
 
@@ -78,14 +101,18 @@ const QrSend = ({ navigation, route }) => {
 
   const handleSend = async () => {
     setLoading({ ...loading, send: true });
+    console.log(info);
     try {
       const res = await ticketApi.send({
         send_type: "TH004",
         ticket_info_id: String(values.id),
         send_count: values.count,
-        target_user_id: data.targetUser,
+        target_user_id: info.targetUser,
         memo: values.memo ? values.memo : null,
       });
+
+      console.log(res);
+
       if (res.CODE === "TKS000") {
         navigation.goBack();
         navigation.navigate("Tabs", { screen: "Home" });
@@ -135,21 +162,29 @@ const QrSend = ({ navigation, route }) => {
     return <Error />;
   }
 
+  if (!info) {
+    return <Error />;
+  }
+
+  if (loading.url) {
+    return <ActivityIndicator size={"large"} color={"#ff3183"} style={StyleSheet.absoluteFillObject} />;
+  }
+
   return (
     <ScreenLayout title={"참가권 QR 전송"} style={{ flex: 1, gap: 10 }}>
       <KeyboardAwareScrollView style={{ flex: 1, backgroundColor: "#ecf2f0", padding: 20 }}>
         <View style={{ padding: 20, borderWidth: StyleSheet.hairlineWidth, marginTop: 40, borderRadius: 10, gap: 20 }}>
           <View style={styles.item}>
             <Text style={styles.text}>이름</Text>
-            <Text style={styles.text}>{info.name}</Text>
+            <Text style={styles.text}>{info?.name}</Text>
           </View>
           <View style={styles.item}>
             <Text style={styles.text}>닉네임</Text>
-            <Text style={styles.text}>{info.nick}</Text>
+            <Text style={styles.text}>{info?.nick}</Text>
           </View>
           <View style={styles.item}>
             <Text style={styles.text}>연락처</Text>
-            <Text style={styles.text}>{info.hp}</Text>
+            <Text style={styles.text}>{info?.hp}</Text>
           </View>
         </View>
         <TouchableOpacity

@@ -37,11 +37,10 @@ const QrCreate = ({ navigation }) => {
     try {
       const { CODE, URL } = await qrApi.getUrl();
       const url = `pokerplusapp://qrsend?url=${URL}`;
-      console.log(url.slice(url.indexOf("?url=") + 5));
       // console.log(`pokerplusapp://qrsend?url=${URL}`);
       const success = CODE === "QU000";
       if (success) {
-        setQrInfoUrl(URL);
+        setQrInfoUrl(url);
         setTimer(180);
       }
     } catch (err) {
