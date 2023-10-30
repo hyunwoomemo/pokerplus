@@ -1,7 +1,7 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React, { createContext, useCallback, useState } from "react";
-import Notice from "../screens/Notice";
-import NoticeDetail from "../screens/NoticeDetail";
+import Notice from "../screens/notice/Notice";
+import NoticeDetail from "../screens/notice/NoticeDetail";
 import { useFocusEffect } from "@react-navigation/native";
 import { NoticeContext } from "../context";
 

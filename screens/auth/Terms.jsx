@@ -4,7 +4,6 @@ import styled from "styled-components/native";
 import { useNavigation } from "@react-navigation/native";
 import ScreenLayout from "../../components/ScreenLayout";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
-import AppBar from "../../components/AppBar";
 import Button from "../../components/Button";
 
 const TextWrapper = styled.View``;

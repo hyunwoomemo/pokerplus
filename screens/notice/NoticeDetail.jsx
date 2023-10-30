@@ -1,8 +1,8 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
 import moment from "moment";
-import Button from "../components/Button";
-import ScreenLayout from "../components/ScreenLayout";
+import Button from "../../components/Button";
+import ScreenLayout from "../../components/ScreenLayout";
 
 const NoticeDetail = ({ navigation: { goBack }, route }) => {
   const { notice, index } = route.params;

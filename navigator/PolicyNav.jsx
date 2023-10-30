@@ -1,7 +1,7 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React from "react";
-import Policy from "../screens/Policy";
-import PolicyDetail from "../screens/PolicyDetail";
+import Policy from "../screens/policy/Policy";
+import PolicyDetail from "../screens/policy/PolicyDetail";
 
 const Stack = createNativeStackNavigator();
 

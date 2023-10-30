@@ -1,17 +1,17 @@
 import React, { useEffect, useRef, useState } from "react";
-import BackBtn from "../components/BackBtn";
-import Layout from "../components/Layout";
-import Input, { WithButtonLabelInput, WithLabelInput } from "../components/Input";
+import BackBtn from "../../components/BackBtn";
+import Layout from "../../components/Layout";
+import Input, { WithButtonLabelInput, WithLabelInput } from "../../components/Input";
 import { Image, LayoutAnimation, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import styled from "styled-components/native";
-import Button from "../components/Button";
+import Button from "../../components/Button";
 import * as ImagePicker from "expo-image-picker";
-import { useImageUpload } from "../utils/useImageUpload";
+import { useImageUpload } from "../../utils/useImageUpload";
 import { AntDesign } from "@expo/vector-icons";
-import ScreenLayout from "../components/ScreenLayout";
+import ScreenLayout from "../../components/ScreenLayout";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { measure } from "react-native-reanimated";
-import { authApi } from "../api";
+import { authApi } from "../../api";
 import { useToast } from "react-native-toast-notifications";
 
 const Alliance = ({ navigation: { navigate }, route }) => {
@@ -120,6 +120,7 @@ const Alliance = ({ navigation: { navigate }, route }) => {
       chief_name,
       chief_hp,
       address: values.detailAddress ? route.params.address + " " + values.detailAddress : route.parmas.address,
+      zip_code: route.params.zipCode,
       open_talk_link: open_talk_link || null,
     };
 
@@ -128,7 +129,6 @@ const Alliance = ({ navigation: { navigate }, route }) => {
         formData.append(key, bodyData[key]);
       }
     }
-    console.log(formData);
 
     try {
       const res = await authApi.accountRegistShop(formData);

@@ -1,11 +1,11 @@
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import Layout from "../components/Layout";
-import Title from "../components/Title";
-import AppBar from "../components/AppBar";
+import Layout from "../../components/Layout";
+import Title from "../../components/Title";
+import AppBar from "../../components/AppBar";
 import { useQueryClient } from "@tanstack/react-query";
-import { resourceApi } from "../api";
-import ScreenLayout from "../components/ScreenLayout";
+import { resourceApi } from "../../api";
+import ScreenLayout from "../../components/ScreenLayout";
 
 const Policy = ({ navigation }) => {
   const queryClient = useQueryClient();

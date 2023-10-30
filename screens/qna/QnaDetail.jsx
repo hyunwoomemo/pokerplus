@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
-import Layout from "../components/Layout";
+import Layout from "../../components/Layout";
 import { ActivityIndicator, LayoutAnimation, StyleSheet, Text, View } from "react-native";
-import { WithTitleBackBtn } from "../components/BackBtn";
+import { WithTitleBackBtn } from "../../components/BackBtn";
 import moment from "moment";
-import { customerApi } from "../api";
-import ScreenLayout from "../components/ScreenLayout";
+import { customerApi } from "../../api";
+import ScreenLayout from "../../components/ScreenLayout";
 import { useQuery } from "@tanstack/react-query";
 import { LinearGradient } from "expo-linear-gradient";
+import Error from "../../components/Error";
 
 const QnaDetail = ({ route }) => {
   const { qna } = route.params;
@@ -17,6 +18,10 @@ const QnaDetail = ({ route }) => {
   const [prevItem, setPrevItem] = useState([]);
 
   const { data, isLoading, isError } = useQuery(["qnaDetail"], () => customerApi.customerItem(qna.id));
+
+  if (isError) {
+    return <Error />;
+  }
 
   return (
     <ScreenLayout title={qna.subject}>

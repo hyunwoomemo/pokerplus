@@ -9,7 +9,7 @@ const ModalComponent = ({ children, visible, hideModal, size }) => {
     backgroundColor: "white",
     padding: 20,
     margin: 20,
-    minHeight: size === "large" ? height * 0.5 : "auto",
+    // minHeight: height * 0.5,
     borderRadius: 30,
   };
   return (

@@ -1,15 +1,16 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { FlatList, LayoutAnimation, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
-import Layout from "../components/Layout";
-import { customerApi } from "../api";
+import Layout from "../../components/Layout";
+import { customerApi } from "../../api";
 import { SelectList } from "react-native-dropdown-select-list";
-import { WithLabelInput } from "../components/Input";
-import Button from "../components/Button";
-import AppBar from "../components/AppBar";
+import { WithLabelInput } from "../../components/Input";
+import Button from "../../components/Button";
+import AppBar from "../../components/AppBar";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import ModalComponent from "../components/Modal";
+import ModalComponent from "../../components/Modal";
 import { useFocusEffect } from "@react-navigation/native";
-import ScreenLayout from "../components/ScreenLayout";
+import ScreenLayout from "../../components/ScreenLayout";
+import Error from "../../components/Error";
 
 const Qna = ({ navigation }) => {
   const [config, setConfig] = useState([]);
@@ -35,7 +36,7 @@ const Qna = ({ navigation }) => {
     }, [])
   );
 
-  const { data, isLoading } = useQuery(["customerConfig"], customerApi.customerConfig);
+  const { data, isLoading, isError } = useQuery(["customerConfig"], customerApi.customerConfig);
 
   useEffect(() => {
     setConfig(data?.DATA.hosts);
@@ -88,6 +89,10 @@ const Qna = ({ navigation }) => {
   };
 
   const submitDisabled = !(selectedConfig && Object.keys(selectedConfig).length && values.subject && values.contents);
+
+  if (isError) {
+    return <Error />;
+  }
 
   return (
     <ScreenLayout title={"1:1 문의하기"}>

@@ -40,6 +40,13 @@ export const deepLinkConfig = {
                     Pub: "/pub",
                     Notice: "/notice",
                     Profile: "/profile",
+                    QrNav: {
+                      screens: {
+                        QrSend: "/qrsend",
+                        QrScan: "/qrscan",
+                      },
+                    },
+                    Leave: "/leave",
                   },
                 },
               },

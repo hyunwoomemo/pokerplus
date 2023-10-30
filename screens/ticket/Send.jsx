@@ -14,6 +14,7 @@ import { useFocusEffect } from "@react-navigation/native";
 import { Modal, Portal } from "react-native-paper";
 import ModalComponent from "../../components/Modal";
 import FastImage from "react-native-fast-image";
+import Error from "../../components/Error";
 
 const Send = ({ navigation }) => {
   const [tickets, setTickets] = useState([]);
@@ -66,16 +67,6 @@ const Send = ({ navigation }) => {
     }, [])
   );
 
-  const a = 5;
-  console.log(a);
-  const handleChange = (type, val) => {
-    setValues({
-      ...values,
-      count: "1",
-      [type]: String(val),
-    });
-  };
-
   const handleCount = (type) => {
     if (type === "minus") {
       setValues({
@@ -118,10 +109,6 @@ const Send = ({ navigation }) => {
 
   const handleSend = async () => {
     setLoading({ ...loading, send: true });
-    // const headers = {
-    //   "Content-Type": "application/json",
-    //   Authorization: "Bearer YzFmMTg5NWUtOTI1MC00NjZlLWFjYjMtMGZjNmUwODgzNWYx",
-    // };
     try {
       const res = await ticketApi.send({
         send_type: "TH003",
@@ -131,18 +118,6 @@ const Send = ({ navigation }) => {
         memo: values.memo ? values.memo : null,
       });
       if (res.CODE === "TKS000") {
-        // fetch("https://onesignal.com/api/v1/notifications", {
-        //   method: "POST",
-        //   body: JSON.stringify({
-        //     app_id: "ae232b11-fde8-419d-8069-9ec35bf73f62",
-        //     include_aliases: { external_id: [values.userId] },
-        //     target_channel: "push",
-        //     data: { foo: "bar" },
-        //     contents: { en: `${user.name}님이 티켓을 전송했습니다.` },
-        //   }),
-        //   headers: headers,
-        // })
-        //   .then((res) => res.json())
         queryClient.invalidateQueries(["myticket"]);
         queryClient.invalidateQueries(["send"]);
         queryClient.invalidateQueries(["user"]);
@@ -197,6 +172,10 @@ const Send = ({ navigation }) => {
       id: item.ticket_info_id,
     });
   };
+
+  if (isError) {
+    return <Error />;
+  }
 
   return (
     <View>
@@ -305,8 +284,8 @@ const Send = ({ navigation }) => {
               <Text style={{ color: "#fff", fontWeight: "bold" }}>{loading.find ? <ActivityIndicator color="#fff" size={15} /> : "조회"}</Text>
             </TouchableOpacity>
           </View>
-          <ModalComponent visible={visible} hideModal={hideModal} size="large">
-            <View style={{ flex: 1, justifyContent: "center", paddingHorizontal: 20, alignItems: "center", gap: 30 }}>
+          <ModalComponent visible={visible} hideModal={hideModal}>
+            <View style={{ justifyContent: "center", paddingHorizontal: 20, alignItems: "center", gap: 30 }}>
               <Text style={{ fontSize: 18 }}>사용자 정보 조회 결과</Text>
               <Text style={{ fontSize: 18, color: "#ff3183", fontWeight: "bold" }}>번호: {values.hp}</Text>
               <Text style={{ fontSize: 18 }}>이름: {values.name}</Text>

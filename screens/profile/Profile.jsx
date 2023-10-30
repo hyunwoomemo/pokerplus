@@ -1,18 +1,18 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Animated, Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
-import Layout from "../components/Layout";
-import ScreenLayout from "../components/ScreenLayout";
-import Button from "../components/Button";
-import { WithLabelDisableInput } from "../components/Input";
+import Layout from "../../components/Layout";
+import ScreenLayout from "../../components/ScreenLayout";
+import Button from "../../components/Button";
+import { WithLabelDisableInput } from "../../components/Input";
 import styled from "styled-components/native";
 import { useRecoilState } from "recoil";
-import { authState } from "../recoil/auth/atom";
-import BackBtn, { WithTitleBackBtn } from "../components/BackBtn";
-import { opacityAnimation } from "../animations/opacityAnimation";
+import { authState } from "../../recoil/auth/atom";
+import BackBtn, { WithTitleBackBtn } from "../../components/BackBtn";
+import { opacityAnimation } from "../../animations/opacityAnimation";
 import { useQuery } from "@tanstack/react-query";
-import { authApi } from "../api";
+import { authApi } from "../../api";
 import FastImage from "react-native-fast-image";
-import { imageCache } from "../recoil/imageCache/atom";
+import { imageCache } from "../../recoil/imageCache/atom";
 
 const Title = styled.Text`
   text-align: center;
@@ -46,12 +46,15 @@ const Profile = ({ navigation }) => {
         <View style={{ alignItems: "center", paddingVertical: 30 }}>
           <Animated.View style={{ width: 120, height: 120, borderRadius: 60, backgroundColor: "rgba(0,0,0,0.2)", opacity: opacity }}>
             <FastImage
-              source={{ uri: `${data?.DATA?.user_profile_url}?cache=${cache}` }}
+              source={{ uri: `${data?.DATA?.user_profile_url}` }}
               style={{
                 width: 120,
                 height: 120,
                 borderRadius: 60,
               }}
+              // width={120}
+              // height={120}
+              // borderRadius={60}
               resizeMode="cover"
               onLoadStart={() => opacityAnimation(opacity, "start")}
               onLoadEnd={() => opacityAnimation(opacity, "reset")}
@@ -76,7 +79,7 @@ const Profile = ({ navigation }) => {
             <Text>이메일</Text>
           </WithLabelDisableInput>
         </View>
-        <TouchableOpacity style={{ alignItems: "center", paddingVertical: 40 }}>
+        <TouchableOpacity onPress={() => navigation.navigate("Leave")} style={{ alignItems: "center", paddingVertical: 40 }}>
           <Text style={{ textDecorationLine: "underline", color: "gray" }}>회원 탈퇴</Text>
         </TouchableOpacity>
       </ScrollView>

@@ -8,7 +8,7 @@ import { OneSignal } from "react-native-onesignal";
 import { authState } from "../recoil/auth/atom";
 import { useRecoilState } from "recoil";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { authApi, customerApi, resourceApi, ticketApi } from "../api";
+import { authApi, customerApi, pushApi, resourceApi, ticketApi } from "../api";
 import { pushState } from "../recoil/push/atom";
 import * as SplashScreen from "expo-splash-screen";
 import { getStorage, removeStorage, setStorage } from "../utils/asyncStorage";
@@ -30,6 +30,7 @@ const Home = () => {
   const [user, setUser] = useRecoilState(authState);
   const queryClient = useQueryClient();
   const [visible, setVisible] = useState(false);
+  queryClient.prefetchQuery(["pushUnRead"], pushApi.unReadCheck);
 
   const hideModal = () => {
     setVisible(false);
@@ -45,7 +46,6 @@ const Home = () => {
   });
 
   useEffect(() => {
-    console.log(user.email);
     OneSignal.login(user.email);
     if (OneSignal.User.pushSubscription.getOptedIn()) {
       const setPush = async () => {
@@ -58,7 +58,7 @@ const Home = () => {
         setPush();
       };
     }
-  }, []);
+  }, [user]);
 
   useEffect(() => {
     const prefetch = async () => {

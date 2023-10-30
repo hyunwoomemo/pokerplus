@@ -1,7 +1,6 @@
 import React, { useRef, useState } from "react";
-import { Alert, SafeAreaView, Text, View } from "react-native";
+import { Text, View } from "react-native";
 import ScreenLayout from "../../components/ScreenLayout";
-import styled from "styled-components/native";
 import { WithLabelErrorInput } from "../../components/Input";
 import { validateJoin } from "../../utils/validate";
 import Button from "../../components/Button";

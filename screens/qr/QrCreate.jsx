@@ -1,13 +1,10 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { ActivityIndicator, LayoutAnimation, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import Layout from "../../components/Layout";
-import Button from "../../components/Button";
+import React, { useCallback, useState } from "react";
+import { ActivityIndicator, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { Fontisto } from "@expo/vector-icons";
 import { qrApi } from "../../api";
 import QRCode from "react-native-qrcode-svg";
 import { useFocusEffect } from "@react-navigation/native";
-import AppBar from "../../components/AppBar";
 import ScreenLayout from "../../components/ScreenLayout";
 
 const QrCreate = ({ navigation }) => {
@@ -39,6 +36,9 @@ const QrCreate = ({ navigation }) => {
   const getQrInfoUrl = async () => {
     try {
       const { CODE, URL } = await qrApi.getUrl();
+      const url = `pokerplusapp://qrsend?url=${URL}`;
+      console.log(url.slice(url.indexOf("?url=") + 5));
+      // console.log(`pokerplusapp://qrsend?url=${URL}`);
       const success = CODE === "QU000";
       if (success) {
         setQrInfoUrl(URL);

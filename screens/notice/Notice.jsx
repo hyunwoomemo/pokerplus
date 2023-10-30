@@ -1,25 +1,18 @@
 import React, { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { ActivityIndicator, Dimensions, FlatList, LayoutAnimation, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import Layout from "../components/Layout";
-import { customerApi } from "../api";
+import { customerApi } from "../../api";
 import moment from "moment";
-import Pagination from "../components/Pagination";
-import { NoticeContext } from "../context";
-import Header from "../components/Header";
-import { Appbar, DataTable } from "react-native-paper";
-import AppBar from "../components/AppBar";
+import Pagination from "../../components/Pagination";
+import { NoticeContext } from "../../context";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { offsetValue } from "../config";
-import ScreenLayout from "../components/ScreenLayout";
+import { offsetValue } from "../../config";
+import ScreenLayout from "../../components/ScreenLayout";
+import Error from "../../components/Error";
 
 const Notice = ({ navigation }) => {
-  const [notice, setNotice] = useState();
-  const [total, setTotal] = useState(0);
   const [totalPage, setTotalPage] = useState(0);
   const { currentPage, setCurrentPage } = useContext(NoticeContext);
-  const [loading, setLoading] = useState(true);
   const numberOfItemsPerPageList = [2, 3, 4];
-  const [numberOfItemsPerPage, onItemsPerPageChange] = React.useState(numberOfItemsPerPageList[0]);
 
   const flatRef = useRef();
 
@@ -47,6 +40,10 @@ const Notice = ({ navigation }) => {
   useEffect(() => {
     setTotalPage(Math.ceil(data?.DATA.total / offsetValue));
   }, [data?.DATA.total]);
+
+  if (isError) {
+    return <Error />;
+  }
 
   return (
     <ScreenLayout title={"Notice"}>

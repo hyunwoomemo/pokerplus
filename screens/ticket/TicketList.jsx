@@ -11,6 +11,7 @@ import { ActivityIndicator } from "react-native";
 import { useFocusEffect } from "@react-navigation/native";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import NoItem from "../../components/NoItem";
+import Error from "../../components/Error";
 
 const TicketList = ({ navigation }) => {
   const [tickets, setTickets] = useState();
@@ -33,6 +34,10 @@ const TicketList = ({ navigation }) => {
   }, [data]);
 
   console.log(isFetching);
+
+  if (isError) {
+    return <Error />;
+  }
 
   if (tickets?.length === 0) {
     return <NoItem text={"보유하신 참가권이 없습니다."} />;

@@ -1,6 +1,6 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import QnaList from "../screens/QnaList";
-import QnaDetail from "../screens/QnaDetail";
+import QnaList from "../screens/qna/QnaList";
+import QnaDetail from "../screens/qna/QnaDetail";
 import { useFocusEffect } from "@react-navigation/native";
 import { QnaContext } from "../context";
 import { useCallback, useState } from "react";

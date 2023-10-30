@@ -20,6 +20,7 @@ import { useToast } from "react-native-toast-notifications";
 import FastImage from "react-native-fast-image";
 import { imageCache } from "../../recoil/imageCache/atom";
 import ModalComponent from "../../components/Modal";
+import Error from "../../components/Error";
 
 const InfoEdit = ({ route, navigation }) => {
   const [filename, setFilename] = useState();
@@ -198,11 +199,23 @@ const InfoEdit = ({ route, navigation }) => {
 
   console.log(selectedArea);
 
+  if (isError) {
+    return <Error />;
+  }
+
   return (
     <ScreenLayout title="정보 수정" back={() => navigation.popToTop()}>
       <ScrollView showsVerticalScrollIndicator={false}>
         <TouchableOpacity onPress={() => useImageUpload(status, requestPermission, setImageUrl, setFilename)} style={{ alignItems: "center", paddingVertical: 30 }}>
-          <FastImage source={{ uri: imageUrl ? imageUrl : `${data?.DATA?.user_profile_url}?cache=${cache}` }} style={{ width: 120, height: 120, borderRadius: 60 }} resizeMode="cover" />
+          <FastImage
+            source={{ uri: imageUrl ? imageUrl : `${data?.DATA?.user_profile_url}` }}
+            style={{
+              width: 120,
+              height: 120,
+              borderRadius: 60,
+            }}
+            resizeMode="cover"
+          />
         </TouchableOpacity>
         <Button onPress={() => navigation.navigate("Alliance")} dark label=" 제휴 등록 " style={{ alignItems: "center" }} />
         <View gap={10}>

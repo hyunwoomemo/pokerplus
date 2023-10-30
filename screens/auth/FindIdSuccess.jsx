@@ -1,8 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { SafeAreaView, Text, View } from "react-native";
-import styled from "styled-components/native";
-import BackBtn from "../../components/BackBtn";
-import Title from "../../components/Title";
+import { Text, View } from "react-native";
 import { authApi } from "../../api";
 import Button from "../../components/Button";
 import ScreenLayout from "../../components/ScreenLayout";

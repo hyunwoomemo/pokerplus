@@ -11,6 +11,7 @@ import Pagination from "../../components/Pagination";
 import { offsetValue } from "../../config";
 import NoItem from "../../components/NoItem";
 import { useFocusEffect } from "@react-navigation/native";
+import Error from "../../components/Error";
 
 const ReceiveList = ({ navigation }) => {
   const [totalPage, setTotalPage] = useState(1);
@@ -68,13 +69,17 @@ const ReceiveList = ({ navigation }) => {
     }, [])
   );
 
+  if (isError) {
+    return <Error />;
+  }
+
   return (
     <View style={{ flex: 1, backgroundColor: "#ecf2f0" }}>
       {isLoading ? (
         <ActivityIndicator style={StyleSheet.absoluteFillObject} color="#ff3183" size="large" />
       ) : (
         <>
-          {data?.DATA.length ? (
+          {data?.DATA?.length ? (
             <>
               <View style={styles.container}>
                 <FlatList ref={flatRef} data={data?.DATA} keyExtractor={(item, index) => `${index}-${item.ticket_info_id}`} renderItem={({ item }) => <ReceiveItem item={item} />} />

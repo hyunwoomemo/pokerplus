@@ -2,12 +2,10 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import React from "react";
 import TicketList from "../screens/ticket/TicketList";
 import { useColorScheme } from "react-native";
-import CustomTicketTabBar from "../components/CustomTicketTabBar";
 
 const TicketTab = createBottomTabNavigator();
 
 const TicketTabs = () => {
-  const isDark = useColorScheme() === "dark";
   return (
     <TicketTab.Navigator
       sceneContainerStyle={{}}
@@ -17,7 +15,6 @@ const TicketTabs = () => {
         tabBarShowLabel: false,
       }}
       tabBar={(props) => {
-
         return <CustomTabBar {...props} />;
       }}
     >

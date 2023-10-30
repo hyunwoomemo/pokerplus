@@ -1,16 +1,13 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { Animated, FlatList, LayoutAnimation, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import Layout from "../components/Layout";
-import Title from "../components/Title";
 import { MaterialIcons } from "@expo/vector-icons";
-import { customerApi } from "../api";
-import { toggleAnimation } from "../animations/toggleAnimation";
-import Pagination from "../components/Pagination";
 import { useFocusEffect } from "@react-navigation/native";
-import AppBar from "../components/AppBar";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { offsetValue } from "../config";
-import ScreenLayout from "../components/ScreenLayout";
+import { toggleAnimation } from "../../animations/toggleAnimation";
+import { customerApi } from "../../api";
+import { offsetValue } from "../../config";
+import ScreenLayout from "../../components/ScreenLayout";
+import Error from "../../components/Error";
 
 const AccordionWrapper = ({ title, children, data, index }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -88,7 +85,7 @@ const Faq = () => {
 
   const queryClient = useQueryClient();
 
-  const { data, isLoading } = useQuery(["faq", currentPage], () => customerApi.faqList(offsetValue, currentPage));
+  const { data, isLoading, isError } = useQuery(["faq", currentPage], () => customerApi.faqList(offsetValue, currentPage));
 
   useFocusEffect(
     useCallback(() => {
@@ -106,6 +103,10 @@ const Faq = () => {
   useEffect(() => {
     setTotalPage(Math.ceil(total / offsetValue));
   }, [total]);
+
+  if (isError) {
+    return <Error />;
+  }
 
   return (
     <ScreenLayout title={"FAQ"}>

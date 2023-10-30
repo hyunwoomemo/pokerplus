@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Text, Image, LayoutAnimation, Alert, StatusBar, View } from "react-native";
+import { Text, Image } from "react-native";
 import styled from "styled-components/native";
 import { Icon } from "../../source";
 import InputField from "../../components/InputField";
@@ -11,8 +11,6 @@ import { useToast } from "react-native-toast-notifications";
 import Button from "../../components/Button";
 import { getStorage, setStorage } from "../../utils/asyncStorage";
 import { LogLevel, OneSignal } from "react-native-onesignal";
-import ModalComponent from "../../components/Modal";
-import moment from "moment";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 const Container = styled.View`

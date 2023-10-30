@@ -155,34 +155,42 @@ const Join = ({ navigation: { navigate }, route }) => {
       ...loading,
       join: true,
     });
+
+    const formData = new FormData();
+    if (imageUrl) {
+      const uriParts = imageUrl.split(".");
+      const fileType = uriParts[uriParts.length - 1];
+      formData.append("file1", {
+        uri: Platform.OS === "ios" ? imageUrl.replace("file://", "") : imageUrl,
+        name: `file1.${fileType}`,
+        type: `image/${fileType}`,
+      });
+    }
+    const bodyData = {
+      authkey: authkey,
+      id: values.id,
+      file1: formData,
+      password: values.password,
+      eng_name: values.engFirst + values.engLast,
+      nick: values.nick,
+      location_code: selected,
+      provision_yn: "Y",
+      privacy_yn: "Y",
+      position_yn: "Y",
+      privacy_option_yn: check.length === 4 ? "Y" : "N",
+    };
+
+    for (const key in bodyData) {
+      if (bodyData[key] !== null) {
+        formData.append(key, bodyData[key]);
+      }
+    }
+
     try {
-      const file = imageUrl.split("/").pop();
-      const match = /\.(\w+)$/.exec(file ?? "");
-      const type = match ? `image/${match[1]}` : `image`;
-      const formData = new FormData();
-      formData.append("image", { uri: imageUrl, name: file, type });
-      console.log(formData);
-      const bodyData = {
-        authkey: authkey,
-        id: values.id,
-        file1: formData,
-        password: values.password,
-        eng_name: values.engFirst + values.engLast,
-        nick: values.nick,
-        location_code: selected,
-        provision_yn: "Y",
-        privacy_yn: "Y",
-        position_yn: "Y",
-        privacy_option_yn: check.length === 4 ? "Y" : "N",
-      };
-
-      const res = await authApi.join(bodyData);
-      console.log(res);
-      console.log(bodyData);
-
+      const res = await authApi.join(formData);
       if (res.CODE === "AR000") {
-        // Alert.alert("회원가입이 완료되었습니다.");
         navigate("Login");
+        toast.show("회원가입이 완료되었습니다.");
       } else {
         switch (res.CODE) {
           case "AR100":

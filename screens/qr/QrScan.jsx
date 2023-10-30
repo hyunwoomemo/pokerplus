@@ -68,18 +68,13 @@ export default function QrScan({ navigation }) {
             style={styles.camera}
             onBarCodeScanned={async (scannerResult) => {
               if (!scanned) {
-                // console.log(scannerResult);
-                // const { origin, size } = scannerResult.bounds;
-
-                // setX(Number(origin.y) * cameraLayout.width);
-                // setY(Number(origin.x) * cameraLayout.height);
-                // setQrHeight(Number(size.width) * cameraLayout.height);
-                // setQrWidth(Number(size.height) * cameraLayout.width);
                 setScanned(true);
-                const hash = scannerResult.data.slice(scannerResult.data.lastIndexOf("/") + 1);
+                const first = scannerResult.data.slice(scannerResult.data.indexOf("?url=") + 5);
+                const hash = first.slice(first.lastIndexOf("/") + 1);
                 console.log(hash);
                 try {
                   const res = await qrApi.getInfo(hash);
+                  r;
                   console.log(res);
                   navigation.navigate("QrSend", { data: res.DATA });
                 } catch (err) {
@@ -90,14 +85,12 @@ export default function QrScan({ navigation }) {
               }
             }}
           />
-          {/* <View style={{ borderWidth: 2, borderColor: "red", position: "absolute", width: qrWidth, height: qrHeight, top: y, right: x }}></View> */}
           <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
             <Text style={{ fontSize: 16 }}>QR 코드를 스캔해주세요</Text>
           </View>
         </ScreenLayout>
       )}
       {scanned && <ActivityIndicator style={StyleSheet.absoluteFillObject} size={"large"} />}
-      <StatusBar style="auto" />
     </View>
   );
 }

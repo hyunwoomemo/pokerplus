@@ -1,19 +1,15 @@
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import Tabs from "./Tab";
-import { useContext, useEffect, useRef, useState } from "react";
-import { ActivityIndicator, Animated, Dimensions, Image, LayoutAnimation, Platform, Text, TouchableOpacity, View } from "react-native";
-import { getFocusedRouteNameFromRoute, useNavigation, useRoute } from "@react-navigation/native";
+import { useContext, useRef, useState } from "react";
+import { Animated, Dimensions, Image, LayoutAnimation, Platform, Text, TouchableOpacity, View } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 import styled from "styled-components/native";
 import { toggleAnimation } from "../animations/toggleAnimation";
-import Profile from "../screens/Profile";
-import { useRecoilState, useRecoilValue } from "recoil";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import Notice from "../screens/Notice";
+import { useRecoilState } from "recoil";
 import { MaterialIcons } from "@expo/vector-icons";
-import { FontAwesome } from "@expo/vector-icons";
-import { authApi } from "../api";
+import { authApi, pushApi } from "../api";
 import { SimpleLineIcons } from "@expo/vector-icons";
-import { getStorage, removeStorage } from "../utils/asyncStorage";
+import { removeStorage } from "../utils/asyncStorage";
 import { ActiveDrawer, InNavContext } from "../context";
 import { opacityAnimation } from "../animations/opacityAnimation";
 import { OneSignal } from "react-native-onesignal";
@@ -21,7 +17,7 @@ import { useQuery } from "@tanstack/react-query";
 import { authState } from "../recoil/auth/atom";
 import { imageCache } from "../recoil/imageCache/atom";
 import FastImage from "react-native-fast-image";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 
 const Drawer = createDrawerNavigator();
 
@@ -158,8 +154,12 @@ const SignOutText = styled.Text`
   font-size: 16px;
 `;
 
-const DrawerContent = (active) => {
+const DrawerContent = (active, unread) => {
   const [user, setUser] = useRecoilState(authState);
+  const { data: unReadData } = useQuery(["pushUnRead"], pushApi.unReadCheck);
+
+  console.log(unReadData); /*  */
+
   const {
     data: userData,
     isLoading,
@@ -168,8 +168,6 @@ const DrawerContent = (active) => {
     cacheTime: 0,
   });
   const [cache, setCache] = useRecoilState(imageCache);
-
-  const { myTicketCount, setMyTicketCount } = useContext(InNavContext);
 
   const navigation = useNavigation();
 
@@ -190,7 +188,7 @@ const DrawerContent = (active) => {
 
   return (
     <DrawerContainer ios={Platform.OS === "ios"}>
-      <InfoSection>
+      <InfoSection style={{ alignItems: "center" }}>
         <ProfileWrapper
           onPress={() => navigation.navigate("ProfileNav", { screen: "Profile" })}
           style={{ width: 70, height: 70, borderRadius: 70 / 2, backgroundColor: "rgba(0,0,0,0.2)", opacity: opacity }}
@@ -198,7 +196,7 @@ const DrawerContent = (active) => {
           {userData?.DATA?.user_profile_url && (
             <FastImage
               source={{
-                uri: `${userData?.DATA?.user_profile_url}?cache=${cache}`,
+                uri: `${userData?.DATA?.user_profile_url}`,
               }}
               onLoadStart={() => opacityAnimation(opacity, "start")}
               onLoadEnd={() => {
@@ -209,6 +207,9 @@ const DrawerContent = (active) => {
                 height: 70,
                 borderRadius: 35,
               }}
+              width={70}
+              height={70}
+              borderRadius={35}
               resizeMode={FastImage.resizeMode.cover}
             />
           )}
@@ -223,6 +224,10 @@ const DrawerContent = (active) => {
             <MyTicketText>나의 참가권: {userData?.DATA?.ticket_info ? `${userData?.DATA?.ticket_info?.reduce((acc, cur) => acc + cur.ticket_count, 0)}장` : "0장"}</MyTicketText>
           </TouchableOpacity>
         </InfoTextWrapper>
+        <TouchableOpacity onPress={() => navigation.navigate("PushList")} style={{ marginLeft: "auto" }}>
+          {unReadData?.DATA?.count > 0 ? <View style={{ position: "absolute", right: -2, top: -2, borderRadius: 4, width: 7, height: 7, backgroundColor: "#ff3183" }}></View> : null}
+          <Ionicons name="ios-notifications-outline" size={28} color="black" />
+        </TouchableOpacity>
       </InfoSection>
       <AccordionWrapper title="고객센터" data={customer} active={active}></AccordionWrapper>
       <AccordionWrapper title="앱 설정" data={policy} active={active}></AccordionWrapper>
@@ -239,13 +244,14 @@ const DrawerContent = (active) => {
 };
 export function MyDrawer() {
   const [active, setActive] = useState();
+  const [unread, setUnread] = useState(false);
 
-  const value = { active, setActive };
+  const value = { active, setActive, unread, setUnread };
 
   return (
     <ActiveDrawer.Provider value={value}>
       <Drawer.Navigator
-        drawerContent={() => DrawerContent(active)}
+        drawerContent={() => DrawerContent(active, unread)}
         screenOptions={{
           headerShown: false,
           drawerStyle: {

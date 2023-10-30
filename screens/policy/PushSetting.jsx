@@ -1,12 +1,12 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { ActivityIndicator, StyleSheet, Switch, Text, View } from "react-native";
-import ScreenLayout from "../components/ScreenLayout";
-import AppBar from "../components/AppBar";
+import ScreenLayout from "../../components/ScreenLayout";
+import AppBar from "../../components/AppBar";
 import { OneSignal } from "react-native-onesignal";
 import { useFocusEffect } from "@react-navigation/native";
 import { useRecoilState } from "recoil";
-import { pushState } from "../recoil/push/atom";
-import { getStorage, setStorage } from "../utils/asyncStorage";
+import { pushState } from "../../recoil/push/atom";
+import { getStorage, setStorage } from "../../utils/asyncStorage";
 
 const PushSetting = () => {
   const [isEnabled, setIsEnabled] = useState(false);

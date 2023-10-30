@@ -1,10 +1,6 @@
 import React from "react";
-import { Image, Linking, SafeAreaView, TouchableOpacity, View } from "react-native";
-import BackBtn from "../../components/BackBtn";
-import Title from "../../components/Title";
-import styled from "styled-components/native";
+import { Image, Linking, SafeAreaView, TouchableOpacity } from "react-native";
 import { Icon } from "../../source";
-import AppBar from "../../components/AppBar";
 import ScreenLayout from "../../components/ScreenLayout";
 
 const FindPw = () => {

@@ -1,13 +1,11 @@
 import React, { useEffect } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import Terms from "../screens/auth/Terms";
 import Join from "../screens/join/Join";
 import Login from "../screens/auth/Login";
 import FindId from "../screens/auth/FindId";
 import FindIdSuccess from "../screens/auth/FindIdSuccess";
 import FindPwSuccess from "../screens/auth/FindPwSuccess";
 import FindPw from "../screens/auth/FindPw";
-// import SplashScreen from "react-native-splash-screen";
 import { useRecoilState } from "recoil";
 import { authState } from "../recoil/auth/atom";
 import { getStorage } from "../utils/asyncStorage";

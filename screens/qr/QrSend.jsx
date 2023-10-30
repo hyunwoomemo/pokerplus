@@ -10,8 +10,10 @@ import FastImage from "react-native-fast-image";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import ScreenLayout from "../../components/ScreenLayout";
 import { LayoutAnimation } from "react-native";
+import Error from "../../components/Error";
 
 const QrSend = ({ navigation, route }) => {
+  console.log(route);
   const { data } = route.params;
   const [info, setInfo] = useState([]);
   const [tickets, setTickets] = useState([]);
@@ -60,22 +62,6 @@ const QrSend = ({ navigation, route }) => {
     setTickets(ticketData?.DATA.filter((v) => v.ticket_count !== 0));
   }, [ticketData]);
 
-  // useEffect(() => {
-  //   if (selectTicket && Object.keys(selectTicket).length) {
-  //     LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
-  //   } else {
-  //     LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
-  //   }
-  // }, [selectTicket]);
-
-  const handleChange = (type, val) => {
-    setValues({
-      ...values,
-      count: "1",
-      [type]: val,
-    });
-  };
-
   const handleCount = (type) => {
     if (type === "minus") {
       setValues({
@@ -92,10 +78,6 @@ const QrSend = ({ navigation, route }) => {
 
   const handleSend = async () => {
     setLoading({ ...loading, send: true });
-    // const headers = {
-    //   "Content-Type": "application/json",
-    //   Authorization: "Bearer YzFmMTg5NWUtOTI1MC00NjZlLWFjYjMtMGZjNmUwODgzNWYx",
-    // };
     try {
       const res = await ticketApi.send({
         send_type: "TH004",
@@ -148,6 +130,10 @@ const QrSend = ({ navigation, route }) => {
       </View>
     );
   };
+
+  if (isError) {
+    return <Error />;
+  }
 
   return (
     <ScreenLayout title={"참가권 QR 전송"} style={{ flex: 1, gap: 10 }}>

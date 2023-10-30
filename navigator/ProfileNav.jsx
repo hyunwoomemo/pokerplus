@@ -1,10 +1,10 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React from "react";
-import Profile from "../screens/Profile";
-import InfoCheck from "../screens/auth/InfoCheck";
-import InfoEdit from "../screens/auth/InfoEdit";
-import Alliance from "../screens/Alliance";
-import SearchPostcode from "../screens/SearchPostcode";
+import Profile from "../screens/profile/Profile";
+import InfoCheck from "../screens/profile/InfoCheck";
+import InfoEdit from "../screens/profile/InfoEdit";
+import SearchPostcode from "../screens/profile/SearchPostcode";
+import Alliance from "../screens/profile/Alliance";
 
 const Nav = createNativeStackNavigator();
 

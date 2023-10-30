@@ -5,8 +5,7 @@ import Send from "../screens/ticket/Send";
 import Layout from "../components/Layout";
 import ReceiveList from "../screens/ticket/ReceiveList";
 import SendList from "../screens/ticket/SendList";
-import { Animated, Text, View } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { Animated, View } from "react-native";
 import { Appbar } from "react-native-paper";
 import { TicketContext } from "../context";
 import { useQueryClient } from "@tanstack/react-query";
@@ -30,11 +29,14 @@ export default function TicketNav({ navigation }) {
 
   useFocusEffect(
     useCallback(() => {
-      navigation.navigate("TicketList");
+      // navigation.navigate("TicketList");
       queryClient.invalidateQueries(["myticket"]);
       queryClient.invalidateQueries(["user"]);
       queryClient.invalidateQueries(["receive"]);
-      return () => {};
+      return () => {
+        navigation.navigate("TicketList");
+        navigation.goBack();
+      };
     }, [])
   );
   const topBottom = useRef(new Animated.Value(-5)).current;

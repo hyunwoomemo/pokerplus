@@ -1,17 +1,18 @@
 import React, { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { ActivityIndicator, FlatList, LayoutAnimation, RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import Layout from "../components/Layout";
-import { customerApi } from "../api";
+import Layout from "../../components/Layout";
+import { customerApi } from "../../api";
 import moment from "moment";
 import { LinearGradient } from "expo-linear-gradient";
-import Pagination from "../components/Pagination";
-import { QnaContext } from "../context";
-import AppBar from "../components/AppBar";
+import Pagination from "../../components/Pagination";
+import { QnaContext } from "../../context";
+import AppBar from "../../components/AppBar";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { offsetValue } from "../config";
-import NoItem from "../components/NoItem";
+import { offsetValue } from "../../config";
+import NoItem from "../../components/NoItem";
 import { useFocusEffect } from "@react-navigation/native";
-import ScreenLayout from "../components/ScreenLayout";
+import ScreenLayout from "../../components/ScreenLayout";
+import Error from "../../components/Error";
 
 const QnaList = ({ route, navigation }) => {
   const { currentPage, setCurrentPage } = useContext(QnaContext);
@@ -65,6 +66,10 @@ const QnaList = ({ route, navigation }) => {
       queryClient.invalidateQueries(["qna"]);
     }, [])
   );
+
+  if (isError) {
+    return <Error />;
+  }
 
   return (
     <ScreenLayout title={"1:1 문의 내역"}>

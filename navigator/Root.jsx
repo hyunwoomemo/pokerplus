@@ -1,17 +1,13 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React, { useEffect, useState } from "react";
-import Tabs from "./Tab";
-import { MyDrawer } from "./Drawer";
-import Profile from "../screens/Profile";
 import InNav from "./InNav";
 import OutNav from "./OutNav";
 import { useRecoilState } from "recoil";
 import { authState } from "../recoil/auth/atom";
-import { getStorage, removeStorage } from "../utils/asyncStorage";
-// import SplashScreen from "react-native-splash-screen";
-import { authApi, customerApi, resourceApi, ticketApi } from "../api";
+import { removeStorage } from "../utils/asyncStorage";
+import { authApi } from "../api";
 import { PosterContext } from "../context";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useToast } from "react-native-toast-notifications";
 import { AntDesign } from "@expo/vector-icons";
 
@@ -20,7 +16,6 @@ const Nav = createNativeStackNavigator();
 const Root = ({ navigation, route }) => {
   const [user, setUser] = useRecoilState(authState);
   const [poster, setPoster] = useState([]);
-  const queryClient = useQueryClient();
 
   const values = {
     poster,

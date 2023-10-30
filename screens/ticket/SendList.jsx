@@ -12,6 +12,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import Pagination from "../../components/Pagination";
 import { offsetValue } from "../../config";
 import NoItem from "../../components/NoItem";
+import Error from "../../components/Error";
 
 const SendList = () => {
   const [totalPage, setTotalPage] = useState(1);
@@ -21,7 +22,9 @@ const SendList = () => {
 
   const queryClient = useQueryClient();
 
-  const { data, isLoading } = useQuery(["send", currentPage], () => ticketApi.sendList("send", offsetValue, currentPage));
+  const { data, isLoading, isError } = useQuery(["send", currentPage], () => ticketApi.sendList("send", offsetValue, currentPage), { keepPreviousData: true });
+
+  console.log(data);
 
   useEffect(() => {
     flatRef?.current?.scrollToOffset({ offset: 0, animated: true });
@@ -65,15 +68,19 @@ const SendList = () => {
     }, [])
   );
 
+  if (isError) {
+    return <Error />;
+  }
+
   return (
     <View style={{ flex: 1, backgroundColor: "#ecf2f0" }}>
       {isLoading ? (
         <ActivityIndicator style={StyleSheet.absoluteFillObject} color="#ff3183" size="large" />
       ) : (
         <>
-          {data?.DATA.length ? (
+          {data?.DATA?.length ? (
             <>
-              <View style={styles.container}>
+              <View style={{ flex: 1 }}>
                 <FlatList ref={flatRef} data={data?.DATA} keyExtractor={(item, index) => `${index}-${item.ticket_info_id}`} renderItem={({ item }) => <SendItem item={item} />} />
               </View>
               <View style={{ flexDirection: "row", gap: 10, justifyContent: "center", marginVertical: 10 }}>
@@ -88,11 +95,5 @@ const SendList = () => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-});
 
 export default SendList;

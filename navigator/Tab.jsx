@@ -2,24 +2,23 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import React, { useContext, useEffect } from "react";
 import Home from "../screens/Home";
 import CustomTabBar from "../components/CustomTabBar";
-import InfoCheck from "../screens/auth/InfoCheck";
-import InfoEdit from "../screens/auth/InfoEdit";
+import InfoCheck from "../screens/profile/InfoCheck";
+import InfoEdit from "../screens/profile/InfoEdit";
 import ProfileNav from "./ProfileNav";
 import Championship from "../screens/Championship";
 import Pub from "../screens/Pub";
-import Faq from "../screens/Faq";
-import Qna from "../screens/Qna";
+import Qna from "../screens/qna/Qna";
 import NoticeNav from "./NoticeNav";
 import QnaNav from "./QnaNav";
 import PolicyNav from "./PolicyNav";
 import { getFocusedRouteNameFromRoute } from "@react-navigation/native";
 import { ActiveDrawer } from "../context";
 import TicketNav from "./TicketNav";
-import QrCreate from "../screens/qr/QrCreate";
-import QrScan from "../screens/qr/QrScan";
-import { Button, Text } from "react-native";
 import QrNav from "./QrNav";
-import PushSetting from "../screens/PushSetting";
+import PushSetting from "../screens/policy/PushSetting";
+import Faq from "../screens/faq/Faq";
+import PushList from "../screens/push/PushList";
+import Leave from "../screens/auth/Leave";
 
 const Tab = createBottomTabNavigator();
 
@@ -58,6 +57,8 @@ const Tabs = ({ route }) => {
       <Tab.Screen name="PolicyNav" component={PolicyNav} />
       <Tab.Screen name="QrNav" component={QrNav} />
       <Tab.Screen name="PushSetting" component={PushSetting} />
+      <Tab.Screen name="PushList" component={PushList} />
+      <Tab.Screen name="Leave" component={Leave} />
     </Tab.Navigator>
   );
 };
