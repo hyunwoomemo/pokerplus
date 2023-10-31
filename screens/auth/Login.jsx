@@ -97,8 +97,6 @@ const Login = ({ navigation: { navigate } }) => {
     });
   }, []);
 
-  const onesignalSetting = () => {};
-
   const onLogin = async () => {
     setLoading(true);
     try {
@@ -112,7 +110,6 @@ const Login = ({ navigation: { navigate } }) => {
         setStorage("token", res.DATA.TOKEN);
         const accountInfo = await authApi.info();
         setStorage("user", JSON.stringify(accountInfo?.DATA));
-        onesignalSetting();
         setUser(accountInfo?.DATA);
       } else {
         switch (res.CODE) {

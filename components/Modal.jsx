@@ -1,5 +1,5 @@
-import React, { useRef } from "react";
-import { Dimensions, Text } from "react-native";
+import React, { useEffect, useRef } from "react";
+import { Animated, Dimensions, Text } from "react-native";
 import { Modal, Portal } from "react-native-paper";
 
 const ModalComponent = ({ children, visible, hideModal, size }) => {
@@ -9,7 +9,6 @@ const ModalComponent = ({ children, visible, hideModal, size }) => {
     backgroundColor: "white",
     padding: 20,
     margin: 20,
-    // minHeight: height * 0.5,
     borderRadius: 30,
   };
   return (

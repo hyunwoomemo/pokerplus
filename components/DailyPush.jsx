@@ -29,7 +29,7 @@ const DailyPush = ({ item, dailyData, currentPage }) => {
     const handlePress = async (id) => {
       switch (type) {
         case "ticket":
-        // navigation.navigate("TicketNav");
+          navigation.navigate("TicketNav");
       }
 
       const res = await pushApi.read(id);
