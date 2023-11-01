@@ -1,5 +1,5 @@
 import React, { useCallback, useContext, useEffect, useRef, useState } from "react";
-import { ActivityIndicator, FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, Animated, FlatList, LayoutAnimation, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import ScreenLayout from "../../components/ScreenLayout";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { pushApi } from "../../api";
@@ -11,6 +11,7 @@ import DailyPush from "../../components/DailyPush";
 import { ActiveDrawer } from "../../context";
 import styled from "styled-components/native";
 import { Banner } from "react-native-paper";
+import NoItem from "../../components/NoItem";
 
 const PushList = () => {
   const [totalPage, setTotalPage] = useState(1);
@@ -31,6 +32,7 @@ const PushList = () => {
     useCallback(() => {
       return () => {
         setCurrentPage(1);
+        setEnableSelect(false);
       };
     }, [])
   );
@@ -76,6 +78,52 @@ const PushList = () => {
     return <View style={{ borderWidth: 1, borderColor: "#ececec" }}></View>;
   };
 
+  const topValue = useRef(new Animated.Value(-200)).current;
+
+  const handleEnableSelect = () => {
+    setEnableSelect(!enableSelect);
+
+    if (!enableSelect) {
+      Animated.timing(topValue, {
+        toValue: 0,
+        useNativeDriver: true,
+        duration: 300,
+      }).start();
+    } else {
+      Animated.timing(topValue, {
+        toValue: 0,
+        useNativeDriver: true,
+        duration: 300,
+      }).reset();
+    }
+  };
+
+  useEffect(() => {
+    LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
+  }, [enableSelect]);
+
+  const handleRead = async () => {
+    try {
+      const res = await pushApi.read(0);
+      queryClient.invalidateQueries(["push"]);
+      queryClient.invalidateQueries(["pushUnRead"]);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const handleDelete = async () => {
+    try {
+      const res = await pushApi.delete(0);
+      queryClient.invalidateQueries(["push"]);
+      queryClient.invalidateQueries(["pushUnRead"]);
+      console.log(res);
+    } catch (err) {
+      console.error(err);
+    } finally {
+    }
+  };
+
   const Side = () => {
     return (
       <View style={{ marginLeft: "auto", paddingHorizontal: Platform.OS === "android" && 30, flexDirection: "row", alignItems: "center", gap: 15 }}>
@@ -85,19 +133,42 @@ const PushList = () => {
         <TouchableOpacity>
           <StyledText>삭제</StyledText>
         </TouchableOpacity> */}
-        <TouchableOpacity onPress={() => setEnableSelect(!enableSelect)}>
-          <StyledText>선택</StyledText>
+        <TouchableOpacity onPress={handleEnableSelect}>
+          <StyledText>옵션</StyledText>
         </TouchableOpacity>
       </View>
     );
   };
 
   return (
-    <ScreenLayout title={"푸시 알림 내역"}>
+    <ScreenLayout title={"푸시 알림 내역"} side={<Side />}>
       {isLoading ? (
         <ActivityIndicator style={StyleSheet.absoluteFillObject} color="#ff3183" size="large" />
       ) : (
         <>
+          {enableSelect && (
+            <Animated.View
+              style={{
+                padding: 20,
+                // transform: [{ translateY: topValue }],
+                zIndex: 2,
+                // transform: [{ translateY: 0 }],
+                backgroundColor: "#fff",
+                marginBottom: 20,
+                flexDirection: "row",
+                justifyContent: "space-between",
+                borderRadius: 10,
+              }}
+            >
+              <TouchableOpacity onPress={handleRead}>
+                <StyledText>모두 읽기</StyledText>
+              </TouchableOpacity>
+              {/* <Text>•</Text> */}
+              <TouchableOpacity onPress={handleDelete}>
+                <StyledText>모두 삭제</StyledText>
+              </TouchableOpacity>
+            </Animated.View>
+          )}
           {data?.DATA?.length ? (
             <>
               <View style={styles.container}>

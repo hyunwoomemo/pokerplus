@@ -147,7 +147,7 @@ const Terms = () => {
         </SecondLine>
       </TextWrapper>
       <CheckWrapper>
-        {terms.map((term, i) => {
+        {terms.map((term, i) => { 
           return (
             <CheckRow key={term.text}>
               <BouncyCheckbox disableBuiltInState ref={term.ref} fillColor="#ff3183" isChecked={i === 0 ? check.length === 4 : check.includes(i)} onPress={() => handleCheck(i)} />

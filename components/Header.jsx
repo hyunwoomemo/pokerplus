@@ -47,6 +47,7 @@ const Header = () => {
           queryClient.invalidateQueries(["myticket"]);
           queryClient.invalidateQueries(["send"]);
           queryClient.invalidateQueries(["user"]);
+          queryClient.invalidateQueries(["pushUnRead"]);
           // navigation.setParams({ route: router.name });
         }}
       >

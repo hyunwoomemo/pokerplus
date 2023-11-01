@@ -25,7 +25,7 @@ const PolicyDetail = ({ route }) => {
     <>
       {isLoading ? (
         <ActivityIndicator size={"large"} style={StyleSheet.absoluteFillObject} />
-      ) : (
+    ) : (
         <ScrollView style={styles.container}>
           {Platform.OS === "android" && <BackBtn />}
           <Title text={result?.title} />

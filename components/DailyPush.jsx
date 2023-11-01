@@ -38,8 +38,8 @@ const DailyPush = ({ item, dailyData, currentPage, enableSelect, selectedItem, s
 
     return (
       <TouchableOpacity onPress={() => handlePress(item.id)}>
-        <View style={{ flexDirection: "row", alignItems: "center" }}>
-          {enableSelect && (
+        <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
+          {/* {enableSelect && (
             <BouncyCheckbox
               isChecked={selectedItem.find((v) => v === item.id)}
               disableBuiltInState
@@ -55,7 +55,7 @@ const DailyPush = ({ item, dailyData, currentPage, enableSelect, selectedItem, s
                 }
               }}
             />
-          )}
+          )} */}
           {!item.readDate && <View style={{ backgroundColor: "#ff3183", borderRadius: 5, width: 7, height: 7 }}></View>}
           <Text style={{ paddingVertical: 15, fontSize: 16, color: item.readDate ? "#bfbfbf" : undefined }}>{item.message}</Text>
         </View>
@@ -64,7 +64,7 @@ const DailyPush = ({ item, dailyData, currentPage, enableSelect, selectedItem, s
   };
 
   return (
-    <View style={{ padding: 10 }}>
+    <View style={{ padding: 0 }}>
       <FlatList data={dailyData[item]} renderItem={({ item }) => <PushItem item={item} />} ListHeaderComponent={<Header />} />
     </View>
   );
