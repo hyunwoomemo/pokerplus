@@ -7,25 +7,12 @@ import { useCallback, useState } from "react";
 
 const QnaNav = () => {
   const Stack = createNativeStackNavigator();
-  const [currentPage, setCurrentPage] = useState(1);
-
-  const value = { currentPage, setCurrentPage };
-
-  useFocusEffect(
-    useCallback(() => {
-      return () => {
-        setCurrentPage(1);
-      };
-    }, [])
-  );
 
   return (
-    <QnaContext.Provider value={value}>
-      <Stack.Navigator initialRouteName="QnaList" screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="QnaList" component={QnaList} />
-        <Stack.Screen name="QnaDetail" component={QnaDetail} />
-      </Stack.Navigator>
-    </QnaContext.Provider>
+    <Stack.Navigator initialRouteName="QnaList" screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="QnaList" component={QnaList} />
+      <Stack.Screen name="QnaDetail" component={QnaDetail} />
+    </Stack.Navigator>
   );
 };
 

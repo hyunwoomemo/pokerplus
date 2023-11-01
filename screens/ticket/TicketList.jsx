@@ -33,8 +33,6 @@ const TicketList = ({ navigation }) => {
     setTickets(data?.DATA?.filter((v) => v.ticket_count !== 0));
   }, [data]);
 
-  console.log(isFetching);
-
   if (isError) {
     return <Error />;
   }

@@ -158,8 +158,6 @@ const DrawerContent = (active, unread) => {
   const [user, setUser] = useRecoilState(authState);
   const { data: unReadData } = useQuery(["pushUnRead"], pushApi.unReadCheck);
 
-  console.log(unReadData); /*  */
-
   const {
     data: userData,
     isLoading,

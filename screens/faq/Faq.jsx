@@ -5,7 +5,7 @@ import { useFocusEffect } from "@react-navigation/native";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { toggleAnimation } from "../../animations/toggleAnimation";
 import { customerApi } from "../../api";
-import { offsetValue } from "../../config";
+import { groupCount, offsetValue } from "../../config";
 import ScreenLayout from "../../components/ScreenLayout";
 import Error from "../../components/Error";
 
@@ -82,6 +82,8 @@ const Faq = () => {
   const [total, setTotal] = useState(1);
   const [totalPage, setTotalPage] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
+  const [totalGroup, setTotalGroup] = useState(1);
+  const [currentGroup, setCurrentGroup] = useState(1);
 
   const queryClient = useQueryClient();
 
@@ -118,7 +120,17 @@ const Faq = () => {
       />
 
       <View style={{ flexDirection: "row", gap: 10, justifyContent: "center", marginVertical: 10 }}>
-        {totalPage > 1 && <Pagination totalPage={totalPage} currentPage={currentPage} setCurrentPage={setCurrentPage} />}
+        {totalPage > 1 && (
+          <Pagination
+            totalPage={totalPage}
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+            groupCount={groupCount}
+            totalGroup={totalGroup}
+            currentGroup={currentGroup}
+            setCurrentGroup={setCurrentGroup}
+          />
+        )}
       </View>
     </ScreenLayout>
   );

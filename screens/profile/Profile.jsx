@@ -25,7 +25,6 @@ const Profile = ({ navigation }) => {
   const [ticketCount, setTicketCount] = useState(0);
   const [cache, setCache] = useRecoilState(imageCache);
   const { data, isLoading, isError } = useQuery(["user"], authApi.info);
-  console.log(data);
 
   useEffect(() => {
     const count = data.DATA.ticket_info?.reduce((acc, cur) => acc + cur.ticket_count, 0);

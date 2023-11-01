@@ -34,8 +34,6 @@ export default function QrScan({ navigation }) {
   const [qrWidth, setQrWidth] = useState(0);
   const [qrHeight, setQrHeight] = useState(0);
 
-  // console.log(x, y, qrWidth, qrHeight);
-
   useEffect(() => {
     Camera.getCameraPermissionsAsync().then(({ status }) => {
       setPermission({
@@ -70,12 +68,9 @@ export default function QrScan({ navigation }) {
               if (!scanned) {
                 setScanned(true);
                 const first = scannerResult.data.slice(scannerResult.data.indexOf("?url=") + 5);
-                console.log(first);
                 const hash = first.slice(first.lastIndexOf("/") + 1);
-                console.log(hash);
                 try {
                   const res = await qrApi.getInfo(hash);
-                  console.log("sdfsdf", res);
                   navigation.navigate("QrSend", { data: res.DATA });
                 } catch (err) {
                   toast.show("유효하지 않은 QR코드입니다.");

@@ -13,10 +13,8 @@ const Leave = ({ route }) => {
     const handleLeave = async () => {
       if (route.params) {
         const { authkey } = route.params;
-        console.log(authkey);
 
         const res = await authApi.accountLeave({ authKey: authkey, memo: "" });
-        console.log(res);
       }
     };
 
@@ -38,8 +36,6 @@ const Leave = ({ route }) => {
       password: text,
     });
   };
-
-  console.log(values);
 
   const handleSubmit = async () => {
     try {

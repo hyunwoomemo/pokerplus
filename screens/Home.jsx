@@ -1,5 +1,5 @@
 import React from "react";
-import { ActivityIndicator, Alert, Dimensions, StatusBar, StyleSheet, Text, View } from "react-native";
+import { Alert, Dimensions, StatusBar, StyleSheet, Text, View } from "react-native";
 import Layout from "../components/Layout";
 import styled from "styled-components/native";
 import Carousel from "../components/Carousel";

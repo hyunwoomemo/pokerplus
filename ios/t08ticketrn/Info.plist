@@ -9,10 +9,12 @@
 	<key>CFBundleDisplayName</key>
 	<string>포커플러스</string>
 	<key>CFBundleDocumentTypes</key>
-	<array>
-		<dict/>
-		<dict/>
-	</array>
+  <array>
+      <dict>
+          <key>CFBundleTypeName</key>
+          <string>포커플러스</string>
+      </dict>
+  </array>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>

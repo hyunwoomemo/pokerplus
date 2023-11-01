@@ -5,8 +5,8 @@ import { AntDesign } from "@expo/vector-icons";
 const NoItem = ({ text }) => {
   return (
     <View style={{ flex: 1, gap: 20, alignItems: "center", justifyContent: "center" }}>
-      <AntDesign name="warning" size={150} color="gray" />
-      <Text style={{ fontSize: 20, color: "#000" }}>{text}</Text>
+      <AntDesign name="warning" size={80} color="gray" />
+      <Text style={{ fontSize: 16, color: "#000" }}>{text}</Text>
     </View>
   );
 };

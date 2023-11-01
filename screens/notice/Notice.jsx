@@ -1,17 +1,19 @@
 import React, { useCallback, useContext, useEffect, useRef, useState } from "react";
-import { ActivityIndicator, Dimensions, FlatList, LayoutAnimation, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Dimensions, FlatList, LayoutAnimation, Platform, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { customerApi } from "../../api";
 import moment from "moment";
 import Pagination from "../../components/Pagination";
 import { NoticeContext } from "../../context";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { offsetValue } from "../../config";
+import { groupCount, offsetValue } from "../../config";
 import ScreenLayout from "../../components/ScreenLayout";
 import Error from "../../components/Error";
 
 const Notice = ({ navigation }) => {
-  const [totalPage, setTotalPage] = useState(0);
-  const { currentPage, setCurrentPage } = useContext(NoticeContext);
+  const [totalPage, setTotalPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalGroup, setTotalGroup] = useState(1);
+  const [currentGroup, setCurrentGroup] = useState(1);
   const numberOfItemsPerPageList = [2, 3, 4];
 
   const flatRef = useRef();
@@ -72,7 +74,15 @@ const Notice = ({ navigation }) => {
 
       {!isLoading && data?.DATA.total > offsetValue && (
         <View style={{ flexDirection: "row", gap: 10, justifyContent: "center", marginVertical: 20 }}>
-          <Pagination totalPage={totalPage} currentPage={currentPage} setCurrentPage={setCurrentPage} />
+          <Pagination
+            totalPage={totalPage}
+            currentPage={currentPage}
+            setCurrentPage={setCurrentPage}
+            groupCount={groupCount}
+            totalGroup={totalGroup}
+            currentGroup={currentGroup}
+            setCurrentGroup={setCurrentGroup}
+          />
         </View>
       )}
     </ScreenLayout>

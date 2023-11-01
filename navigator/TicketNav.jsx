@@ -33,22 +33,12 @@ export default function TicketNav({ navigation }) {
       queryClient.invalidateQueries(["myticket"]);
       queryClient.invalidateQueries(["user"]);
       queryClient.invalidateQueries(["receive"]);
-      return () => {
-        // navigation.navigate("TicketList");
-        // navigation.goBack();
-      };
-    }, [])
-  );
-  const topBottom = useRef(new Animated.Value(-5)).current;
 
-  useFocusEffect(
-    useCallback(() => {
       Animated.timing(topBottom, {
         toValue: 0,
         useNativeDriver: true,
         duration: 300,
       }).start();
-
       return () => {
         Animated.timing(topBottom, {
           toValue: 0,
@@ -58,6 +48,7 @@ export default function TicketNav({ navigation }) {
       };
     }, [])
   );
+  const topBottom = useRef(new Animated.Value(-5)).current;
 
   return (
     <TicketContext.Provider value={values}>
@@ -65,11 +56,12 @@ export default function TicketNav({ navigation }) {
         <Animated.View style={{ transform: [{ translateY: topBottom }] }}>
           <Appbar.Header style={{ backgroundColor: "#ecf2f0" }}>
             <Appbar.BackAction
+              color="black"
               onPress={() => {
                 navigation.goBack();
               }}
             />
-            <Appbar.Content title="Ticket" />
+            <Appbar.Content title="Ticket" color="black" />
           </Appbar.Header>
         </Animated.View>
       </View>

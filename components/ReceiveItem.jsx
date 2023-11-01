@@ -38,7 +38,6 @@ const styleCodeText = (text) => {
 };
 
 const ReceiveItem = ({ item, index, page }) => {
-  console.log(page);
   const opacity = useRef(new Animated.Value(0)).current;
   const scale = opacity.interpolate({
     inputRange: [0, 1],
@@ -98,7 +97,7 @@ const ReceiveItem = ({ item, index, page }) => {
           <View style={{ flexDirection: "row", gap: 5, alignItems: "center" }}>
             <FastImage
               source={{ uri: ticket_logo_url || "https://data.spolive.com/data/template/t08/common/footer_icon_ticket.png" }}
-              style={ticket_logo_url ? { width: 60, height: 30 } : { width: 60, height: 30 }}
+              style={ticket_logo_url ? { width: 70, height: 30 } : { width: 70, height: 30 }}
               resizeMode="contain"
             />
             <Text numberOfLines={2} style={styles.ticketname}>
@@ -132,7 +131,7 @@ const ReceiveItem = ({ item, index, page }) => {
             <View style={{ gap: 5, flexDirection: "row" }}>
               <FastImage
                 source={{ uri: ticket_logo_url || "https://data.spolive.com/data/template/t08/common/footer_icon_ticket.png" }}
-                style={ticket_logo_url ? { width: 60, height: 30 } : { width: 60, height: 30 }}
+                style={ticket_logo_url ? { width: 70, height: 30 } : { width: 70, height: 30 }}
                 resizeMode="contain"
               />
               <DetailText>{ticket_name}</DetailText>

@@ -5,8 +5,6 @@ import { pushApi } from "../api";
 import { useQueryClient } from "@tanstack/react-query";
 
 const DailyPush = ({ item, dailyData, currentPage }) => {
-  console.log(currentPage);
-  // console.log(dailyData[item]?.length);
   const Header = () => {
     return (
       <View style={{ padding: 10, backgroundColor: "rgb(221,223,226)", marginBottom: 15, borderRadius: 10 }}>

@@ -1,5 +1,5 @@
 import React, { useCallback, useContext, useEffect, useRef, useState } from "react";
-import { ActivityIndicator, FlatList, LayoutAnimation, RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, Animated, FlatList, LayoutAnimation, RefreshControl, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Layout from "../../components/Layout";
 import { customerApi } from "../../api";
 import moment from "moment";
@@ -8,17 +8,29 @@ import Pagination from "../../components/Pagination";
 import { QnaContext } from "../../context";
 import AppBar from "../../components/AppBar";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { offsetValue } from "../../config";
+import { groupCount, offsetValue } from "../../config";
 import NoItem from "../../components/NoItem";
 import { useFocusEffect } from "@react-navigation/native";
 import ScreenLayout from "../../components/ScreenLayout";
 import Error from "../../components/Error";
+import QnaItem from "../../components/QnaItem";
 
 const QnaList = ({ route, navigation }) => {
-  const { currentPage, setCurrentPage } = useContext(QnaContext);
+  // const { currentPage, setCurrentPage } = useContext(QnaContext);
   const [totalPage, setTotalPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalGroup, setTotalGroup] = useState(1);
+  const [currentGroup, setCurrentGroup] = useState(1);
   const [status, setStatus] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
+
+  useFocusEffect(
+    useCallback(() => {
+      return () => {
+        setCurrentPage(1);
+      };
+    }, [])
+  );
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
@@ -31,10 +43,6 @@ const QnaList = ({ route, navigation }) => {
   const flatRef = useRef();
 
   const queryClient = useQueryClient();
-
-  const itemStatus = (code) => {
-    return status?.filter((item) => item.code === code)[0]?.title;
-  };
 
   const { data, isLoading, isError } = useQuery(["qna", currentPage], () => customerApi.customerList(0, offsetValue, currentPage), {
     staleTime: 2000,
@@ -86,22 +94,7 @@ const QnaList = ({ route, navigation }) => {
                 ref={flatRef}
                 showsVerticalScrollIndicator={false}
                 keyExtractor={(item, index) => index}
-                renderItem={({ item, index }) => (
-                  <TouchableOpacity key={item.id} style={styles.itemWrapper} onPress={() => navigation.navigate("QnaDetail", { qna: item })}>
-                    <LinearGradient colors={["#4c56fa", "#bb21a8"]} start={{ x: 1, y: 0 }} style={styles.gradient} end={{ x: 0, y: 0 }}>
-                      <View style={styles.innerContainer}>
-                        <Text style={styles.status}>{itemStatus(item.status_code)}</Text>
-                      </View>
-                    </LinearGradient>
-                    <View style={styles.contentsWrapper}>
-                      <View style={styles.itemheader}>
-                        <Text style={styles.itemheaderText}>{item.company_name}</Text>
-                        <Text style={styles.itemheaderText}>{moment(item.created_at).utc().add(9, "h").format("YY/MM/DD HH:mm:ss")}</Text>
-                      </View>
-                      <Text style={{ fontSize: 18 }}>{item.contents}</Text>
-                    </View>
-                  </TouchableOpacity>
-                )}
+                renderItem={({ item, index }) => <QnaItem item={item} index={index} page={currentPage} status={status} />}
               />
             </>
           ) : (
@@ -109,7 +102,15 @@ const QnaList = ({ route, navigation }) => {
           )}
           {totalPage > 1 && (
             <View style={{ flexDirection: "row", gap: 10, justifyContent: "center", marginVertical: 10 }}>
-              <Pagination totalPage={totalPage} currentPage={currentPage} setCurrentPage={setCurrentPage} />
+              <Pagination
+                totalPage={totalPage}
+                currentPage={currentPage}
+                setCurrentPage={setCurrentPage}
+                groupCount={groupCount}
+                totalGroup={totalGroup}
+                currentGroup={currentGroup}
+                setCurrentGroup={setCurrentGroup}
+              />
             </View>
           )}
         </>

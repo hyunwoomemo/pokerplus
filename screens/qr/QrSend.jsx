@@ -96,7 +96,6 @@ const QrSend = ({ navigation, route }) => {
 
   const handleSend = async () => {
     setLoading({ ...loading, send: true });
-    console.log(info);
     try {
       const res = await ticketApi.send({
         send_type: "TH004",
@@ -105,8 +104,6 @@ const QrSend = ({ navigation, route }) => {
         target_user_id: info.targetUser,
         memo: values.memo ? values.memo : null,
       });
-
-      console.log(res);
 
       if (res.CODE === "TKS000") {
         navigation.goBack();
@@ -208,7 +205,7 @@ const QrSend = ({ navigation, route }) => {
               <TouchableOpacity onPress={() => handleSelectTicket(item)} style={{ flexDirection: "row", justifyContent: "space-between", alignItems: "center", padding: 20 }}>
                 <FastImage
                   source={{ uri: item.ticket_logo_url || "https://data.spolive.com/data/template/t08/common/footer_icon_ticket.png" }}
-                  style={item.ticket_logo_url ? { width: 60, height: 30 } : { width: 60, height: 30 }}
+                  style={item.ticket_logo_url ? { width: 70, height: 30 } : { width: 70, height: 30 }}
                   resizeMode="contain"
                 />
                 <Text style={{ fontSize: 16 }}>{item.ticket_name}</Text>

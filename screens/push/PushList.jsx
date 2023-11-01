@@ -26,15 +26,12 @@ const PushList = () => {
     }, [])
   );
 
-  console.log(unread);
-
   const queryClient = useQueryClient();
 
   const { data, isLoading } = useQuery(["push", currentPage], () => pushApi.getPushList(offsetValue, currentPage), { keepPreviousData: true });
 
   useEffect(() => {
     const month = data?.DATA.map((v) => moment(v.created_at).utc().format("YYYY-MM-DD")).filter((v, i, arr) => arr.indexOf(v) === i);
-    console.log(month);
     setMonthArray(month);
 
     const obj = {};
@@ -45,7 +42,6 @@ const PushList = () => {
 
     setDailyData(obj);
   }, [data, currentPage]);
-  // console.log(dailyData);
 
   const flatRef = useRef();
 
@@ -59,8 +55,6 @@ const PushList = () => {
     }
   });
 
-  console.log(data);
-
   useEffect(() => {
     flatRef?.current?.scrollToOffset({ offset: 0, animated: true });
     if (currentPage < totalPage) {
@@ -72,8 +66,6 @@ const PushList = () => {
   const Separator = () => {
     return <View style={{ borderWidth: 1, borderColor: "#ececec" }}></View>;
   };
-
-  console.log(monthArray);
 
   return (
     <ScreenLayout title={"푸시 알림 내역"}>

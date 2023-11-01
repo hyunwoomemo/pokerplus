@@ -20,8 +20,6 @@ export const useImageUpload = async (status, requestPermission, setImageUrl, set
       return null;
     }
 
-    console.log(result);
-
     LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
     setImageUrl(result.assets[0].uri);
     if (setFileName) {

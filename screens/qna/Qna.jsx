@@ -81,7 +81,6 @@ const Qna = ({ navigation }) => {
   const handleSelect = (item) => {
     setVisible(false);
     setSelectedConfig(item);
-    console.log(item);
     setValues({
       ...values,
       host_id: item.host_id,
@@ -96,7 +95,7 @@ const Qna = ({ navigation }) => {
 
   return (
     <ScreenLayout title={"1:1 문의하기"}>
-      <ScrollView style={{ marginTop: 20 }} ref={scrollRef}>
+      <ScrollView ref={scrollRef}>
         <TouchableOpacity
           onPress={() => setVisible(true)}
           style={{
@@ -130,7 +129,7 @@ const Qna = ({ navigation }) => {
           <Text style={{ fontSize: 16 }}>제목</Text>
         </WithLabelInput>
         <View style={styles.textAreaWrapper}>
-          <Text style={{ fontSize: 16 }}>문의 내용 입력 (200자 내외)</Text>
+          <Text style={{ fontSize: 16, paddingLeft: 10 }}>문의 내용 (200자 내외)</Text>
           <TextInput
             value={values.contents}
             onChangeText={(text) => handleChange("contents", text)}

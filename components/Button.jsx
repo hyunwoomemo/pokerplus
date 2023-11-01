@@ -18,6 +18,10 @@ const ButtonText = styled.Text`
   font-weight: bold;
   color: ${(props) => (props.disabled ? "#797979" : props.primary || props.dark ? "#fff" : "#000")};
   font-size: 16px;
+  position: relative;
+  justify-content: center;
+  /* text-align: center;
+  vertical-align: middle; */
 `;
 
 const Button = ({ onPress, loading, label, style, disabled, primary, dark }) => {
@@ -26,13 +30,13 @@ const Button = ({ onPress, loading, label, style, disabled, primary, dark }) => 
       {primary ? (
         <LinearGradient colors={disabled ? ["gray", "gray"] : ["#fe806a", "#ff3183"]} start={{ x: 0.3, y: 0.1 }} style={{ borderRadius: 50 }} end={{ x: 0.9, y: 0.1 }}>
           <Wrapper primary>
-            <ButtonText primary>{loading ? <ActivityIndicator color="#fff" size={15} /> : label}</ButtonText>
+            <ButtonText primary>{loading ? <ActivityIndicator color="#fff" size={15} style={{ ...StyleSheet.absoluteFill, paddingBottom: 10 }} /> : label}</ButtonText>
           </Wrapper>
         </LinearGradient>
       ) : (
         <Wrapper dark={dark} disabled={disabled}>
           <ButtonText dark={dark} disabled={disabled}>
-            {loading ? <ActivityIndicator color="#ff3183" size={15} /> : label}
+            {loading ? <ActivityIndicator color="#ff3183" size={21} /> : label}
           </ButtonText>
         </Wrapper>
       )}

@@ -22,12 +22,7 @@ const TicketTab = ({ state, descriptors, navigation, options }) => {
         if (index < 5) {
           // Display only the first 4 items
           const { options } = descriptors[route.key];
-          const label =
-            options.tabBarLabel !== undefined
-              ? options.tabBarLabel
-              : options.title !== undefined
-              ? options.title
-              : route.name;
+          const label = options.tabBarLabel !== undefined ? options.tabBarLabel : options.title !== undefined ? options.title : route.name;
 
           const isFocused = state.index === index;
 

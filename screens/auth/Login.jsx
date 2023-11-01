@@ -10,7 +10,6 @@ import { validateLogin } from "../../utils/validate";
 import { useToast } from "react-native-toast-notifications";
 import Button from "../../components/Button";
 import { getStorage, setStorage } from "../../utils/asyncStorage";
-import { LogLevel, OneSignal } from "react-native-onesignal";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 const Container = styled.View`
@@ -106,13 +105,13 @@ const Login = ({ navigation: { navigate } }) => {
       };
 
       const res = await authApi.login(bodyData);
-      if (res.CODE === "AL000") {
+      if (res?.CODE === "AL000") {
         setStorage("token", res.DATA.TOKEN);
         const accountInfo = await authApi.info();
         setStorage("user", JSON.stringify(accountInfo?.DATA));
         setUser(accountInfo?.DATA);
       } else {
-        switch (res.CODE) {
+        switch (res?.CODE) {
           case "AL001":
             toast.show("로그인에 실패했습니다.");
             break;

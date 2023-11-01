@@ -94,8 +94,6 @@ const InfoEdit = ({ route, navigation }) => {
     setArea(areaData?.DATA);
   }, [areaData]);
 
-  console.log(areaLoading, areaData);
-
   useEffect(() => {
     setChangeValues({
       ...changneValues,
@@ -117,7 +115,6 @@ const InfoEdit = ({ route, navigation }) => {
     4. changeValues.location_code가 빈칸이 아니면서 default와 change가 같지 않다.
     5. changeValues.password가 빈칸이 아니면서 change password === password2가 같다.
 */
-  console.log(imageUrl);
   const saveActive =
     imageUrl ||
     (changneValues.id && defaultValue.id !== changneValues.id) ||
@@ -196,8 +193,6 @@ const InfoEdit = ({ route, navigation }) => {
       location_code: item.code,
     });
   };
-
-  console.log(selectedArea);
 
   if (isError) {
     return <Error />;

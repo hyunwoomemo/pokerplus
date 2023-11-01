@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { ActivityIndicator, LayoutAnimation, Platform, StyleSheet, Text, View } from "react-native";
+import { ActivityIndicator, LayoutAnimation, Platform, ScrollView, StyleSheet, Text, View } from "react-native";
 import BackBtn from "../../components/BackBtn";
 import Title from "../../components/Title";
 import { resourceApi } from "../../api";
@@ -11,8 +11,6 @@ const PolicyDetail = ({ route }) => {
   const [result, setResult] = useState([]);
 
   const { data, isLoading, isError } = useQuery(["policy", type], () => resourceApi.policys(type));
-
-  console.log(data);
 
   if (isError) {
     return <Error />;
@@ -28,11 +26,11 @@ const PolicyDetail = ({ route }) => {
       {isLoading ? (
         <ActivityIndicator size={"large"} style={StyleSheet.absoluteFillObject} />
       ) : (
-        <View style={styles.container}>
+        <ScrollView style={styles.container}>
           {Platform.OS === "android" && <BackBtn />}
           <Title text={result?.title} />
           <Text style={styles.result}>{result?.contents}</Text>
-        </View>
+        </ScrollView>
       )}
     </>
   );

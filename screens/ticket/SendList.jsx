@@ -1,30 +1,27 @@
 import React, { useCallback, useContext, useEffect, useRef, useState } from "react";
 import { LayoutAnimation, Text, View, ActivityIndicator } from "react-native";
-import Layout from "../../components/Layout";
 import { ticketApi } from "../../api";
 import { StyleSheet } from "react-native";
 import { FlatList } from "react-native";
-import ReceiveItem from "../../components/ReceiveItem";
 import SendItem from "../../components/SendItem";
 import { useFocusEffect } from "@react-navigation/native";
-import { TicketContext } from "../../context";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import Pagination from "../../components/Pagination";
-import { offsetValue } from "../../config";
+import { groupCount, offsetValue } from "../../config";
 import NoItem from "../../components/NoItem";
 import Error from "../../components/Error";
 
 const SendList = () => {
   const [totalPage, setTotalPage] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
+  const [totalGroup, setTotalGroup] = useState(1);
+  const [currentGroup, setCurrentGroup] = useState(1);
 
   const flatRef = useRef();
 
   const queryClient = useQueryClient();
 
   const { data, isLoading, isError } = useQuery(["send", currentPage], () => ticketApi.sendList("send", offsetValue, currentPage), { keepPreviousData: true });
-
-  console.log(data);
 
   useEffect(() => {
     flatRef?.current?.scrollToOffset({ offset: 0, animated: true });
@@ -89,7 +86,17 @@ const SendList = () => {
                 />
               </View>
               <View style={{ flexDirection: "row", gap: 10, justifyContent: "center", marginVertical: 10 }}>
-                {totalPage > 1 && <Pagination totalPage={totalPage} currentPage={currentPage} setCurrentPage={setCurrentPage} />}
+                {totalPage > 1 && (
+                  <Pagination
+                    totalPage={totalPage}
+                    currentPage={currentPage}
+                    setCurrentPage={setCurrentPage}
+                    groupCount={groupCount}
+                    totalGroup={totalGroup}
+                    currentGroup={currentGroup}
+                    setCurrentGroup={setCurrentGroup}
+                  />
+                )}
               </View>
             </>
           ) : (

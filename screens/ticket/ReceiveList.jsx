@@ -1,21 +1,23 @@
 import React, { useCallback, useContext, useEffect, useRef, useState } from "react";
-import { ActivityIndicator, LayoutAnimation, Text, View } from "react-native";
-import Layout from "../../components/Layout";
+import { ActivityIndicator, Dimensions, LayoutAnimation, Text, View } from "react-native";
 import { ticketApi } from "../../api";
 import { StyleSheet } from "react-native";
 import { FlatList } from "react-native";
 import ReceiveItem from "../../components/ReceiveItem";
-import { TicketContext } from "../../context";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import Pagination from "../../components/Pagination";
-import { offsetValue } from "../../config";
+import { groupCount, offsetValue } from "../../config";
 import NoItem from "../../components/NoItem";
 import { useFocusEffect } from "@react-navigation/native";
 import Error from "../../components/Error";
 
 const ReceiveList = ({ navigation }) => {
+  const { height } = Dimensions.get("window");
+  console.log(height);
   const [totalPage, setTotalPage] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
+  const [totalGroup, setTotalGroup] = useState(1);
+  const [currentGroup, setCurrentGroup] = useState(1);
 
   const flatRef = useRef();
 
@@ -63,7 +65,6 @@ const ReceiveList = ({ navigation }) => {
     useCallback(() => {
       queryClient.invalidateQueries(["receive"]);
       return () => {
-        // navigation.goBack();
         setCurrentPage(1);
       };
     }, [])
@@ -90,7 +91,17 @@ const ReceiveList = ({ navigation }) => {
                 />
               </View>
               <View style={{ flexDirection: "row", gap: 10, justifyContent: "center", marginVertical: 10 }}>
-                {totalPage > 1 && <Pagination totalPage={totalPage} currentPage={currentPage} setCurrentPage={setCurrentPage} />}
+                {totalPage > 1 && (
+                  <Pagination
+                    totalPage={totalPage}
+                    currentPage={currentPage}
+                    setCurrentPage={setCurrentPage}
+                    groupCount={groupCount}
+                    totalGroup={totalGroup}
+                    currentGroup={currentGroup}
+                    setCurrentGroup={setCurrentGroup}
+                  />
+                )}
               </View>
             </>
           ) : (

@@ -88,7 +88,7 @@ const withCheckBtn = (Component) => {
           disabled={disabled}
           dark
           primary={success}
-          label={loading ? <ActivityIndicator size={16} color="#fff" /> : success ? "확인 완료" : "중복 확인"}
+          label={loading ? <ActivityIndicator size={21} color="#fff" /> : success ? "확인 완료" : "중복 확인"}
           style={{ flex: 1 }}
         />
       </View>
