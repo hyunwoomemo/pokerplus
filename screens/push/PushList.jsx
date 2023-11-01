@@ -1,20 +1,29 @@
 import React, { useCallback, useContext, useEffect, useRef, useState } from "react";
-import { ActivityIndicator, FlatList, StyleSheet, Text, View } from "react-native";
+import { ActivityIndicator, FlatList, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import ScreenLayout from "../../components/ScreenLayout";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { pushApi } from "../../api";
-import { offsetValue } from "../../config";
+import { groupCount, offsetValue } from "../../config";
 import { ffect, useFocusEffect } from "@react-navigation/native";
 import Pagination from "../../components/Pagination";
 import moment from "moment";
 import DailyPush from "../../components/DailyPush";
 import { ActiveDrawer } from "../../context";
+import styled from "styled-components/native";
+import { Banner } from "react-native-paper";
 
 const PushList = () => {
-  const [currentPage, setCurrentPage] = useState(1);
   const [totalPage, setTotalPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalGroup, setTotalGroup] = useState(1);
+  const [currentGroup, setCurrentGroup] = useState(1);
   const [monthArray, setMonthArray] = useState([]);
   const [dailyData, setDailyData] = useState({});
+
+  const [enableSelect, setEnableSelect] = useState(false);
+  const [selectedItem, setSelectedItem] = useState([]);
+
+  const [allSelect, setAllSelect] = useState(false);
 
   const { unread, setUnread } = useContext(ActiveDrawer);
 
@@ -67,6 +76,22 @@ const PushList = () => {
     return <View style={{ borderWidth: 1, borderColor: "#ececec" }}></View>;
   };
 
+  const Side = () => {
+    return (
+      <View style={{ marginLeft: "auto", paddingHorizontal: Platform.OS === "android" && 30, flexDirection: "row", alignItems: "center", gap: 15 }}>
+        {/* <TouchableOpacity>
+          <StyledText>읽음</StyledText>
+        </TouchableOpacity>
+        <TouchableOpacity>
+          <StyledText>삭제</StyledText>
+        </TouchableOpacity> */}
+        <TouchableOpacity onPress={() => setEnableSelect(!enableSelect)}>
+          <StyledText>선택</StyledText>
+        </TouchableOpacity>
+      </View>
+    );
+  };
+
   return (
     <ScreenLayout title={"푸시 알림 내역"}>
       {isLoading ? (
@@ -82,11 +107,23 @@ const PushList = () => {
                   ItemSeparatorComponent={<Separator />}
                   data={monthArray}
                   keyExtractor={(item, index) => `${index}`}
-                  renderItem={({ item }) => <DailyPush item={item} currentPage={currentPage} dailyData={dailyData} />}
+                  renderItem={({ item }) => (
+                    <DailyPush selectedItem={selectedItem} setSelectedItem={setSelectedItem} enableSelect={enableSelect} item={item} currentPage={currentPage} dailyData={dailyData} />
+                  )}
                 />
               </View>
               <View style={{ flexDirection: "row", gap: 10, justifyContent: "center", marginVertical: 10 }}>
-                {totalPage > 1 && <Pagination totalPage={totalPage} currentPage={currentPage} setCurrentPage={setCurrentPage} />}
+                {totalPage > 1 && (
+                  <Pagination
+                    totalPage={totalPage}
+                    currentPage={currentPage}
+                    setCurrentPage={setCurrentPage}
+                    groupCount={groupCount}
+                    totalGroup={totalGroup}
+                    currentGroup={currentGroup}
+                    setCurrentGroup={setCurrentGroup}
+                  />
+                )}
               </View>
             </>
           ) : (
@@ -97,6 +134,10 @@ const PushList = () => {
     </ScreenLayout>
   );
 };
+
+const StyledText = styled.Text`
+  font-size: 16px;
+`;
 
 const styles = StyleSheet.create({
   container: {

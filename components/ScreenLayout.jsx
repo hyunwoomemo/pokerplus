@@ -11,7 +11,7 @@ const Container = styled.View`
   background-color: ${(props) => props.backgroundColor || "#ecf2f0"};
   flex: 1;
 `;
-const ScreenLayout = ({ back, children, title, appbar, action, backgroundColor }) => {
+const ScreenLayout = ({ back, children, title, appbar, action, backgroundColor, side }) => {
   const navigation = useNavigation();
 
   const topBottom = useRef(new Animated.Value(-10)).current;
@@ -57,7 +57,7 @@ const ScreenLayout = ({ back, children, title, appbar, action, backgroundColor }
           <Title text={title} />
         </View>
       ) : (
-        <AppBar move={topBottom} title={title} action={action} back={back ? back : () => navigation.goBack()} />
+        <AppBar side={side} move={topBottom} title={title} action={action} back={back ? back : () => navigation.goBack()} />
       )}
       <Animated.View style={Platform.OS === "ios" ? { paddingHorizontal: 20, flex: 1, opacity } : { paddingHorizontal: 20, flex: 1 }}>{children}</Animated.View>
       <SafeAreaView></SafeAreaView>

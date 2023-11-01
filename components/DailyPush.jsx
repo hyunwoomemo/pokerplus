@@ -1,10 +1,11 @@
 import { useNavigation } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
-import { FlatList, Text, TouchableOpacity, View } from "react-native";
+import { FlatList, LayoutAnimation, Text, TouchableOpacity, View } from "react-native";
 import { pushApi } from "../api";
 import { useQueryClient } from "@tanstack/react-query";
+import BouncyCheckbox from "react-native-bouncy-checkbox";
 
-const DailyPush = ({ item, dailyData, currentPage }) => {
+const DailyPush = ({ item, dailyData, currentPage, enableSelect, selectedItem, setSelectedItem }) => {
   const Header = () => {
     return (
       <View style={{ padding: 10, backgroundColor: "rgb(221,223,226)", marginBottom: 15, borderRadius: 10 }}>
@@ -38,8 +39,25 @@ const DailyPush = ({ item, dailyData, currentPage }) => {
     return (
       <TouchableOpacity onPress={() => handlePress(item.id)}>
         <View style={{ flexDirection: "row", alignItems: "center" }}>
+          {enableSelect && (
+            <BouncyCheckbox
+              isChecked={selectedItem.find((v) => v === item.id)}
+              disableBuiltInState
+              fillColor="gray"
+              size={16}
+              innerIconStyle={{ borderRadius: 3 }}
+              iconStyle={{ borderRadius: 3 }}
+              onPress={() => {
+                if (selectedItem.find((v) => v === item.id)) {
+                  setSelectedItem((prev) => [...prev].filter((v) => v !== item.id));
+                } else {
+                  setSelectedItem((prev) => [...prev, item.id].filter((v, i, arr) => arr.indexOf(v) === i));
+                }
+              }}
+            />
+          )}
           {!item.readDate && <View style={{ backgroundColor: "#ff3183", borderRadius: 5, width: 7, height: 7 }}></View>}
-          <Text style={{ padding: 15, fontSize: 16, color: item.readDate ? "#bfbfbf" : undefined }}>{item.message}</Text>
+          <Text style={{ paddingVertical: 15, fontSize: 16, color: item.readDate ? "#bfbfbf" : undefined }}>{item.message}</Text>
         </View>
       </TouchableOpacity>
     );

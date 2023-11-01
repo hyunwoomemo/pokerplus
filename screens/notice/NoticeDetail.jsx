@@ -17,7 +17,7 @@ const NoticeDetail = ({ navigation: { goBack }, route }) => {
 
 const styles = StyleSheet.create({
   contents: {
-    padding: 20,
+    paddingVertical: 20,
     fontSize: 16,
   },
   button: {

@@ -28,6 +28,8 @@ const Send = ({ navigation }) => {
     setSendVisible(false);
   };
 
+  const [user, setUser] = useRecoilState(authState);
+
   const hideModal = (type) => {
     if (type !== "ok") {
       setValues({
@@ -49,6 +51,16 @@ const Send = ({ navigation }) => {
   const [values, setValues] = useState({
     count: "1",
   });
+
+  const disableMyHP = user.hp === values?.hp?.replaceAll("-", "");
+
+  useEffect(() => {
+    if (disableMyHP) {
+      LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
+    } else {
+      LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
+    }
+  }, [disableMyHP]);
 
   const { data, isLoading, isError } = useQuery(["myticket"], ticketApi.list);
 
@@ -254,8 +266,8 @@ const Send = ({ navigation }) => {
             <TextInput
               placeholder="상대방 핸드폰 번호"
               value={values.hp}
+              maxLength={13}
               onChangeText={(text) => {
-                // LayoutAnimation.configureNext(LayoutAnimation.Presets.spring);
                 text = text
                   .replace(/[^0-9]/g, "")
                   .replace(/^(\d{0,3})(\d{0,4})(\d{0,4})$/g, "$1-$2-$3")
@@ -274,9 +286,9 @@ const Send = ({ navigation }) => {
             )}
             <TouchableOpacity
               onPress={handleFindUser}
-              disabled={!values.hp}
+              disabled={!values.hp || disableMyHP}
               style={
-                values.hp
+                values.hp && !disableMyHP
                   ? { marginTop: 10, backgroundColor: "#383838", borderRadius: 50, paddingVertical: 18, paddingHorizontal: 20, flex: 1, alignItems: "center", justifyContent: "center" }
                   : { marginTop: 10, backgroundColor: "#969696", borderRadius: 50, paddingVertical: 18, paddingHorizontal: 20, flex: 1, alignItems: "center", justifyContent: "center" }
               }
@@ -284,6 +296,7 @@ const Send = ({ navigation }) => {
               <Text style={{ color: "#fff", fontWeight: "bold" }}>{loading.find ? <ActivityIndicator color="#fff" size={21} /> : "조회"}</Text>
             </TouchableOpacity>
           </View>
+          {disableMyHP && <Text style={{ paddingHorizontal: 10, paddingVertical: 10, color: "tomato" }}>자신의 번호로 티켓 전송할 수 없습니다.</Text>}
           <ModalComponent visible={visible} hideModal={hideModal}>
             <View style={{ justifyContent: "center", paddingHorizontal: 20, alignItems: "center", gap: 30 }}>
               <Text style={{ fontSize: 18 }}>사용자 정보 조회 결과</Text>

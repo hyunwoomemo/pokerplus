@@ -9,23 +9,25 @@ const FindIdSuccess = ({ navigation: { navigate }, route }) => {
 
   const [authInfo, setAuthInfo] = useState();
 
+  // console.log(authInfo);
+
   useEffect(() => {
-    if (!authInfo) {
-      try {
-        authApi.authInfo(authkey).then((res) => {
-          if (res.CODE === "AAI000") {
-            setAuthInfo(res.DATA);
-          }
-        });
-      } catch (err) {
-        console.error(err);
-      }
+    try {
+      authApi.authInfo(authkey).then((res) => {
+        console.log(res);
+        if (res.CODE === "AAI000") {
+          setAuthInfo(res.DATA);
+        }
+      });
+    } catch (err) {
+      console.error(err);
     }
-  });
+  }, [authInfo]);
 
   return (
     <ScreenLayout title="이메일 찾기" appbar>
       {authInfo?.name && <Text style={{ marginTop: 30 }}>{`${authInfo?.name}님의 이메일은 아래와 같습니다.`}</Text>}
+      {<Text style={{ marginTop: 30 }}>{`이메일은 아래와 같습니다.`}</Text>}
       <View
         style={{
           padding: 32,
@@ -42,7 +44,7 @@ const FindIdSuccess = ({ navigation: { navigate }, route }) => {
           },
         }}
       >
-        {authInfo?.user_id && <Text style={{ fontSize: 24 }}>{`${authInfo?.user_id}`}</Text>}
+        {user_id && <Text style={{ fontSize: 24 }}>{`${user_id}`}</Text>}
       </View>
       <View style={{ flexDirection: "row", gap: 10, marginTop: 20 }}>
         <Button dark style={{ flex: 1 }} label="로그인" onPress={() => navigate("Login")} />

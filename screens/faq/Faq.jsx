@@ -142,9 +142,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     paddingVertical: 20,
   },
-  wrapper: {
-    paddingHorizontal: 20,
-  },
+  wrapper: {},
   accordionItemTitle: {
     fontSize: 16,
     width: "90%",

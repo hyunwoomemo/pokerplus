@@ -57,7 +57,7 @@ const Notice = ({ navigation }) => {
         // horizontal
         renderItem={({ item, index }) => (
           <TouchableOpacity
-            style={{ padding: 20, gap: 5, borderBottomWidth: 1, borderBottomColor: "rgba(0,0,0,0.1)" }}
+            style={{ paddingVertical: 20, gap: 5, borderBottomWidth: 1, borderBottomColor: "rgba(0,0,0,0.1)" }}
             onPress={() =>
               navigation.navigate("NoticeDetail", {
                 notice: data?.DATA.data,

@@ -235,7 +235,7 @@ const DrawerContent = (active, unread) => {
           <SimpleLineIcons name="logout" size={20} color="black" />
           <SignOutText>로그아웃</SignOutText>
         </SignOut>
-        <Text style={{ color: "gray", fontSize: 14 }}>APP VER 1.0.1</Text>
+        <Text style={{ color: "gray", fontSize: 14 }}>APP VER 0.0.3</Text>
       </DrawerFooter>
     </DrawerContainer>
   );

@@ -106,7 +106,7 @@
 	<key>NSSpeechRecognitionUsageDescription</key>
 	<string></string>
 	<key>NSUserTrackingUsageDescription</key>
-	<string></string>
+	<string>개인에게 최적화된 서비스를 제공하기 위해 사용자의 활동 정보를 수집합니다.</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>remote-notification</string>

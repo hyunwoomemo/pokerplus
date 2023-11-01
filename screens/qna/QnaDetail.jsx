@@ -51,9 +51,7 @@ const QnaDetail = ({ route }) => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    paddingHorizontal: 20,
-  },
+  container: {},
   contentsTitle: {
     fontSize: 16,
   },

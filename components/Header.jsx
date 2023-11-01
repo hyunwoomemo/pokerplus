@@ -30,7 +30,7 @@ const QRWrapper = styled.View`
   flex-direction: row;
   width: 20%;
   justify-content: flex-end;
-  gap: 10px;
+  gap: 20px;
   align-items: center;
   padding-right: 10px;
 `;
@@ -55,7 +55,7 @@ const Header = () => {
         {/* <Octicons name="three-bars" size={24} color="black" /> */}
       </Hambuger>
       <Main onPress={() => navigation.navigate("Home")}>
-        <Image source={{ uri: "https://data.spolive.com/data/template/t08/common/logo.png" }} width={40} height={40} resizeMode="cover" />
+        <Image source={{ uri: "https://data.spolive.com/data/template/t08/common/logo.png" }} width={40} height={40} resizeMode="contain" />
       </Main>
       <QRWrapper>
         <TouchableOpacity onPress={() => navigation.navigate("QrNav", { screen: "QrCreate" })}>

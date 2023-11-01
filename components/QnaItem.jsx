@@ -1,11 +1,14 @@
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import { LinearGradient } from "expo-linear-gradient";
 import moment from "moment";
 import React, { useCallback, useRef } from "react";
 import { Animated, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import { LinearGradient } from "react-native-svg";
+// import { LinearGradient } from "react-native-svg";
 
 const QnaItem = ({ item, index, page, status }) => {
   const navigation = useNavigation();
+
+  console.log(item);
 
   const opacity = useRef(new Animated.Value(0)).current;
   const scale = opacity.interpolate({
@@ -71,7 +74,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   itemWrapper: {
-    paddingHorizontal: 20,
     flexDirection: "row",
     alignItems: "center",
     gap: 20,
