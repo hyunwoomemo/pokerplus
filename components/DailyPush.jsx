@@ -59,7 +59,6 @@ const DailyPush = ({ item, dailyData, currentPage, enableSelect, selectedItem, s
           console.log(dx);
           position.setValue({ x: dx, y: dy });
         },
-        onPanResponderRelease: (_, {})
       })
     );
 
