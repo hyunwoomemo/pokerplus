@@ -141,34 +141,33 @@ const PushList = () => {
   };
 
   return (
-    <ScreenLayout title={"푸시 알림 내역"} side={<Side />}>
+    <ScreenLayout title={"푸시 알림 내역"}>
       {isLoading ? (
         <ActivityIndicator style={StyleSheet.absoluteFillObject} color="#ff3183" size="large" />
       ) : (
         <>
-          {enableSelect && (
-            <Animated.View
-              style={{
-                padding: 20,
-                // transform: [{ translateY: topValue }],
-                zIndex: 2,
-                // transform: [{ translateY: 0 }],
-                backgroundColor: "#fff",
-                marginBottom: 20,
-                flexDirection: "row",
-                justifyContent: "space-between",
-                borderRadius: 10,
-              }}
-            >
-              <TouchableOpacity onPress={handleRead}>
-                <StyledText>모두 읽기</StyledText>
-              </TouchableOpacity>
-              {/* <Text>•</Text> */}
-              <TouchableOpacity onPress={handleDelete}>
-                <StyledText>모두 삭제</StyledText>
-              </TouchableOpacity>
-            </Animated.View>
-          )}
+          <View
+            style={{
+              padding: 20,
+              zIndex: 2,
+              // backgroundColor: "#fff",
+              marginBottom: 20,
+              flexDirection: "row",
+              // justifyContent: "space-between",
+              gap: 30,
+              marginLeft: "auto",
+              borderRadius: 10,
+            }}
+          >
+            <TouchableOpacity onPress={handleRead}>
+              <StyledText>모두 읽기</StyledText>
+            </TouchableOpacity>
+            {/* <Text>•</Text> */}
+            <TouchableOpacity onPress={handleDelete}>
+              <StyledText>모두 삭제</StyledText>
+            </TouchableOpacity>
+          </View>
+
           {data?.DATA?.length ? (
             <>
               <View style={styles.container}>

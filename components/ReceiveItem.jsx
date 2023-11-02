@@ -87,7 +87,7 @@ const ReceiveItem = ({ item, index, page }) => {
   };
 
   return (
-    <Animated.View style={page === 1 ? { ...styles.container, opacity, transform: [{ scale }] } : styles.container}>
+    <Animated.View style={page === 1 ? { ...styles.container } : styles.container}>
       <TouchableOpacity style={styles.contentWrapper} onPress={handleDetailModal}>
         <View style={styles.firstline}>
           <Text style={styles.text}>{prev_owner_name}</Text>

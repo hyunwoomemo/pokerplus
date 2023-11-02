@@ -9,7 +9,8 @@ const FindIdSuccess = ({ navigation: { navigate }, route }) => {
 
   const [authInfo, setAuthInfo] = useState();
 
-  // console.log(authInfo);
+  console.log(authkey);
+  console.log(authInfo);
 
   useEffect(() => {
     try {

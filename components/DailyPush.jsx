@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
-import React, { useEffect, useState } from "react";
-import { FlatList, LayoutAnimation, Text, TouchableOpacity, View } from "react-native";
+import React, { useEffect, useRef, useState } from "react";
+import { Animated, FlatList, LayoutAnimation, PanResponder, Pressable, Text, TouchableOpacity, View } from "react-native";
 import { pushApi } from "../api";
 import { useQueryClient } from "@tanstack/react-query";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
@@ -36,9 +36,48 @@ const DailyPush = ({ item, dailyData, currentPage, enableSelect, selectedItem, s
       queryClient.invalidateQueries(["pushUnRead"]);
     };
 
+    const scale = useRef(new Animated.Value(1)).current;
+    const position = useRef(new Animated.ValueXY({ x: 0, y: 0 })).current;
+
+    const onPressIn = Animated.timing(scale, {
+      toValue: 0.9,
+      useNativeDriver: true,
+    });
+
+    const onPressOut = Animated.timing(scale, {
+      toValue: 1,
+      useNativeDriver: true,
+    });
+
+    const panResponder = useRef(
+      PanResponder.create({
+        onStartShouldSetPanResponder: () => true,
+        onPanResponderGrant: () => {
+          onPressIn.start();
+        },
+        onPanResponderMove: (_, { dx, dy }) => {
+          console.log(dx);
+          position.setValue({ x: dx, y: dy });
+        },
+        onPanResponderRelease: (_, {})
+      })
+    );
+
     return (
-      <TouchableOpacity onPress={() => handlePress(item.id)}>
-        <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
+      <Pressable>
+        <Animated.View
+          {...panResponder.panHandlers}
+          onResponderStart={() => console.log("touch")}
+          style={{
+            flexDirection: "row",
+            alignItems: "center",
+            gap: 10,
+            backgroundColor: "#ececec",
+            padding: 10,
+            borderRadius: 10,
+            transform: [...position.getTranslateTransform(), { scale }],
+          }}
+        >
           {/* {enableSelect && (
             <BouncyCheckbox
               isChecked={selectedItem.find((v) => v === item.id)}
@@ -58,8 +97,8 @@ const DailyPush = ({ item, dailyData, currentPage, enableSelect, selectedItem, s
           )} */}
           {!item.readDate && <View style={{ backgroundColor: "#ff3183", borderRadius: 5, width: 7, height: 7 }}></View>}
           <Text style={{ paddingVertical: 15, fontSize: 16, color: item.readDate ? "#bfbfbf" : undefined }}>{item.message}</Text>
-        </View>
-      </TouchableOpacity>
+        </Animated.View>
+      </Pressable>
     );
   };
 
